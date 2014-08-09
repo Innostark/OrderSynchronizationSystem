@@ -100,30 +100,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Service References\MBAPI\mbapi.wsdl" />
   </ItemGroup>
   <ItemGroup>
@@ -158,7 +134,6 @@
     </None>
     <None Include="Service References\MBAPI\configuration.svcinfo" />
     <None Include="Service References\MBAPI\configuration91.svcinfo" />
-    <None Include="Service References\MBAPI\mbapi.disco" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

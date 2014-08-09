@@ -9,6 +9,10 @@
 //------------------------------------------------------------------------------
 
 namespace IST.OrderSynchronizationSystem.MBAPI {
+    using System.Runtime.Serialization;
+    using System;
+    
+    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Shipment", Namespace="http://api.moldingbox.com/")]
@@ -1477,48 +1481,56 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://api.moldingbox.com/", ConfigurationName="MBAPI.MBAPISoap")]
     public interface MBAPISoap {
         
+        // CODEGEN: Generating message contract since element name ApiKey from namespace http://api.moldingbox.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Post_Shipment", ReplyAction="*")]
         IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentResponse Post_Shipment(IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Post_Shipment", ReplyAction="*")]
         System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentResponse> Post_ShipmentAsync(IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentRequest request);
         
+        // CODEGEN: Generating message contract since element name ApiKey from namespace http://api.moldingbox.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Retrieve_Shipment_Status", ReplyAction="*")]
         IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusResponse Retrieve_Shipment_Status(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Retrieve_Shipment_Status", ReplyAction="*")]
         System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusResponse> Retrieve_Shipment_StatusAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusRequest request);
         
+        // CODEGEN: Generating message contract since element name Retrieve_Shipping_MethodsResult from namespace http://api.moldingbox.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Retrieve_Shipping_Methods", ReplyAction="*")]
         IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsResponse Retrieve_Shipping_Methods(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Retrieve_Shipping_Methods", ReplyAction="*")]
         System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsResponse> Retrieve_Shipping_MethodsAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsRequest request);
         
+        // CODEGEN: Generating message contract since element name ApiKey from namespace http://api.moldingbox.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Retrieve_Merchant_Shipping_Methods", ReplyAction="*")]
         IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsResponse Retrieve_Merchant_Shipping_Methods(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Retrieve_Merchant_Shipping_Methods", ReplyAction="*")]
         System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsResponse> Retrieve_Merchant_Shipping_MethodsAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsRequest request);
         
+        // CODEGEN: Generating message contract since element name Retrieve_Shipment_Status_TypesResult from namespace http://api.moldingbox.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Retrieve_Shipment_Status_Types", ReplyAction="*")]
         IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesResponse Retrieve_Shipment_Status_Types(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Retrieve_Shipment_Status_Types", ReplyAction="*")]
         System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesResponse> Retrieve_Shipment_Status_TypesAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesRequest request);
         
+        // CODEGEN: Generating message contract since element name ApiKey from namespace http://api.moldingbox.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Cancel_Shipment", ReplyAction="*")]
         IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentResponse Cancel_Shipment(IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Cancel_Shipment", ReplyAction="*")]
         System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentResponse> Cancel_ShipmentAsync(IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentRequest request);
         
+        // CODEGEN: Generating message contract since element name ApiKey from namespace http://api.moldingbox.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Retrieve_Inventory_Item", ReplyAction="*")]
         IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemResponse Retrieve_Inventory_Item(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Retrieve_Inventory_Item", ReplyAction="*")]
         System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemResponse> Retrieve_Inventory_ItemAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemRequest request);
         
+        // CODEGEN: Generating message contract since element name ApiKey from namespace http://api.moldingbox.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://api.moldingbox.com/Retrieve_Inventory_Items", ReplyAction="*")]
         IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsResponse Retrieve_Inventory_Items(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsRequest request);
         
@@ -1528,6 +1540,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Post_ShipmentRequest {
         
@@ -1544,6 +1557,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Post_ShipmentRequestBody {
         
@@ -1564,6 +1578,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Post_ShipmentResponse {
         
@@ -1580,6 +1595,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Post_ShipmentResponseBody {
         
@@ -1596,6 +1612,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Retrieve_Shipment_StatusRequest {
         
@@ -1612,6 +1629,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Retrieve_Shipment_StatusRequestBody {
         
@@ -1632,6 +1650,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Retrieve_Shipment_StatusResponse {
         
@@ -1648,6 +1667,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Retrieve_Shipment_StatusResponseBody {
         
@@ -1664,6 +1684,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Retrieve_Shipping_MethodsRequest {
         
@@ -1680,6 +1701,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute()]
     public partial class Retrieve_Shipping_MethodsRequestBody {
         
@@ -1689,6 +1711,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Retrieve_Shipping_MethodsResponse {
         
@@ -1705,6 +1728,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Retrieve_Shipping_MethodsResponseBody {
         
@@ -1721,6 +1745,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Retrieve_Merchant_Shipping_MethodsRequest {
         
@@ -1737,6 +1762,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Retrieve_Merchant_Shipping_MethodsRequestBody {
         
@@ -1753,6 +1779,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Retrieve_Merchant_Shipping_MethodsResponse {
         
@@ -1769,6 +1796,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Retrieve_Merchant_Shipping_MethodsResponseBody {
         
@@ -1785,6 +1813,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Retrieve_Shipment_Status_TypesRequest {
         
@@ -1801,6 +1830,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute()]
     public partial class Retrieve_Shipment_Status_TypesRequestBody {
         
@@ -1810,6 +1840,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Retrieve_Shipment_Status_TypesResponse {
         
@@ -1826,6 +1857,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Retrieve_Shipment_Status_TypesResponseBody {
         
@@ -1842,6 +1874,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Cancel_ShipmentRequest {
         
@@ -1858,6 +1891,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Cancel_ShipmentRequestBody {
         
@@ -1878,6 +1912,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Cancel_ShipmentResponse {
         
@@ -1894,6 +1929,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Cancel_ShipmentResponseBody {
         
@@ -1910,6 +1946,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Retrieve_Inventory_ItemRequest {
         
@@ -1926,6 +1963,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Retrieve_Inventory_ItemRequestBody {
         
@@ -1946,6 +1984,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Retrieve_Inventory_ItemResponse {
         
@@ -1962,6 +2001,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Retrieve_Inventory_ItemResponseBody {
         
@@ -1978,6 +2018,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Retrieve_Inventory_ItemsRequest {
         
@@ -1994,6 +2035,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Retrieve_Inventory_ItemsRequestBody {
         
@@ -2010,6 +2052,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class Retrieve_Inventory_ItemsResponse {
         
@@ -2026,6 +2069,7 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://api.moldingbox.com/")]
     public partial class Retrieve_Inventory_ItemsResponseBody {
         
@@ -2067,68 +2111,208 @@ namespace IST.OrderSynchronizationSystem.MBAPI {
                 base(binding, remoteAddress) {
         }
         
-        public IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentResponse Post_Shipment(IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentRequest request) {
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentResponse IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Post_Shipment(IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentRequest request) {
             return base.Channel.Post_Shipment(request);
         }
         
-        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentResponse> Post_ShipmentAsync(IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentRequest request) {
+        public IST.OrderSynchronizationSystem.MBAPI.Response[] Post_Shipment(string ApiKey, IST.OrderSynchronizationSystem.MBAPI.Shipment[] Shipments) {
+            IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentRequestBody();
+            inValue.Body.ApiKey = ApiKey;
+            inValue.Body.Shipments = Shipments;
+            IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentResponse retVal = ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Post_Shipment(inValue);
+            return retVal.Body.Post_ShipmentResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentResponse> IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Post_ShipmentAsync(IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentRequest request) {
             return base.Channel.Post_ShipmentAsync(request);
         }
         
-        public IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusResponse Retrieve_Shipment_Status(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusRequest request) {
+        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentResponse> Post_ShipmentAsync(string ApiKey, IST.OrderSynchronizationSystem.MBAPI.Shipment[] Shipments) {
+            IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentRequestBody();
+            inValue.Body.ApiKey = ApiKey;
+            inValue.Body.Shipments = Shipments;
+            return ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Post_ShipmentAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusResponse IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Retrieve_Shipment_Status(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusRequest request) {
             return base.Channel.Retrieve_Shipment_Status(request);
         }
         
-        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusResponse> Retrieve_Shipment_StatusAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusRequest request) {
+        public IST.OrderSynchronizationSystem.MBAPI.StatusResponse[] Retrieve_Shipment_Status(string ApiKey, IST.OrderSynchronizationSystem.MBAPI.ArrayOfInt MBShipmentIDs) {
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusRequestBody();
+            inValue.Body.ApiKey = ApiKey;
+            inValue.Body.MBShipmentIDs = MBShipmentIDs;
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusResponse retVal = ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Retrieve_Shipment_Status(inValue);
+            return retVal.Body.Retrieve_Shipment_StatusResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusResponse> IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Retrieve_Shipment_StatusAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusRequest request) {
             return base.Channel.Retrieve_Shipment_StatusAsync(request);
         }
         
-        public IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsResponse Retrieve_Shipping_Methods(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsRequest request) {
+        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusResponse> Retrieve_Shipment_StatusAsync(string ApiKey, IST.OrderSynchronizationSystem.MBAPI.ArrayOfInt MBShipmentIDs) {
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusRequestBody();
+            inValue.Body.ApiKey = ApiKey;
+            inValue.Body.MBShipmentIDs = MBShipmentIDs;
+            return ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Retrieve_Shipment_StatusAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsResponse IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Retrieve_Shipping_Methods(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsRequest request) {
             return base.Channel.Retrieve_Shipping_Methods(request);
         }
         
-        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsResponse> Retrieve_Shipping_MethodsAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsRequest request) {
+        public IST.OrderSynchronizationSystem.MBAPI.ShippingMethod[] Retrieve_Shipping_Methods() {
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsRequestBody();
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsResponse retVal = ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Retrieve_Shipping_Methods(inValue);
+            return retVal.Body.Retrieve_Shipping_MethodsResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsResponse> IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Retrieve_Shipping_MethodsAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsRequest request) {
             return base.Channel.Retrieve_Shipping_MethodsAsync(request);
         }
         
-        public IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsResponse Retrieve_Merchant_Shipping_Methods(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsRequest request) {
+        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsResponse> Retrieve_Shipping_MethodsAsync() {
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsRequestBody();
+            return ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Retrieve_Shipping_MethodsAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsResponse IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Retrieve_Merchant_Shipping_Methods(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsRequest request) {
             return base.Channel.Retrieve_Merchant_Shipping_Methods(request);
         }
         
-        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsResponse> Retrieve_Merchant_Shipping_MethodsAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsRequest request) {
+        public IST.OrderSynchronizationSystem.MBAPI.ShippingMethod[] Retrieve_Merchant_Shipping_Methods(string ApiKey) {
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsRequestBody();
+            inValue.Body.ApiKey = ApiKey;
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsResponse retVal = ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Retrieve_Merchant_Shipping_Methods(inValue);
+            return retVal.Body.Retrieve_Merchant_Shipping_MethodsResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsResponse> IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Retrieve_Merchant_Shipping_MethodsAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsRequest request) {
             return base.Channel.Retrieve_Merchant_Shipping_MethodsAsync(request);
         }
         
-        public IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesResponse Retrieve_Shipment_Status_Types(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesRequest request) {
+        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsResponse> Retrieve_Merchant_Shipping_MethodsAsync(string ApiKey) {
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsRequestBody();
+            inValue.Body.ApiKey = ApiKey;
+            return ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Retrieve_Merchant_Shipping_MethodsAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesResponse IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Retrieve_Shipment_Status_Types(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesRequest request) {
             return base.Channel.Retrieve_Shipment_Status_Types(request);
         }
         
-        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesResponse> Retrieve_Shipment_Status_TypesAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesRequest request) {
+        public IST.OrderSynchronizationSystem.MBAPI.Status[] Retrieve_Shipment_Status_Types() {
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesRequestBody();
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesResponse retVal = ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Retrieve_Shipment_Status_Types(inValue);
+            return retVal.Body.Retrieve_Shipment_Status_TypesResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesResponse> IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Retrieve_Shipment_Status_TypesAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesRequest request) {
             return base.Channel.Retrieve_Shipment_Status_TypesAsync(request);
         }
         
-        public IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentResponse Cancel_Shipment(IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentRequest request) {
+        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesResponse> Retrieve_Shipment_Status_TypesAsync() {
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesRequestBody();
+            return ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Retrieve_Shipment_Status_TypesAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentResponse IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Cancel_Shipment(IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentRequest request) {
             return base.Channel.Cancel_Shipment(request);
         }
         
-        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentResponse> Cancel_ShipmentAsync(IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentRequest request) {
+        public IST.OrderSynchronizationSystem.MBAPI.StatusResponse[] Cancel_Shipment(string ApiKey, IST.OrderSynchronizationSystem.MBAPI.ArrayOfInt MBShipmentIDs) {
+            IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentRequestBody();
+            inValue.Body.ApiKey = ApiKey;
+            inValue.Body.MBShipmentIDs = MBShipmentIDs;
+            IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentResponse retVal = ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Cancel_Shipment(inValue);
+            return retVal.Body.Cancel_ShipmentResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentResponse> IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Cancel_ShipmentAsync(IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentRequest request) {
             return base.Channel.Cancel_ShipmentAsync(request);
         }
         
-        public IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemResponse Retrieve_Inventory_Item(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemRequest request) {
+        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentResponse> Cancel_ShipmentAsync(string ApiKey, IST.OrderSynchronizationSystem.MBAPI.ArrayOfInt MBShipmentIDs) {
+            IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentRequestBody();
+            inValue.Body.ApiKey = ApiKey;
+            inValue.Body.MBShipmentIDs = MBShipmentIDs;
+            return ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Cancel_ShipmentAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemResponse IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Retrieve_Inventory_Item(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemRequest request) {
             return base.Channel.Retrieve_Inventory_Item(request);
         }
         
-        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemResponse> Retrieve_Inventory_ItemAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemRequest request) {
+        public IST.OrderSynchronizationSystem.MBAPI.SingleItemResponse Retrieve_Inventory_Item(string ApiKey, string SKU) {
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemRequestBody();
+            inValue.Body.ApiKey = ApiKey;
+            inValue.Body.SKU = SKU;
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemResponse retVal = ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Retrieve_Inventory_Item(inValue);
+            return retVal.Body.Retrieve_Inventory_ItemResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemResponse> IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Retrieve_Inventory_ItemAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemRequest request) {
             return base.Channel.Retrieve_Inventory_ItemAsync(request);
         }
         
-        public IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsResponse Retrieve_Inventory_Items(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsRequest request) {
+        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemResponse> Retrieve_Inventory_ItemAsync(string ApiKey, string SKU) {
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemRequestBody();
+            inValue.Body.ApiKey = ApiKey;
+            inValue.Body.SKU = SKU;
+            return ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Retrieve_Inventory_ItemAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsResponse IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Retrieve_Inventory_Items(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsRequest request) {
             return base.Channel.Retrieve_Inventory_Items(request);
         }
         
-        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsResponse> Retrieve_Inventory_ItemsAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsRequest request) {
+        public IST.OrderSynchronizationSystem.MBAPI.MultipleItemResponse Retrieve_Inventory_Items(string ApiKey) {
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsRequestBody();
+            inValue.Body.ApiKey = ApiKey;
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsResponse retVal = ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Retrieve_Inventory_Items(inValue);
+            return retVal.Body.Retrieve_Inventory_ItemsResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsResponse> IST.OrderSynchronizationSystem.MBAPI.MBAPISoap.Retrieve_Inventory_ItemsAsync(IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsRequest request) {
             return base.Channel.Retrieve_Inventory_ItemsAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsResponse> Retrieve_Inventory_ItemsAsync(string ApiKey) {
+            IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsRequest inValue = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsRequest();
+            inValue.Body = new IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsRequestBody();
+            inValue.Body.ApiKey = ApiKey;
+            return ((IST.OrderSynchronizationSystem.MBAPI.MBAPISoap)(this)).Retrieve_Inventory_ItemsAsync(inValue);
         }
     }
 }
