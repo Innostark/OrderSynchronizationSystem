@@ -34,6 +34,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,6 +67,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\MBAPI\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Connection.resx">
       <DependentUpon>Connection.cs</DependentUpon>
     </EmbeddedResource>
@@ -93,6 +100,31 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Cancel_ShipmentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Post_ShipmentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Retrieve_Inventory_ItemsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Retrieve_Merchant_Shipping_MethodsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_StatusResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipment_Status_TypesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MBAPI\IST.OrderSynchronizationSystem.MBAPI.Retrieve_Shipping_MethodsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MBAPI\mbapi.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -120,6 +152,19 @@
     <Content Include="Resources\Synchronization.png" />
     <Content Include="Resources\THubToMoldingBoxSynchronize.ico" />
     <Content Include="Resources\THubToMoldingBoxSynchronize.png" />
+    <None Include="Service References\MBAPI\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\MBAPI\configuration.svcinfo" />
+    <None Include="Service References\MBAPI\configuration91.svcinfo" />
+    <None Include="Service References\MBAPI\mbapi.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\MBAPI\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
