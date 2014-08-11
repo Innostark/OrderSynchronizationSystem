@@ -62,6 +62,7 @@
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Models\ShippingMethod.cs" />
+    <Compile Include="MoldingBox\MoldingBoxHelper.cs" />
     <Compile Include="OrderSynchronizerTHubToMoldingBox.cs">
       <SubType>Form</SubType>
     </Compile>
