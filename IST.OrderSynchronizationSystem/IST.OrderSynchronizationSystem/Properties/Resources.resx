@@ -166,4 +166,29 @@
   <data name="THubToMoldingBoxSynchronizeImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\thubtomoldingboxsynchronize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MainWindow_StartPauseToggle_Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="MainWindow_StartPauseToggle_Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="MainWindow_Required_Field" xml:space="preserve">
+    <value>This field is required.</value>
+  </data>
+  <data name="MainWindow_MinutesRange" xml:space="preserve">
+    <value>Please provide minutes between 5 to 999.</value>
+  </data>
+  <data name="MainWindow_VarifySourceDatabase_Checking_source_database" xml:space="preserve">
+    <value>Checking source database.</value>
+  </data>
+  <data name="MainWindow_VarifySourceDatabase_Checking_Staging_database" xml:space="preserve">
+    <value>Checking staging database.</value>
+  </data>
+  <data name="MainWindow_UnableToConnection_SourceDatabase" xml:space="preserve">
+    <value>Unable to connect to source database. Please check server name, database name, username, password and retry.</value>
+  </data>
+  <data name="MainWindow_UnableToConnection_StagingDatabase" xml:space="preserve">
+    <value>Unable to connect to staging database. Please check server name, database name, username, password and retry.</value>
+  </data>
+  
 </root>
