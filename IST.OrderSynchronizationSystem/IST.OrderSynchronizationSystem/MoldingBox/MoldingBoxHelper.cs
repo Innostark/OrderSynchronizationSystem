@@ -1,5 +1,4 @@
 ﻿using IST.OrderSynchronizationSystem.MBAPI;
-using IST.OrderSynchronizationSystem.Models;
 
 namespace IST.OrderSynchronizationSystem.MoldingBox
 {

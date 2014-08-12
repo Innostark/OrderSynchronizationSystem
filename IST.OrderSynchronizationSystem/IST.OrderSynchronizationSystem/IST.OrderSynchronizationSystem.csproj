@@ -48,11 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>App.settings</DependentUpon>
-    </Compile>
     <Compile Include="AutoSynchOrder.cs" />
     <Compile Include="Connection.cs">
       <SubType>Form</SubType>
@@ -67,6 +62,7 @@
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\OssShipment.cs" />
     <Compile Include="MoldingBox\MoldingBoxHelper.cs" />
     <Compile Include="OrderSynchronizerTHubToMoldingBox.cs">
       <SubType>Form</SubType>
@@ -110,11 +106,8 @@
     <EmbeddedResource Include="SqlResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SqlResource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="App.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>App.Designer.cs</LastGenOutput>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
