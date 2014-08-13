@@ -82,7 +82,7 @@ namespace IST.OrderSynchronizationSystem
             try
             {
                 var shipments = new List<OssShipment>();
-                using (new TransactionScope())
+                using (TransactionScope scope = new TransactionScope())
                 {
                     //TODO: Use in where clause
                     var lastExecutionTime = this.GetLastOrdersSyncWithTHub();
@@ -91,49 +91,44 @@ namespace IST.OrderSynchronizationSystem
                         var tHubDbConnection =
                             new SqlConnection(_sourceSqlConnectionConnectionStringBuilder.ConnectionString))
                     {
-
                         using (
                             var ordersCommand = new SqlCommand(SqlResource.source_sql_PullOrdersFromThub,
                                 tHubDbConnection))
                         {
                             ordersCommand.Parameters.Add("@LastExecutionTime", SqlDbType.DateTime).Value =
                                 lastExecutionTime;
-
                             tHubDbConnection.Open();
                             var orderResults = ordersCommand.ExecuteReader();
                             if (orderResults.HasRows)
                             {
-                                using (var stagingDbConnection = new SqlConnection())
+                                while (orderResults.Read())
                                 {
-                                    while (orderResults.Read())
-                                    {
-                                        var shipment = OssDatabase.ConvertSourceOrderToStagingShipment(orderResults);
-                                        
-                                        shipments.Add(shipment);
-                                    }
+                                    var shipment = ConvertSourceOrderToStagingShipment(orderResults);
+
+                                    shipments.Add(shipment);
                                 }
                             }
                             tHubDbConnection.Close();
                         }
-
+                        tHubDbConnection.Open();
                         foreach (var shipment in shipments)
                         {
-                            tHubDbConnection.Open();
                             var orderItems = new List<Item>();
                             var thubOrderId = shipment.ThubOrderId;
                             using (var orderItemsCommand = new SqlCommand(SqlResource.source_sql_PullOrderItems, tHubDbConnection))
                             {
                                 orderItemsCommand.Parameters.AddWithValue("@THubOrderId", thubOrderId);
                                 var orderItemResults = orderItemsCommand.ExecuteReader();
-                                if (orderItemResults.HasRows)
+                                while(orderItemResults.Read())
                                 {
-                                    orderItems.Add(OssDatabase.ConvertSourceOrderItemToStaging(orderItemResults));
+                                    orderItems.Add(ConvertSourceOrderItemToStaging(orderItemResults));
                                 }
                                 shipment.Items = orderItems.ToArray();
                             }
                         }
                         tHubDbConnection.Close();
                     }
+                    scope.Complete();
                 }
 
                 return shipments;
@@ -192,7 +187,7 @@ namespace IST.OrderSynchronizationSystem
             {
                 SKU = orderItem["SKU"].ToString(),
                 Description = orderItem["Description"].ToString(),
-                Quantity = (int) orderItem["Quantity"],
+                Quantity = Convert.ToInt32(decimal.Parse(orderItem["Quantity"].ToString())),
                 Custom1 = orderItem["Custom1"].ToString(),
                 Custom2 = orderItem["Custom2"].ToString(),
                 Custom3 = orderItem["Custom3"].ToString(),
