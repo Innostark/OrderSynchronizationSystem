@@ -138,6 +138,7 @@
     <None Include="Resources\ConnectionImage.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DatabaseScripts\StagingDatabaseScript.sql" />
     <Content Include="Resources\ModingBoxToTHubSynchronise.ico" />
     <Content Include="Resources\ModingBoxToTHubSynchronise.png" />
     <Content Include="Resources\Pause.ico" />
