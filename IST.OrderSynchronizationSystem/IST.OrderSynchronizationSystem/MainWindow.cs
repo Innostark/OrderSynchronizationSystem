@@ -4,9 +4,13 @@ using System.Data;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using IST.OrderSynchronizationSystem.GUI;
+using IST.OrderSynchronizationSystem.MBAPI;
 using IST.OrderSynchronizationSystem.Models;
+using IST.OrderSynchronizationSystem.MoldingBox;
 using IST.OrderSynchronizationSystem.Properties;
 using System.Configuration;
+using Newtonsoft.Json;
 
 namespace IST.OrderSynchronizationSystem
 {
@@ -225,6 +229,78 @@ namespace IST.OrderSynchronizationSystem
             toolStripStatus.Text = Resources.MainWindow_VarifySourceDatabase_Checking_Staging_database;
             return _orderSyncronizationDatabase.VarifySourceDatabase();
         }
+        private void SetDatabaseSettings(string dbSettings)
+        {
+            var readyToSave = true;
+            var errorText = String.Empty;
+
+            var server = (dbSettings == "Source" ? SourceServerTextBox.Text : StagingServerTextBox.Text);
+            var database = (dbSettings == "Source" ? SourceDatabaseTextBox.Text : StagingDatabaseTextBox.Text);
+            var username = (dbSettings == "Source" ? SourceUsernameTextBox.Text : StagingUsernameTextBox.Text);
+            var password = (dbSettings == "Source" ? SourcePasswordTextBox.Text : StagingPasswordTextBox.Text);
+
+            if (String.IsNullOrWhiteSpace(server))
+            {
+                readyToSave = false;
+                errorText = "Please provide a valid " + dbSettings + " Server.";
+            }
+            if (String.IsNullOrWhiteSpace(database))
+            {
+                readyToSave = false;
+                errorText += (String.IsNullOrWhiteSpace(errorText) ? String.Empty : Environment.NewLine) +
+                             "Please provide a valid " + dbSettings + " Database.";
+            }
+            if (String.IsNullOrWhiteSpace(username))
+            {
+                readyToSave = false;
+                errorText += (String.IsNullOrWhiteSpace(errorText) ? String.Empty : Environment.NewLine) +
+                             "Please provide a valid " + dbSettings + " User name.";
+            }
+            if (String.IsNullOrWhiteSpace(password))
+            {
+                readyToSave = false;
+                errorText += (String.IsNullOrWhiteSpace(errorText) ? String.Empty : Environment.NewLine) +
+                             "Please provide a valid " + dbSettings + " Password.";
+            }
+
+            if (readyToSave)
+            {
+                Configuration applicationConfigurations = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                // Add an Application Setting.
+                var applicationSettings = (AppSettingsSection)applicationConfigurations.GetSection("appSettings");
+                if (applicationSettings != null)
+                {
+                    applicationSettings.Settings[dbSettings + "ServerName"].Value = server;
+                    applicationSettings.Settings[dbSettings + "DatabaseName"].Value = database;
+                    applicationSettings.Settings[dbSettings + "UserName"].Value = username;
+                    applicationSettings.Settings[dbSettings + "Password"].Value = password;
+                }
+
+                // Save the changes in App.config file.
+                applicationConfigurations.Save(ConfigurationSaveMode.Modified);
+                // Force a reload of a changed section.
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+                if (dbSettings.Equals("Source"))
+                {
+                    _sourceServer = server;
+                    _sourceDatabsae = database;
+                    _sourceUsername = username;
+                    _sourcePassword = password;
+                }
+                else if (dbSettings.Equals("Staging"))
+                {
+                    _stagingServer = server;
+                    _stagingServer = database;
+                    _stagingUsername = username;
+                    _stagingPassword = password;
+                }
+            }
+            else
+            {
+                MessageBox.Show(this, errorText, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void SynchronizeOrdersFromTHubButton_Click(object sender, EventArgs e)
         {
@@ -265,87 +341,106 @@ namespace IST.OrderSynchronizationSystem
             this.SetDatabaseSettings("Staging");
         }
 
-        private void SetDatabaseSettings(string dbSettings)
-        {
-            var readyToSave = true;
-            var errorText = String.Empty;
-
-            var server = (dbSettings == "Source" ? SourceServerTextBox.Text : StagingServerTextBox.Text);
-            var database = (dbSettings == "Source" ? SourceDatabaseTextBox.Text : StagingDatabaseTextBox.Text);
-            var username = (dbSettings == "Source" ? SourceUsernameTextBox.Text : StagingUsernameTextBox.Text);
-            var password = (dbSettings == "Source" ? SourcePasswordTextBox.Text : StagingPasswordTextBox.Text);
-
-            if (String.IsNullOrWhiteSpace(server))
-            {
-                readyToSave = false;
-                errorText = "Please provide a valid " + dbSettings + " Server.";
-            }
-            if (String.IsNullOrWhiteSpace(database))
-            {
-                readyToSave = false;
-                errorText += (String.IsNullOrWhiteSpace(errorText) ? String.Empty : Environment.NewLine) +
-                             "Please provide a valid " + dbSettings + " Database.";
-            }
-            if (String.IsNullOrWhiteSpace(username))
-            {
-                readyToSave = false;
-                errorText += (String.IsNullOrWhiteSpace(errorText) ? String.Empty : Environment.NewLine) +
-                             "Please provide a valid " + dbSettings + " User name.";
-            }
-            if (String.IsNullOrWhiteSpace(password))
-            {
-                readyToSave = false;
-                errorText += (String.IsNullOrWhiteSpace(errorText) ? String.Empty : Environment.NewLine) +
-                             "Please provide a valid " + dbSettings + " Password.";
-            }
-
-            if (readyToSave)
-            {
-                Configuration applicationConfigurations = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                // Add an Application Setting.
-                var applicationSettings = (AppSettingsSection) applicationConfigurations.GetSection("appSettings");
-                if (applicationSettings != null)
-                {
-                    applicationSettings.Settings[dbSettings + "ServerName"].Value = server;
-                    applicationSettings.Settings[dbSettings + "DatabaseName"].Value = database;
-                    applicationSettings.Settings[dbSettings + "UserName"].Value = username;
-                    applicationSettings.Settings[dbSettings + "Password"].Value = password;
-                }
-
-                // Save the changes in App.config file.
-                applicationConfigurations.Save(ConfigurationSaveMode.Modified);
-                // Force a reload of a changed section.
-                ConfigurationManager.RefreshSection("connectionStrings");
-
-                if (dbSettings.Equals("Source"))
-                {
-                    _sourceServer = server;
-                    _sourceDatabsae = database;
-                    _sourceUsername = username;
-                    _sourcePassword = password;
-                }
-                else if (dbSettings.Equals("Staging"))
-                {
-                    _stagingServer = server;
-                    _stagingServer = database;
-                    _stagingUsername = username;
-                    _stagingPassword = password;
-                }
-            }
-            else
-            {
-                MessageBox.Show(this, errorText, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void MainWindow_Load(object sender, EventArgs e)
         {
             this.MainFormTabControl.SelectTab(this.OSSOrderTabPage);
         }
 
+        private void LoadOrderFromStagingButton_Click(object sender, EventArgs e)
+        {
+            this._ossOrders = this._orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders");
+            if (this._ossOrders.Rows.Count > 0) this.OssOrdersDataGridView.DataSource = this._ossOrders;
+            else MessageBox.Show("No Order available is T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.NoOfOrdersLabel.Text = "No. of Order: " + this._ossOrders.Rows.Count.ToString();
+        }
+
+        /*
+         * this.OssOrdersDataGridView.DataBindingComplete += OssOrdersDataGridView_DataBindingComplete;
+            this.OssOrdersDataGridView.CellContentClick += OssOrdersDataGridView_CellContentClick;
+         * */
+
+        private void OssOrdersDataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (this.OssOrdersDataGridView.ColumnCount == 14)
+            {
+                //Format columns and add send button column
+                this.SetOssOrderDataGridHeaderTextAndColumnVisibility();
+                this.AddDisableSendButtonToOssOrderDataGridView();
+                this.EnableDisableSendToMoldingBoxButton();
+            }
+        }
+
+        private void OssOrdersDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+            var apiKey = this.MoldinboxKeyTextBox.Text;
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0 && !String.IsNullOrWhiteSpace(apiKey))
+            {
+                var row = this._ossOrders.Rows[e.RowIndex];
+                var selectedTHubOrderReferenceNumber = row["THubOrderReferenceNo"].ToString();
+
+
+                var sendToMbButtonCell = (DataGridViewDisableButtonCell)this.OssOrdersDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                if (sendToMbButtonCell.Enabled)
+                {
+                    var ossOrderRow = this._ossOrders.Rows[e.RowIndex];
+                    var orderJsonString = ossOrderRow["THubCompleteOrder"].ToString();
+                    if (!String.IsNullOrWhiteSpace(orderJsonString))
+                    {
+                        var shipments = new Shipment[1]
+                        {
+                            JsonConvert.DeserializeObject<Shipment>(orderJsonString)
+                        };
+                        var client = MoldingBoxHelper.GetMoldingBoxClient();
+
+                        var shipmentRequestSentOn = DateTime.Now;
+                        var responses = MoldingBoxHelper.PostShipment(client, apiKey, shipments);
+                        var shipmentResponseReceivedeOn = DateTime.Now;
+                        
+                        ossOrderRow["SentToMB"] = true;
+                        ossOrderRow["SentToMBOn"] = shipmentRequestSentOn;
+                        ossOrderRow["MBPostShipmentMessage"] = JsonConvert.SerializeObject(new OssShipmentMessage(apiKey, shipments));
+                        ossOrderRow["MBPostShipmentResponseMessage"] = JsonConvert.SerializeObject(responses);
+
+                        var response = responses[0];
+                        ossOrderRow["MBSuccessfullyReceived"] = response.SuccessfullyReceived;
+                        ossOrderRow["MBShipmentId"] = response.MBShipmentID.ToString();
+                        ossOrderRow["MBShipmentSubmitError"] = response.ErrorMessage;
+
+                        this._orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
+                        this.OssOrdersDataGridView.DataBindings.Clear();
+                        this.OssOrdersDataGridView.DataSource = this._ossOrders;
+                    }
+
+                    this.SetSendToMoldingBoxCheckBox(e);
+                    this.DisableSentToMoldingBoxButton(sendToMbButtonCell);
+                }
+            }
+        }
+
+        private void DisableSentToMoldingBoxButton(DataGridViewDisableButtonCell sendToMbButtonCell)
+        {
+            //((DataGridViewButtonColumn) senderGrid.Columns[eventArgs.ColumnIndex]).ReadOnly = true;
+            sendToMbButtonCell.Enabled = false;
+            this.OssOrdersDataGridView.InvalidateCell(sendToMbButtonCell);
+        }
+
+        private void SetSendToMoldingBoxCheckBox(DataGridViewCellEventArgs eventArgs)
+        {
+            if (this.OssOrdersDataGridView.ColumnCount == 15)
+            {
+                var mbSentCell = (DataGridViewCheckBoxCell) this.OssOrdersDataGridView.Rows[eventArgs.RowIndex].Cells[6];
+                if (mbSentCell != null && !((bool) mbSentCell.Value))
+                {
+                    mbSentCell.Value = true;
+                }
+            }
+        }
+
         private void LoadConfigurationFromAppConfig()
         {
-            Configuration applicationConfigurations = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var applicationConfigurations = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             // Add an Application Setting.
             var applicationSettings = (AppSettingsSection) applicationConfigurations.GetSection("appSettings");
             if (applicationSettings != null)
@@ -371,11 +466,34 @@ namespace IST.OrderSynchronizationSystem
             }
         }
 
-        private void LoadOrderFromStagingButton_Click(object sender, EventArgs e)
+        private void EnableDisableSendToMoldingBoxButton()
         {
-            this._ossOrders = this._orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders");
-            this.OssOrdersDataGridView.DataSource = this._ossOrders;
+            foreach (DataGridViewRow ossOrdersDataGridRow in this.OssOrdersDataGridView.Rows)
+            {
+                var mbSentCell = (DataGridViewCheckBoxCell)ossOrdersDataGridRow.Cells[5];
+                if (mbSentCell != null && ((bool)mbSentCell.Value))
+                {
+                    var sendToMbButtonCell = (DataGridViewDisableButtonCell)ossOrdersDataGridRow.Cells[14];
+                    sendToMbButtonCell.Enabled = false;
+                }
+            }
+        }
 
+        private void AddDisableSendButtonToOssOrderDataGridView()
+        {
+            var sendToMoldingBoxButtonColumn = new DataGridViewDisableButtonColumn();
+            sendToMoldingBoxButtonColumn.HeaderText = "Send To MB";
+            sendToMoldingBoxButtonColumn.Text = "Send >";
+            sendToMoldingBoxButtonColumn.Name = "btnSendShipMentToMB";
+            sendToMoldingBoxButtonColumn.ToolTipText = "Click to submit order to ModingBox for processing.";
+            sendToMoldingBoxButtonColumn.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8.5F, FontStyle.Bold);
+            sendToMoldingBoxButtonColumn.UseColumnTextForButtonValue = true;
+            sendToMoldingBoxButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            OssOrdersDataGridView.Columns.Add(sendToMoldingBoxButtonColumn);
+        }
+
+        private void SetOssOrderDataGridHeaderTextAndColumnVisibility()
+        {
             this.OssOrdersDataGridView.Columns[0].Visible = false;
             this.OssOrdersDataGridView.Columns[1].Visible = false;
             this.OssOrdersDataGridView.Columns[2].HeaderText = "Order #";
@@ -391,31 +509,6 @@ namespace IST.OrderSynchronizationSystem
             this.OssOrdersDataGridView.Columns[11].Visible = false;
             this.OssOrdersDataGridView.Columns[12].Visible = false;
             this.OssOrdersDataGridView.Columns[13].Visible = false;
-
-
-            var sendToMoldingBoxButtonColumn = new DataGridViewButtonColumn();
-            sendToMoldingBoxButtonColumn.HeaderText = "Send To MB";
-            sendToMoldingBoxButtonColumn.Text = "Send >";
-            sendToMoldingBoxButtonColumn.Name = "btnSendShipMentToMB";
-            sendToMoldingBoxButtonColumn.ToolTipText = "Click to submit order to ModingBox for processing.";
-            sendToMoldingBoxButtonColumn.DefaultCellStyle.Font = new System.Drawing.Font("Calibri", 6.25F, FontStyle.Bold);
-            sendToMoldingBoxButtonColumn.UseColumnTextForButtonValue = true;
-            sendToMoldingBoxButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            OssOrdersDataGridView.Columns.Add(sendToMoldingBoxButtonColumn);
-
-        }
-
-        private void OssOrdersDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            var senderGrid = (DataGridView) sender;
-
-            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
-            {
-                var row = this._ossOrders.Rows[e.RowIndex];
-
-                //Manual Send to Molding Box
-                MessageBox.Show("Implement the send to Molding Box, Order Reference # " + row["THubOrderReferenceNo"].ToString());
-            }
         }
     }
 }

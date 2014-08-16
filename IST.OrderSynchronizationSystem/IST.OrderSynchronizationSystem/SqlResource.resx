@@ -131,7 +131,7 @@ From   OrderItems as oi With(NoLock)
 Where  oi.OrderId = @THubOrderId</value>
   </data>
   <data name="source_sql_PullOrdersFromThub" xml:space="preserve">
-    <value>Select ord.OrderId As THubOrderID,
+    <value>Select  Top 1 ord.OrderId As THubOrderID,
        ord.ChannelOrderReference As OrderID, 
        ord.OrderDate As Orderdate, 
        Case ord.ShippingAddrSameAsBilling
@@ -209,10 +209,7 @@ Where  oi.OrderId = @THubOrderId</value>
 	   End
     From   Orders As ord With(NoLock),
            OrderShippingStatus As oss With(NoLock)
-    Where  ord.IsCompleteOrderFlag = 1
-    And    ord.ShippingStatusId = oss.ShippingStatusId
-    And    Upper(oss.ShippingStatusName) In ('PUBLISHED', 'SHIPPED', 'SKIP')
-    And    ord.OrderId &gt; @LastExecutedTHubOrderId</value>
+    Where  ord.ChannelOrderReference = 100004947</value>
   </data>
   <data name="source_sql_verify" xml:space="preserve">
     <value>Select count(*) from Orders With(NoLock)</value>

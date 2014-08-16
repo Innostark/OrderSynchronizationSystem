@@ -40,6 +40,9 @@
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainFormTabControl = new System.Windows.Forms.TabControl();
             this.ConfigurationTabPage = new System.Windows.Forms.TabPage();
+            this.MoldingBoxApiKeyGroupBox = new System.Windows.Forms.GroupBox();
+            this.MoldinboxKeyTextBox = new System.Windows.Forms.TextBox();
+            this.MoldingBoxApiKeyLabel = new System.Windows.Forms.Label();
             this.AutomaticOrderSynchronizeSettingsGroupBox = new System.Windows.Forms.GroupBox();
             this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             this.SynchronizeIntervalMinutesLabel = new System.Windows.Forms.Label();
@@ -69,6 +72,7 @@
             this.ServerLabel = new System.Windows.Forms.Label();
             this.OSSOrderTabPage = new System.Windows.Forms.TabPage();
             this.LoadOrderFromStagingGroupBox = new System.Windows.Forms.GroupBox();
+            this.NoOfOrdersLabel = new System.Windows.Forms.Label();
             this.LoadOrderFromStagingButton = new System.Windows.Forms.Button();
             this.OSSOrdersGroupBox = new System.Windows.Forms.GroupBox();
             this.OssOrdersDataGridView = new System.Windows.Forms.DataGridView();
@@ -83,6 +87,7 @@
             this.ApplicationMenuStrip.SuspendLayout();
             this.MainFormTabControl.SuspendLayout();
             this.ConfigurationTabPage.SuspendLayout();
+            this.MoldingBoxApiKeyGroupBox.SuspendLayout();
             this.AutomaticOrderSynchronizeSettingsGroupBox.SuspendLayout();
             this.StagingDbGroupBox.SuspendLayout();
             this.SourceGroupBox.SuspendLayout();
@@ -103,7 +108,7 @@
             this.toolsToolStripMenuItem});
             this.ApplicationMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.ApplicationMenuStrip.Name = "ApplicationMenuStrip";
-            this.ApplicationMenuStrip.Size = new System.Drawing.Size(958, 24);
+            this.ApplicationMenuStrip.Size = new System.Drawing.Size(1230, 24);
             this.ApplicationMenuStrip.TabIndex = 1;
             this.ApplicationMenuStrip.Text = "Application Menu Strip";
             // 
@@ -152,12 +157,13 @@
             this.MainFormTabControl.Location = new System.Drawing.Point(0, 24);
             this.MainFormTabControl.Name = "MainFormTabControl";
             this.MainFormTabControl.SelectedIndex = 0;
-            this.MainFormTabControl.Size = new System.Drawing.Size(958, 584);
+            this.MainFormTabControl.Size = new System.Drawing.Size(1230, 744);
             this.MainFormTabControl.TabIndex = 5;
             // 
             // ConfigurationTabPage
             // 
             this.ConfigurationTabPage.BackColor = System.Drawing.Color.Transparent;
+            this.ConfigurationTabPage.Controls.Add(this.MoldingBoxApiKeyGroupBox);
             this.ConfigurationTabPage.Controls.Add(this.AutomaticOrderSynchronizeSettingsGroupBox);
             this.ConfigurationTabPage.Controls.Add(this.StagingDbGroupBox);
             this.ConfigurationTabPage.Controls.Add(this.SourceGroupBox);
@@ -165,9 +171,41 @@
             this.ConfigurationTabPage.Location = new System.Drawing.Point(4, 22);
             this.ConfigurationTabPage.Name = "ConfigurationTabPage";
             this.ConfigurationTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.ConfigurationTabPage.Size = new System.Drawing.Size(950, 558);
+            this.ConfigurationTabPage.Size = new System.Drawing.Size(1222, 718);
             this.ConfigurationTabPage.TabIndex = 0;
             this.ConfigurationTabPage.Text = "Configuration";
+            // 
+            // MoldingBoxApiKeyGroupBox
+            // 
+            this.MoldingBoxApiKeyGroupBox.Controls.Add(this.MoldinboxKeyTextBox);
+            this.MoldingBoxApiKeyGroupBox.Controls.Add(this.MoldingBoxApiKeyLabel);
+            this.MoldingBoxApiKeyGroupBox.Location = new System.Drawing.Point(8, 178);
+            this.MoldingBoxApiKeyGroupBox.Name = "MoldingBoxApiKeyGroupBox";
+            this.MoldingBoxApiKeyGroupBox.Size = new System.Drawing.Size(936, 68);
+            this.MoldingBoxApiKeyGroupBox.TabIndex = 4;
+            this.MoldingBoxApiKeyGroupBox.TabStop = false;
+            this.MoldingBoxApiKeyGroupBox.Text = "Molding Box API Key";
+            // 
+            // MoldinboxKeyTextBox
+            // 
+            this.MoldinboxKeyTextBox.BackColor = System.Drawing.Color.PowderBlue;
+            this.MoldinboxKeyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MoldinboxKeyTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MoldinboxKeyTextBox.ForeColor = System.Drawing.Color.DarkRed;
+            this.MoldinboxKeyTextBox.Location = new System.Drawing.Point(69, 33);
+            this.MoldinboxKeyTextBox.Name = "MoldinboxKeyTextBox";
+            this.MoldinboxKeyTextBox.Size = new System.Drawing.Size(862, 20);
+            this.MoldinboxKeyTextBox.TabIndex = 15;
+            this.MoldinboxKeyTextBox.Text = "MBLLTAtOr8wKNI2Z44oPj2s81Hea6F";
+            // 
+            // MoldingBoxApiKeyLabel
+            // 
+            this.MoldingBoxApiKeyLabel.AutoSize = true;
+            this.MoldingBoxApiKeyLabel.Location = new System.Drawing.Point(29, 33);
+            this.MoldingBoxApiKeyLabel.Name = "MoldingBoxApiKeyLabel";
+            this.MoldingBoxApiKeyLabel.Size = new System.Drawing.Size(30, 15);
+            this.MoldingBoxApiKeyLabel.TabIndex = 16;
+            this.MoldingBoxApiKeyLabel.Text = "Key:";
             // 
             // AutomaticOrderSynchronizeSettingsGroupBox
             // 
@@ -176,7 +214,7 @@
             this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SynchronizeIntervalLabel);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SynchronizeButton);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AutomaticOrderSynchronizeSettingsGroupBox.Location = new System.Drawing.Point(4, 178);
+            this.AutomaticOrderSynchronizeSettingsGroupBox.Location = new System.Drawing.Point(8, 252);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Name = "AutomaticOrderSynchronizeSettingsGroupBox";
             this.AutomaticOrderSynchronizeSettingsGroupBox.Size = new System.Drawing.Size(462, 55);
             this.AutomaticOrderSynchronizeSettingsGroupBox.TabIndex = 3;
@@ -451,20 +489,30 @@
             this.OSSOrderTabPage.Location = new System.Drawing.Point(4, 22);
             this.OSSOrderTabPage.Name = "OSSOrderTabPage";
             this.OSSOrderTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.OSSOrderTabPage.Size = new System.Drawing.Size(950, 558);
+            this.OSSOrderTabPage.Size = new System.Drawing.Size(1222, 718);
             this.OSSOrderTabPage.TabIndex = 1;
             this.OSSOrderTabPage.Text = "T-Hub Orders";
             // 
             // LoadOrderFromStagingGroupBox
             // 
+            this.LoadOrderFromStagingGroupBox.Controls.Add(this.NoOfOrdersLabel);
             this.LoadOrderFromStagingGroupBox.Controls.Add(this.LoadOrderFromStagingButton);
             this.LoadOrderFromStagingGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadOrderFromStagingGroupBox.Location = new System.Drawing.Point(227, 6);
             this.LoadOrderFromStagingGroupBox.Name = "LoadOrderFromStagingGroupBox";
-            this.LoadOrderFromStagingGroupBox.Size = new System.Drawing.Size(215, 55);
+            this.LoadOrderFromStagingGroupBox.Size = new System.Drawing.Size(215, 105);
             this.LoadOrderFromStagingGroupBox.TabIndex = 7;
             this.LoadOrderFromStagingGroupBox.TabStop = false;
             this.LoadOrderFromStagingGroupBox.Text = "Load Order from Staging";
+            // 
+            // NoOfOrdersLabel
+            // 
+            this.NoOfOrdersLabel.AutoSize = true;
+            this.NoOfOrdersLabel.Location = new System.Drawing.Point(7, 52);
+            this.NoOfOrdersLabel.Name = "NoOfOrdersLabel";
+            this.NoOfOrdersLabel.Size = new System.Drawing.Size(76, 13);
+            this.NoOfOrdersLabel.TabIndex = 1;
+            this.NoOfOrdersLabel.Text = "No. of Orders: ";
             // 
             // LoadOrderFromStagingButton
             // 
@@ -482,9 +530,9 @@
             // OSSOrdersGroupBox
             // 
             this.OSSOrdersGroupBox.Controls.Add(this.OssOrdersDataGridView);
-            this.OSSOrdersGroupBox.Location = new System.Drawing.Point(6, 67);
+            this.OSSOrdersGroupBox.Location = new System.Drawing.Point(6, 109);
             this.OSSOrdersGroupBox.Name = "OSSOrdersGroupBox";
-            this.OSSOrdersGroupBox.Size = new System.Drawing.Size(938, 488);
+            this.OSSOrdersGroupBox.Size = new System.Drawing.Size(1208, 606);
             this.OSSOrdersGroupBox.TabIndex = 7;
             this.OSSOrdersGroupBox.TabStop = false;
             this.OSSOrdersGroupBox.Text = "Orders";
@@ -509,7 +557,7 @@
             this.OssOrdersDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.Ivory;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Gray;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -521,9 +569,11 @@
             this.OssOrdersDataGridView.Name = "OssOrdersDataGridView";
             this.OssOrdersDataGridView.RowHeadersVisible = false;
             this.OssOrdersDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.OssOrdersDataGridView.Size = new System.Drawing.Size(926, 462);
+            this.OssOrdersDataGridView.Size = new System.Drawing.Size(1196, 580);
             this.OssOrdersDataGridView.TabIndex = 0;
+            this.OssOrdersDataGridView.DataBindingComplete += OssOrdersDataGridView_DataBindingComplete;
             this.OssOrdersDataGridView.CellContentClick += OssOrdersDataGridView_CellContentClick;
+
             // 
             // SyncOrdersWithTHubGroupBox
             // 
@@ -576,7 +626,7 @@
             // 
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(950, 558);
+            this.tabPage1.Size = new System.Drawing.Size(950, 718);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "...";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -596,9 +646,9 @@
             // 
             this.ApplicationStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatus});
-            this.ApplicationStatusStrip.Location = new System.Drawing.Point(0, 608);
+            this.ApplicationStatusStrip.Location = new System.Drawing.Point(0, 768);
             this.ApplicationStatusStrip.Name = "ApplicationStatusStrip";
-            this.ApplicationStatusStrip.Size = new System.Drawing.Size(958, 22);
+            this.ApplicationStatusStrip.Size = new System.Drawing.Size(1230, 22);
             this.ApplicationStatusStrip.TabIndex = 50;
             this.ApplicationStatusStrip.Text = "Application Status Strip";
             // 
@@ -606,7 +656,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(958, 630);
+            this.ClientSize = new System.Drawing.Size(1230, 790);
             this.Controls.Add(this.MainFormTabControl);
             this.Controls.Add(this.ApplicationStatusStrip);
             this.Controls.Add(this.ApplicationMenuStrip);
@@ -622,6 +672,8 @@
             this.ApplicationMenuStrip.PerformLayout();
             this.MainFormTabControl.ResumeLayout(false);
             this.ConfigurationTabPage.ResumeLayout(false);
+            this.MoldingBoxApiKeyGroupBox.ResumeLayout(false);
+            this.MoldingBoxApiKeyGroupBox.PerformLayout();
             this.AutomaticOrderSynchronizeSettingsGroupBox.ResumeLayout(false);
             this.AutomaticOrderSynchronizeSettingsGroupBox.PerformLayout();
             this.StagingDbGroupBox.ResumeLayout(false);
@@ -630,6 +682,7 @@
             this.SourceGroupBox.PerformLayout();
             this.OSSOrderTabPage.ResumeLayout(false);
             this.LoadOrderFromStagingGroupBox.ResumeLayout(false);
+            this.LoadOrderFromStagingGroupBox.PerformLayout();
             this.OSSOrdersGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.OssOrdersDataGridView)).EndInit();
             this.SyncOrdersWithTHubGroupBox.ResumeLayout(false);
@@ -692,6 +745,10 @@
         private System.Windows.Forms.DataGridView OssOrdersDataGridView;
         private System.Windows.Forms.GroupBox LoadOrderFromStagingGroupBox;
         private System.Windows.Forms.Button LoadOrderFromStagingButton;
+        private System.Windows.Forms.Label NoOfOrdersLabel;
+        private System.Windows.Forms.GroupBox MoldingBoxApiKeyGroupBox;
+        private System.Windows.Forms.TextBox MoldinboxKeyTextBox;
+        private System.Windows.Forms.Label MoldingBoxApiKeyLabel;
     }
 }
 

@@ -1,6 +1,6 @@
 ﻿USE [OSSStaging]
 GO
-/****** Object:  UserDefinedTableType [dbo].[CreateOSSOrdersTableType]    Script Date: 16/08/2014 03:16:00 ******/
+/****** Object:  UserDefinedTableType [dbo].[CreateOSSOrdersTableType]    Script Date: 16/08/2014 14:33:37 ******/
 CREATE TYPE [dbo].[CreateOSSOrdersTableType] AS TABLE(
 	[THubOrderId] [bigint] NOT NULL,
 	[THubOrderReferenceNo] [nvarchar](100) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TYPE [dbo].[CreateOSSOrdersTableType] AS TABLE(
 	[THubCompleteOrder] [nvarchar](max) NULL
 )
 GO
-/****** Object:  UserDefinedTableType [dbo].[OSSOrdersTableType]    Script Date: 16/08/2014 03:16:00 ******/
+/****** Object:  UserDefinedTableType [dbo].[OSSOrdersTableType]    Script Date: 16/08/2014 14:33:37 ******/
 CREATE TYPE [dbo].[OSSOrdersTableType] AS TABLE(
 	[THubOrderId] [bigint] NOT NULL,
 	[THubOrderReferenceNo] [nvarchar](100) NOT NULL,
@@ -23,7 +23,7 @@ CREATE TYPE [dbo].[OSSOrdersTableType] AS TABLE(
 	[MBShipmentSubmitError] [nvarchar](max) NULL
 )
 GO
-/****** Object:  StoredProcedure [dbo].[USPCreateOSSOrders]    Script Date: 16/08/2014 03:16:00 ******/
+/****** Object:  StoredProcedure [dbo].[USPCreateOSSOrders]    Script Date: 16/08/2014 14:33:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -55,7 +55,7 @@ Begin
 End
 
 GO
-/****** Object:  StoredProcedure [dbo].[USPLoadOrdersFromStaging]    Script Date: 16/08/2014 03:16:00 ******/
+/****** Object:  StoredProcedure [dbo].[USPLoadOrdersFromStaging]    Script Date: 16/08/2014 14:33:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -91,7 +91,47 @@ BEGIN
 END
 
 GO
-/****** Object:  Table [dbo].[Exceptions]    Script Date: 16/08/2014 03:16:00 ******/
+/****** Object:  StoredProcedure [dbo].[USPUpdateOrderAfterMoldingBoxShipmentRequest]    Script Date: 16/08/2014 14:33:37 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[USPUpdateOrderAfterMoldingBoxShipmentRequest] 
+	-- Add the parameters for the stored procedure here
+	@OSSOrderId bigint,
+	@SentToMB bit, 
+	@SentToMBOn datetime,
+	@MBPostShipmentMessage nvarchar(MAX),
+	@MBPostShipmentResponseMessage nvarchar(MAX),
+	@MBSuccessfullyReceived bit,
+	@MBShipmentId nvarchar(15),
+	@MBShipmentSubmitError nvarchar(MAX)
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+UPDATE [dbo].[OSSOrders]
+   SET [SentToMB] = @SentToMB,
+       [SentToMBOn] = @SentToMBOn,
+       [MBPostShipmentMessage] = @MBPostShipmentMessage,
+       [MBPostShipmentResponseMessage] = @MBPostShipmentResponseMessage,
+       [MBSuccessfullyReceived] = @MBSuccessfullyReceived,
+       [MBShipmentId] = @MBShipmentId,
+       [MBShipmentSubmitError] = @MBShipmentSubmitError
+ WHERE [OSSOrderId] = @OSSOrderId;
+
+END
+
+GO
+/****** Object:  Table [dbo].[Exceptions]    Script Date: 16/08/2014 14:33:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -109,7 +149,7 @@ CREATE TABLE [dbo].[Exceptions](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[ExceptionTypes]    Script Date: 16/08/2014 03:16:00 ******/
+/****** Object:  Table [dbo].[ExceptionTypes]    Script Date: 16/08/2014 14:33:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -125,7 +165,7 @@ CREATE TABLE [dbo].[ExceptionTypes](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Logs]    Script Date: 16/08/2014 03:16:00 ******/
+/****** Object:  Table [dbo].[Logs]    Script Date: 16/08/2014 14:33:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -143,7 +183,7 @@ CREATE TABLE [dbo].[Logs](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[LogTypes]    Script Date: 16/08/2014 03:16:00 ******/
+/****** Object:  Table [dbo].[LogTypes]    Script Date: 16/08/2014 14:33:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -159,7 +199,7 @@ CREATE TABLE [dbo].[LogTypes](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[OSSConfigurations]    Script Date: 16/08/2014 03:16:00 ******/
+/****** Object:  Table [dbo].[OSSConfigurations]    Script Date: 16/08/2014 14:33:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -171,7 +211,7 @@ CREATE TABLE [dbo].[OSSConfigurations](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[OSSOrders]    Script Date: 16/08/2014 03:16:00 ******/
+/****** Object:  Table [dbo].[OSSOrders]    Script Date: 16/08/2014 14:33:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

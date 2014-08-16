@@ -61,6 +61,8 @@
     </Compile>
     <Compile Include="ConnectionType.cs" />
     <Compile Include="EncodeDecode.cs" />
+    <Compile Include="GUI\DataGridViewDisableButtonColumn.cs" />
+    <Compile Include="GUI\DataGridViewDisableButtonCell.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,6 +70,7 @@
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\OssShipment.cs" />
+    <Compile Include="Models\OssShipmentMessage.cs" />
     <Compile Include="MoldingBox\MoldingBoxHelper.cs" />
     <Compile Include="OrderSynchronizerTHubToMoldingBox.cs">
       <SubType>Form</SubType>

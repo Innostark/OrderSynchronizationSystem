@@ -91,8 +91,13 @@ namespace IST.OrderSynchronizationSystem
                     using (
                         var ordersCommand = new SqlCommand(SqlResource.source_sql_PullOrdersFromThub, tHubDbConnection))
                     {
-                        ordersCommand.Parameters.Add("@LastExecutedTHubOrderId", SqlDbType.BigInt).Value =
-                            lastExecutedTHubOrderId;
+                        //ordersCommand.Parameters.Add("@LastExecutedTHubOrderId", SqlDbType.BigInt).Value = lastExecutedTHubOrderId;
+                        //TODO: Replace query predicate with following predicate
+                        //Where  ord.IsCompleteOrderFlag = 1
+                        //And    ord.ShippingStatusId = oss.ShippingStatusId
+                        //And    Upper(oss.ShippingStatusName) In ('PUBLISHED', 'SHIPPED', 'SKIP')
+                        //And    ord.OrderId = '100004947'
+                        //==And    ord.OrderId &gt; @LastExecutedTHubOrderId
                         tHubDbConnection.Open();
                         var orderResults = ordersCommand.ExecuteReader();
                         if (orderResults.HasRows)
@@ -242,9 +247,10 @@ namespace IST.OrderSynchronizationSystem
 
         private static Item ConvertSourceOrderItemToStagingItem(IDataRecord orderItem)
         {
+            //TODO: Replace the Hard Coded SKU with live
             return new Item()
             {
-                SKU = orderItem["SKU"].ToString(),
+                SKU = "SKU1",//SKU = orderItem["SKU"].ToString()
                 Description = orderItem["Description"].ToString(),
                 Quantity = (int)orderItem["Quantity"],
                 Custom1 = orderItem["Custom1"].ToString(),
@@ -345,6 +351,40 @@ namespace IST.OrderSynchronizationSystem
             stagingRow["MBShipmentSubmitError"] = stagingOrder["MBShipmentSubmitError"];
             stagingRow["MBShipmentIdSubmitedToThub"] = stagingOrder["MBShipmentIdSubmitedToThub"];
             stagingRow["MBShipmentIdSubmitedToThubOn"] = stagingOrder["MBShipmentIdSubmitedToThubOn"];
+        }
+
+        internal int UpdateOrderAfterMoldingBoxShipmentRequest(DataRow ossOrderRow)
+        {
+            var recordsUpdated = int.MinValue;
+            using (var transaction = new TransactionScope())
+            {
+                using (var stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+                {
+                    stagingDbconnection.Open();
+                    using (
+                        var command = new SqlCommand("USPUpdateOrderAfterMoldingBoxShipmentRequest")
+                        {
+                            CommandType = CommandType.StoredProcedure,
+                            Connection = stagingDbconnection
+                        })
+                    {
+                        command.Parameters.AddWithValue("@OSSOrderId", ossOrderRow["OSSOrderId"]);
+                        command.Parameters.AddWithValue("@SentToMB", ossOrderRow["SentToMB"]);
+                        command.Parameters.AddWithValue("@SentToMBOn", ossOrderRow["SentToMBOn"]);
+                        command.Parameters.AddWithValue("@MBPostShipmentMessage", ossOrderRow["MBPostShipmentMessage"]);
+                        command.Parameters.AddWithValue("@MBPostShipmentResponseMessage", ossOrderRow["MBPostShipmentResponseMessage"]);
+                        command.Parameters.AddWithValue("@MBSuccessfullyReceived", ossOrderRow["MBSuccessfullyReceived"]);
+                        command.Parameters.AddWithValue("@MBShipmentId", ossOrderRow["MBShipmentId"]);
+                        command.Parameters.AddWithValue("@MBShipmentSubmitError", ossOrderRow["MBShipmentSubmitError"]);
+
+                        recordsUpdated = command.ExecuteNonQuery();
+                    }
+                    stagingDbconnection.Close();
+                }
+                transaction.Complete();
+            }
+
+            return recordsUpdated;
         }
     }
 }
