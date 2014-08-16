@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.ApplicationMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,8 +68,10 @@
             this.DatabaseLabel = new System.Windows.Forms.Label();
             this.ServerLabel = new System.Windows.Forms.Label();
             this.OSSOrderTabPage = new System.Windows.Forms.TabPage();
+            this.LoadOrderFromStagingGroupBox = new System.Windows.Forms.GroupBox();
+            this.LoadOrderFromStagingButton = new System.Windows.Forms.Button();
             this.OSSOrdersGroupBox = new System.Windows.Forms.GroupBox();
-            this.OSSOrdersDataGridView = new System.Windows.Forms.DataGridView();
+            this.OssOrdersDataGridView = new System.Windows.Forms.DataGridView();
             this.SyncOrdersWithTHubGroupBox = new System.Windows.Forms.GroupBox();
             this.SynchronizeOrdersFromTHubButton = new System.Windows.Forms.Button();
             this.ManualSendToMoldingBoxGroupBox = new System.Windows.Forms.GroupBox();
@@ -83,8 +87,9 @@
             this.StagingDbGroupBox.SuspendLayout();
             this.SourceGroupBox.SuspendLayout();
             this.OSSOrderTabPage.SuspendLayout();
+            this.LoadOrderFromStagingGroupBox.SuspendLayout();
             this.OSSOrdersGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.OSSOrdersDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.OssOrdersDataGridView)).BeginInit();
             this.SyncOrdersWithTHubGroupBox.SuspendLayout();
             this.ManualSendToMoldingBoxGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).BeginInit();
@@ -438,6 +443,7 @@
             // OSSOrderTabPage
             // 
             this.OSSOrderTabPage.BackColor = System.Drawing.Color.Transparent;
+            this.OSSOrderTabPage.Controls.Add(this.LoadOrderFromStagingGroupBox);
             this.OSSOrderTabPage.Controls.Add(this.OSSOrdersGroupBox);
             this.OSSOrderTabPage.Controls.Add(this.SyncOrdersWithTHubGroupBox);
             this.OSSOrderTabPage.Controls.Add(this.ManualSendToMoldingBoxGroupBox);
@@ -449,9 +455,33 @@
             this.OSSOrderTabPage.TabIndex = 1;
             this.OSSOrderTabPage.Text = "T-Hub Orders";
             // 
+            // LoadOrderFromStagingGroupBox
+            // 
+            this.LoadOrderFromStagingGroupBox.Controls.Add(this.LoadOrderFromStagingButton);
+            this.LoadOrderFromStagingGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoadOrderFromStagingGroupBox.Location = new System.Drawing.Point(227, 6);
+            this.LoadOrderFromStagingGroupBox.Name = "LoadOrderFromStagingGroupBox";
+            this.LoadOrderFromStagingGroupBox.Size = new System.Drawing.Size(215, 55);
+            this.LoadOrderFromStagingGroupBox.TabIndex = 7;
+            this.LoadOrderFromStagingGroupBox.TabStop = false;
+            this.LoadOrderFromStagingGroupBox.Text = "Load Order from Staging";
+            // 
+            // LoadOrderFromStagingButton
+            // 
+            this.LoadOrderFromStagingButton.BackColor = System.Drawing.Color.DarkKhaki;
+            this.LoadOrderFromStagingButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoadOrderFromStagingButton.ForeColor = System.Drawing.Color.Transparent;
+            this.LoadOrderFromStagingButton.Location = new System.Drawing.Point(6, 18);
+            this.LoadOrderFromStagingButton.Name = "LoadOrderFromStagingButton";
+            this.LoadOrderFromStagingButton.Size = new System.Drawing.Size(203, 27);
+            this.LoadOrderFromStagingButton.TabIndex = 0;
+            this.LoadOrderFromStagingButton.Text = "Load Orders from Staging";
+            this.LoadOrderFromStagingButton.UseVisualStyleBackColor = false;
+            this.LoadOrderFromStagingButton.Click += new System.EventHandler(this.LoadOrderFromStagingButton_Click);
+            // 
             // OSSOrdersGroupBox
             // 
-            this.OSSOrdersGroupBox.Controls.Add(this.OSSOrdersDataGridView);
+            this.OSSOrdersGroupBox.Controls.Add(this.OssOrdersDataGridView);
             this.OSSOrdersGroupBox.Location = new System.Drawing.Point(6, 67);
             this.OSSOrdersGroupBox.Name = "OSSOrdersGroupBox";
             this.OSSOrdersGroupBox.Size = new System.Drawing.Size(938, 488);
@@ -459,13 +489,41 @@
             this.OSSOrdersGroupBox.TabStop = false;
             this.OSSOrdersGroupBox.Text = "Orders";
             // 
-            // OSSOrdersDataGridView
+            // OssOrdersDataGridView
             // 
-            this.OSSOrdersDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.OSSOrdersDataGridView.Location = new System.Drawing.Point(6, 20);
-            this.OSSOrdersDataGridView.Name = "OSSOrdersDataGridView";
-            this.OSSOrdersDataGridView.Size = new System.Drawing.Size(926, 462);
-            this.OSSOrdersDataGridView.TabIndex = 0;
+            this.OssOrdersDataGridView.AllowUserToAddRows = false;
+            this.OssOrdersDataGridView.AllowUserToDeleteRows = false;
+            this.OssOrdersDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.OssOrdersDataGridView.BackgroundColor = System.Drawing.Color.Khaki;
+            this.OssOrdersDataGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+            this.OssOrdersDataGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+            this.OssOrdersDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.SandyBrown;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.DarkGreen;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.OssOrdersDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.OssOrdersDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Ivory;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Gray;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.OssOrdersDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
+            this.OssOrdersDataGridView.GridColor = System.Drawing.Color.Black;
+            this.OssOrdersDataGridView.Location = new System.Drawing.Point(6, 20);
+            this.OssOrdersDataGridView.MultiSelect = false;
+            this.OssOrdersDataGridView.Name = "OssOrdersDataGridView";
+            this.OssOrdersDataGridView.RowHeadersVisible = false;
+            this.OssOrdersDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.OssOrdersDataGridView.Size = new System.Drawing.Size(926, 462);
+            this.OssOrdersDataGridView.TabIndex = 0;
+            this.OssOrdersDataGridView.CellContentClick += OssOrdersDataGridView_CellContentClick;
             // 
             // SyncOrdersWithTHubGroupBox
             // 
@@ -473,19 +531,19 @@
             this.SyncOrdersWithTHubGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SyncOrdersWithTHubGroupBox.Location = new System.Drawing.Point(6, 6);
             this.SyncOrdersWithTHubGroupBox.Name = "SyncOrdersWithTHubGroupBox";
-            this.SyncOrdersWithTHubGroupBox.Size = new System.Drawing.Size(469, 55);
+            this.SyncOrdersWithTHubGroupBox.Size = new System.Drawing.Size(215, 55);
             this.SyncOrdersWithTHubGroupBox.TabIndex = 6;
             this.SyncOrdersWithTHubGroupBox.TabStop = false;
             this.SyncOrdersWithTHubGroupBox.Text = "Syncronize Orders with T-Hub";
             // 
             // SynchronizeOrdersFromTHubButton
             // 
-            this.SynchronizeOrdersFromTHubButton.BackColor = System.Drawing.Color.DarkOrange;
+            this.SynchronizeOrdersFromTHubButton.BackColor = System.Drawing.Color.IndianRed;
             this.SynchronizeOrdersFromTHubButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SynchronizeOrdersFromTHubButton.ForeColor = System.Drawing.Color.Transparent;
             this.SynchronizeOrdersFromTHubButton.Location = new System.Drawing.Point(6, 18);
             this.SynchronizeOrdersFromTHubButton.Name = "SynchronizeOrdersFromTHubButton";
-            this.SynchronizeOrdersFromTHubButton.Size = new System.Drawing.Size(457, 27);
+            this.SynchronizeOrdersFromTHubButton.Size = new System.Drawing.Size(203, 27);
             this.SynchronizeOrdersFromTHubButton.TabIndex = 0;
             this.SynchronizeOrdersFromTHubButton.Text = "Synchronize Orders with T-Hub";
             this.SynchronizeOrdersFromTHubButton.UseVisualStyleBackColor = false;
@@ -571,8 +629,9 @@
             this.SourceGroupBox.ResumeLayout(false);
             this.SourceGroupBox.PerformLayout();
             this.OSSOrderTabPage.ResumeLayout(false);
+            this.LoadOrderFromStagingGroupBox.ResumeLayout(false);
             this.OSSOrdersGroupBox.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.OSSOrdersDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.OssOrdersDataGridView)).EndInit();
             this.SyncOrdersWithTHubGroupBox.ResumeLayout(false);
             this.ManualSendToMoldingBoxGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).EndInit();
@@ -630,7 +689,9 @@
         private System.Windows.Forms.GroupBox SyncOrdersWithTHubGroupBox;
         private System.Windows.Forms.Button SynchronizeOrdersFromTHubButton;
         private System.Windows.Forms.GroupBox OSSOrdersGroupBox;
-        private System.Windows.Forms.DataGridView OSSOrdersDataGridView;
+        private System.Windows.Forms.DataGridView OssOrdersDataGridView;
+        private System.Windows.Forms.GroupBox LoadOrderFromStagingGroupBox;
+        private System.Windows.Forms.Button LoadOrderFromStagingButton;
     }
 }
 

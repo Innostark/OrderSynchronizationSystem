@@ -63,7 +63,7 @@ namespace IST.OrderSynchronizationSystem {
         /// <summary>
         ///   Looks up a localized string similar to Select oi.ItemCode As SKU,
         ///       oi.ItemDescription As &apos;Description&apos;,
-        ///	   oi.Quantity As Quantity,
+        ///	   Cast(oi.Quantity As int) As Quantity,
         ///	   oi.CustomValue1 As Custom1,
         ///	   oi.CustomValue2 As Custom2,
         ///	   oi.CustomValue3 As Custom3,
@@ -115,11 +115,20 @@ namespace IST.OrderSynchronizationSystem {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select Max(lo.CreatedOn) As lastOrdersSyncWithTHub From Logs As lo With(NoLock), LogTypes as lot  Where lo.LogTypeId = lot.LogTypeId And Lower(lot.LogType) = &apos;t-hub orders synchronize&apos;.
+        ///   Looks up a localized string similar to USPCreateOSSOrders.
         /// </summary>
-        internal static string staging_sql_LastExecutionTimeQuery {
+        internal static string staging_sql_CreateOssOrders {
             get {
-                return ResourceManager.GetString("staging_sql_LastExecutionTimeQuery", resourceCulture);
+                return ResourceManager.GetString("staging_sql_CreateOssOrders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Cast(oc.ConfigValue As bigint) As LastExecutedTHubOrderId From OSSConfigurations As oc Where oc.ConfigKey = &apos;LastUpdatedTHubOrderId&apos;.
+        /// </summary>
+        internal static string staging_sql_LastExecutedTHubOrderId {
+            get {
+                return ResourceManager.GetString("staging_sql_LastExecutedTHubOrderId", resourceCulture);
             }
         }
         

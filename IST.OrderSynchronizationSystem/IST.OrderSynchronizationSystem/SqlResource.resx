@@ -120,7 +120,7 @@
   <data name="source_sql_PullOrderItems" xml:space="preserve">
     <value>Select oi.ItemCode As SKU,
        oi.ItemDescription As 'Description',
-	   oi.Quantity As Quantity,
+	   Cast(oi.Quantity As int) As Quantity,
 	   oi.CustomValue1 As Custom1,
 	   oi.CustomValue2 As Custom2,
 	   oi.CustomValue3 As Custom3,
@@ -212,13 +212,16 @@ Where  oi.OrderId = @THubOrderId</value>
     Where  ord.IsCompleteOrderFlag = 1
     And    ord.ShippingStatusId = oss.ShippingStatusId
     And    Upper(oss.ShippingStatusName) In ('PUBLISHED', 'SHIPPED', 'SKIP')
-    And    ord.OrderDate &gt; @LastExecutionTime</value>
+    And    ord.OrderId &gt; @LastExecutedTHubOrderId</value>
   </data>
   <data name="source_sql_verify" xml:space="preserve">
     <value>Select count(*) from Orders With(NoLock)</value>
   </data>
-  <data name="staging_sql_LastExecutionTimeQuery" xml:space="preserve">
-    <value>Select Max(lo.CreatedOn) As lastOrdersSyncWithTHub From Logs As lo With(NoLock), LogTypes as lot  Where lo.LogTypeId = lot.LogTypeId And Lower(lot.LogType) = 't-hub orders synchronize'</value>
+  <data name="staging_sql_CreateOssOrders" xml:space="preserve">
+    <value>USPCreateOSSOrders</value>
+  </data>
+  <data name="staging_sql_LastExecutedTHubOrderId" xml:space="preserve">
+    <value>Select Cast(oc.ConfigValue As bigint) As LastExecutedTHubOrderId From OSSConfigurations As oc Where oc.ConfigKey = 'LastUpdatedTHubOrderId'</value>
   </data>
   <data name="staging_sql_verify" xml:space="preserve">
     <value>Select count(*) from OSSOrders With(NoLock)</value>

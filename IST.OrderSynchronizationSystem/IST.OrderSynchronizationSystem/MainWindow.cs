@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using IST.OrderSynchronizationSystem.Models;
 using IST.OrderSynchronizationSystem.Properties;
 using System.Configuration;
 
@@ -23,6 +27,7 @@ namespace IST.OrderSynchronizationSystem
         private string _stagingDatabase = String.Empty;
         private string _stagingUsername = String.Empty;
         private string _stagingPassword = String.Empty;
+        private DataTable _ossOrders = null;
 
 
         public MainWindow(bool programState)
@@ -223,20 +228,31 @@ namespace IST.OrderSynchronizationSystem
 
         private void SynchronizeOrdersFromTHubButton_Click(object sender, EventArgs e)
         {
-            //Check source database
-            if (!VarifySourceDatabase())
+            var ossShipments = new List<OssShipment>();
+            try
             {
-                toolStripStatus.Text = Resources.MainWindow_UnableToConnection_SourceDatabase;
-                return;
+                //Check source database
+                if (!VarifySourceDatabase())
+                {
+                    toolStripStatus.Text = Resources.MainWindow_UnableToConnection_SourceDatabase;
+                    return;
+                }
+                //Check Staging database
+                if (!VarifyStagingDatabase())
+                {
+                    toolStripStatus.Text = Resources.MainWindow_UnableToConnection_StagingDatabase;
+                    return;
+                }
+
+                ossShipments = this._orderSyncronizationDatabase.LoadShipmentsFromThub();
             }
-            //Check Staging database
-            if (!VarifyStagingDatabase())
+            catch (Exception ex)
             {
-                toolStripStatus.Text = Resources.MainWindow_UnableToConnection_StagingDatabase;
-                return;
+                MessageBox.Show(String.Format("{0}{1}{2}", "Error while loading orders form T-Hub.", Environment.NewLine, ex.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            this._orderSyncronizationDatabase.GetShipmentsFromThub();
+            this._orderSyncronizationDatabase.InsertShipmentsToStaging(ossShipments);
+
         }
 
         private void SaveSourceButon_Click(object sender, EventArgs e)
@@ -324,6 +340,7 @@ namespace IST.OrderSynchronizationSystem
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            this.MainFormTabControl.SelectTab(this.OSSOrderTabPage);
         }
 
         private void LoadConfigurationFromAppConfig()
@@ -351,6 +368,53 @@ namespace IST.OrderSynchronizationSystem
                 StagingUsernameTextBox.Text = _stagingUsername;
                 _stagingPassword = applicationSettings.Settings["StagingPassword"].Value;
                 StagingPasswordTextBox.Text = _stagingPassword;
+            }
+        }
+
+        private void LoadOrderFromStagingButton_Click(object sender, EventArgs e)
+        {
+            this._ossOrders = this._orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders");
+            this.OssOrdersDataGridView.DataSource = this._ossOrders;
+
+            this.OssOrdersDataGridView.Columns[0].Visible = false;
+            this.OssOrdersDataGridView.Columns[1].Visible = false;
+            this.OssOrdersDataGridView.Columns[2].HeaderText = "Order #";
+            this.OssOrdersDataGridView.Columns[3].HeaderText = "Created On";
+            this.OssOrdersDataGridView.Columns[4].Visible = false;
+            this.OssOrdersDataGridView.Columns[5].HeaderText = "MB Sent";
+            this.OssOrdersDataGridView.Columns[5].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            this.OssOrdersDataGridView.Columns[6].HeaderText = "MB Sent On";
+            this.OssOrdersDataGridView.Columns[7].Visible = false;
+            this.OssOrdersDataGridView.Columns[8].HeaderText = "Shipment Id";
+            this.OssOrdersDataGridView.Columns[9].HeaderText = "MB Shipment Id";
+            this.OssOrdersDataGridView.Columns[10].Visible = false;
+            this.OssOrdersDataGridView.Columns[11].Visible = false;
+            this.OssOrdersDataGridView.Columns[12].Visible = false;
+            this.OssOrdersDataGridView.Columns[13].Visible = false;
+
+
+            var sendToMoldingBoxButtonColumn = new DataGridViewButtonColumn();
+            sendToMoldingBoxButtonColumn.HeaderText = "Send To MB";
+            sendToMoldingBoxButtonColumn.Text = "Send >";
+            sendToMoldingBoxButtonColumn.Name = "btnSendShipMentToMB";
+            sendToMoldingBoxButtonColumn.ToolTipText = "Click to submit order to ModingBox for processing.";
+            sendToMoldingBoxButtonColumn.DefaultCellStyle.Font = new System.Drawing.Font("Calibri", 6.25F, FontStyle.Bold);
+            sendToMoldingBoxButtonColumn.UseColumnTextForButtonValue = true;
+            sendToMoldingBoxButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            OssOrdersDataGridView.Columns.Add(sendToMoldingBoxButtonColumn);
+
+        }
+
+        private void OssOrdersDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView) sender;
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+            {
+                var row = this._ossOrders.Rows[e.RowIndex];
+
+                //Manual Send to Molding Box
+                MessageBox.Show("Implement the send to Molding Box, Order Reference # " + row["THubOrderReferenceNo"].ToString());
             }
         }
     }
