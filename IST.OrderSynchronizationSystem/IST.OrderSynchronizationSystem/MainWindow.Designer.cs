@@ -73,11 +73,11 @@
             this.OSSOrderTabPage = new System.Windows.Forms.TabPage();
             this.LoadOrderFromStagingGroupBox = new System.Windows.Forms.GroupBox();
             this.NoOfOrdersLabel = new System.Windows.Forms.Label();
-            this.LoadOrderFromStagingButton = new System.Windows.Forms.Button();
+            this.DisplayStagingOrderButton = new System.Windows.Forms.Button();
             this.OSSOrdersGroupBox = new System.Windows.Forms.GroupBox();
             this.OssOrdersDataGridView = new System.Windows.Forms.DataGridView();
             this.SyncOrdersWithTHubGroupBox = new System.Windows.Forms.GroupBox();
-            this.SynchronizeOrdersFromTHubButton = new System.Windows.Forms.Button();
+            this.LoadOrdersFromTHubButton = new System.Windows.Forms.Button();
             this.ManualSendToMoldingBoxGroupBox = new System.Windows.Forms.GroupBox();
             this.SendToMoldingBoxButton = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -157,7 +157,7 @@
             this.MainFormTabControl.Location = new System.Drawing.Point(0, 24);
             this.MainFormTabControl.Name = "MainFormTabControl";
             this.MainFormTabControl.SelectedIndex = 0;
-            this.MainFormTabControl.Size = new System.Drawing.Size(1230, 744);
+            this.MainFormTabControl.Size = new System.Drawing.Size(1230, 704);
             this.MainFormTabControl.TabIndex = 5;
             // 
             // ConfigurationTabPage
@@ -171,7 +171,7 @@
             this.ConfigurationTabPage.Location = new System.Drawing.Point(4, 22);
             this.ConfigurationTabPage.Name = "ConfigurationTabPage";
             this.ConfigurationTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.ConfigurationTabPage.Size = new System.Drawing.Size(1222, 718);
+            this.ConfigurationTabPage.Size = new System.Drawing.Size(1222, 678);
             this.ConfigurationTabPage.TabIndex = 0;
             this.ConfigurationTabPage.Text = "Configuration";
             // 
@@ -489,18 +489,18 @@
             this.OSSOrderTabPage.Location = new System.Drawing.Point(4, 22);
             this.OSSOrderTabPage.Name = "OSSOrderTabPage";
             this.OSSOrderTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.OSSOrderTabPage.Size = new System.Drawing.Size(1222, 718);
+            this.OSSOrderTabPage.Size = new System.Drawing.Size(1222, 678);
             this.OSSOrderTabPage.TabIndex = 1;
             this.OSSOrderTabPage.Text = "T-Hub Orders";
             // 
             // LoadOrderFromStagingGroupBox
             // 
             this.LoadOrderFromStagingGroupBox.Controls.Add(this.NoOfOrdersLabel);
-            this.LoadOrderFromStagingGroupBox.Controls.Add(this.LoadOrderFromStagingButton);
+            this.LoadOrderFromStagingGroupBox.Controls.Add(this.DisplayStagingOrderButton);
             this.LoadOrderFromStagingGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadOrderFromStagingGroupBox.Location = new System.Drawing.Point(227, 6);
             this.LoadOrderFromStagingGroupBox.Name = "LoadOrderFromStagingGroupBox";
-            this.LoadOrderFromStagingGroupBox.Size = new System.Drawing.Size(215, 105);
+            this.LoadOrderFromStagingGroupBox.Size = new System.Drawing.Size(215, 75);
             this.LoadOrderFromStagingGroupBox.TabIndex = 7;
             this.LoadOrderFromStagingGroupBox.TabStop = false;
             this.LoadOrderFromStagingGroupBox.Text = "Load Order from Staging";
@@ -514,23 +514,23 @@
             this.NoOfOrdersLabel.TabIndex = 1;
             this.NoOfOrdersLabel.Text = "No. of Orders: ";
             // 
-            // LoadOrderFromStagingButton
+            // DisplayStagingOrderButton
             // 
-            this.LoadOrderFromStagingButton.BackColor = System.Drawing.Color.DarkKhaki;
-            this.LoadOrderFromStagingButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadOrderFromStagingButton.ForeColor = System.Drawing.Color.Transparent;
-            this.LoadOrderFromStagingButton.Location = new System.Drawing.Point(6, 18);
-            this.LoadOrderFromStagingButton.Name = "LoadOrderFromStagingButton";
-            this.LoadOrderFromStagingButton.Size = new System.Drawing.Size(203, 27);
-            this.LoadOrderFromStagingButton.TabIndex = 0;
-            this.LoadOrderFromStagingButton.Text = "Load Orders from Staging";
-            this.LoadOrderFromStagingButton.UseVisualStyleBackColor = false;
-            this.LoadOrderFromStagingButton.Click += new System.EventHandler(this.LoadOrderFromStagingButton_Click);
+            this.DisplayStagingOrderButton.BackColor = System.Drawing.Color.DarkKhaki;
+            this.DisplayStagingOrderButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DisplayStagingOrderButton.ForeColor = System.Drawing.Color.Transparent;
+            this.DisplayStagingOrderButton.Location = new System.Drawing.Point(6, 18);
+            this.DisplayStagingOrderButton.Name = "DisplayStagingOrderButton";
+            this.DisplayStagingOrderButton.Size = new System.Drawing.Size(203, 27);
+            this.DisplayStagingOrderButton.TabIndex = 0;
+            this.DisplayStagingOrderButton.Text = "Display Staging Orders ";
+            this.DisplayStagingOrderButton.UseVisualStyleBackColor = false;
+            this.DisplayStagingOrderButton.Click += new System.EventHandler(this.LoadOrderFromStagingButton_Click);
             // 
             // OSSOrdersGroupBox
             // 
             this.OSSOrdersGroupBox.Controls.Add(this.OssOrdersDataGridView);
-            this.OSSOrdersGroupBox.Location = new System.Drawing.Point(6, 109);
+            this.OSSOrdersGroupBox.Location = new System.Drawing.Point(6, 87);
             this.OSSOrdersGroupBox.Name = "OSSOrdersGroupBox";
             this.OSSOrdersGroupBox.Size = new System.Drawing.Size(1208, 606);
             this.OSSOrdersGroupBox.TabIndex = 7;
@@ -571,13 +571,12 @@
             this.OssOrdersDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.OssOrdersDataGridView.Size = new System.Drawing.Size(1196, 580);
             this.OssOrdersDataGridView.TabIndex = 0;
-            this.OssOrdersDataGridView.DataBindingComplete += OssOrdersDataGridView_DataBindingComplete;
-            this.OssOrdersDataGridView.CellContentClick += OssOrdersDataGridView_CellContentClick;
-
+            this.OssOrdersDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OssOrdersDataGridView_CellContentClick_1);
+            this.OssOrdersDataGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssOrdersDataGridView_DataBindingComplete_1);
             // 
             // SyncOrdersWithTHubGroupBox
             // 
-            this.SyncOrdersWithTHubGroupBox.Controls.Add(this.SynchronizeOrdersFromTHubButton);
+            this.SyncOrdersWithTHubGroupBox.Controls.Add(this.LoadOrdersFromTHubButton);
             this.SyncOrdersWithTHubGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SyncOrdersWithTHubGroupBox.Location = new System.Drawing.Point(6, 6);
             this.SyncOrdersWithTHubGroupBox.Name = "SyncOrdersWithTHubGroupBox";
@@ -586,18 +585,18 @@
             this.SyncOrdersWithTHubGroupBox.TabStop = false;
             this.SyncOrdersWithTHubGroupBox.Text = "Syncronize Orders with T-Hub";
             // 
-            // SynchronizeOrdersFromTHubButton
+            // LoadOrdersFromTHubButton
             // 
-            this.SynchronizeOrdersFromTHubButton.BackColor = System.Drawing.Color.IndianRed;
-            this.SynchronizeOrdersFromTHubButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SynchronizeOrdersFromTHubButton.ForeColor = System.Drawing.Color.Transparent;
-            this.SynchronizeOrdersFromTHubButton.Location = new System.Drawing.Point(6, 18);
-            this.SynchronizeOrdersFromTHubButton.Name = "SynchronizeOrdersFromTHubButton";
-            this.SynchronizeOrdersFromTHubButton.Size = new System.Drawing.Size(203, 27);
-            this.SynchronizeOrdersFromTHubButton.TabIndex = 0;
-            this.SynchronizeOrdersFromTHubButton.Text = "Synchronize Orders with T-Hub";
-            this.SynchronizeOrdersFromTHubButton.UseVisualStyleBackColor = false;
-            this.SynchronizeOrdersFromTHubButton.Click += new System.EventHandler(this.SynchronizeOrdersFromTHubButton_Click);
+            this.LoadOrdersFromTHubButton.BackColor = System.Drawing.Color.IndianRed;
+            this.LoadOrdersFromTHubButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoadOrdersFromTHubButton.ForeColor = System.Drawing.Color.Transparent;
+            this.LoadOrdersFromTHubButton.Location = new System.Drawing.Point(6, 18);
+            this.LoadOrdersFromTHubButton.Name = "LoadOrdersFromTHubButton";
+            this.LoadOrdersFromTHubButton.Size = new System.Drawing.Size(203, 27);
+            this.LoadOrdersFromTHubButton.TabIndex = 0;
+            this.LoadOrdersFromTHubButton.Text = "Load Orders From T-Hub";
+            this.LoadOrdersFromTHubButton.UseVisualStyleBackColor = false;
+            this.LoadOrdersFromTHubButton.Click += new System.EventHandler(this.SynchronizeOrdersFromTHubButton_Click);
             // 
             // ManualSendToMoldingBoxGroupBox
             // 
@@ -621,12 +620,13 @@
             this.SendToMoldingBoxButton.TabIndex = 0;
             this.SendToMoldingBoxButton.Text = "Send All Orders To MoldingBox";
             this.SendToMoldingBoxButton.UseVisualStyleBackColor = false;
+            this.SendToMoldingBoxButton.Click += new System.EventHandler(this.SendToMoldingBoxButton_Click);
             // 
             // tabPage1
             // 
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(950, 718);
+            this.tabPage1.Size = new System.Drawing.Size(1222, 678);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "...";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -646,7 +646,7 @@
             // 
             this.ApplicationStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatus});
-            this.ApplicationStatusStrip.Location = new System.Drawing.Point(0, 768);
+            this.ApplicationStatusStrip.Location = new System.Drawing.Point(0, 728);
             this.ApplicationStatusStrip.Name = "ApplicationStatusStrip";
             this.ApplicationStatusStrip.Size = new System.Drawing.Size(1230, 22);
             this.ApplicationStatusStrip.TabIndex = 50;
@@ -656,7 +656,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1230, 790);
+            this.ClientSize = new System.Drawing.Size(1230, 750);
             this.Controls.Add(this.MainFormTabControl);
             this.Controls.Add(this.ApplicationStatusStrip);
             this.Controls.Add(this.ApplicationMenuStrip);
@@ -740,11 +740,11 @@
         private System.Windows.Forms.GroupBox ManualSendToMoldingBoxGroupBox;
         private System.Windows.Forms.Button SendToMoldingBoxButton;
         private System.Windows.Forms.GroupBox SyncOrdersWithTHubGroupBox;
-        private System.Windows.Forms.Button SynchronizeOrdersFromTHubButton;
+        private System.Windows.Forms.Button LoadOrdersFromTHubButton;
         private System.Windows.Forms.GroupBox OSSOrdersGroupBox;
         private System.Windows.Forms.DataGridView OssOrdersDataGridView;
         private System.Windows.Forms.GroupBox LoadOrderFromStagingGroupBox;
-        private System.Windows.Forms.Button LoadOrderFromStagingButton;
+        private System.Windows.Forms.Button DisplayStagingOrderButton;
         private System.Windows.Forms.Label NoOfOrdersLabel;
         private System.Windows.Forms.GroupBox MoldingBoxApiKeyGroupBox;
         private System.Windows.Forms.TextBox MoldinboxKeyTextBox;

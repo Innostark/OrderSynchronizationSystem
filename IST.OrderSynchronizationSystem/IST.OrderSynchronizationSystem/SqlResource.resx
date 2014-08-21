@@ -190,7 +190,7 @@ Where  oi.OrderId = @THubOrderId</value>
 		 When 1
 		 Then ord.BAddr_Phone1
 	   End As Phone,
-       1 As ShippingMethodID,
+       WebShipMethod,
        0.00 As CODAmount,
        ord.CustomValue1 As Custom1,
        ord.CustomValue2 As Custom2,
@@ -206,7 +206,7 @@ Where  oi.OrderId = @THubOrderId</value>
 		 Then 'PUBLISHED'
 		When 6
 		 Then 'SKIP'
-	   End
+	   End as [Status]
     From   Orders As ord With(NoLock),
            OrderShippingStatus As oss With(NoLock)
     Where  ord.ChannelOrderReference = 100004947</value>
@@ -222,5 +222,8 @@ Where  oi.OrderId = @THubOrderId</value>
   </data>
   <data name="staging_sql_verify" xml:space="preserve">
     <value>Select count(*) from OSSOrders With(NoLock)</value>
+  </data>
+  <data name="staging_get_Shipment_Mapping_ThubToMoldingBox" xml:space="preserve">
+    <value>Select DestinationShipmentMethod from OSSShipmentMappings where SourceShipmentMethod = @SourceShipment and THubToMBMap = @THubToMbFlag</value>
   </data>
 </root>

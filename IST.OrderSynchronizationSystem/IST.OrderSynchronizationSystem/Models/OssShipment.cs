@@ -10,5 +10,7 @@ namespace IST.OrderSynchronizationSystem.Models
     public class OssShipment: Shipment
     {
         public Int64 ThubOrderId { get; set; }
+
+        public string WebShipMethod { get; set; }
     }
 }
