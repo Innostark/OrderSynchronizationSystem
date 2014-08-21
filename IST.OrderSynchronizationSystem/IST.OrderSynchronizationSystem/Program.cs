@@ -18,7 +18,7 @@ namespace IST.OrderSynchronizationSystem
             //var Shipments = new Shipment[] 
             //{ new Shipment()
             //    {
-            //        OrderID = "100005182",
+            //        OrderID = "T100005182",
             //        Orderdate = Convert.ToDateTime("2014-08-09 00:00:00.000"),
             //        Company = String.Empty,
             //        FirstName = "Hendrik",
@@ -46,6 +46,7 @@ namespace IST.OrderSynchronizationSystem
 
             //var PostShipmentResponse = MoldingBoxHelper.PostShipment(Client, "MBLLTAtOr8wKNI2Z44oPj2s81Hea6F", Shipments);
             //var ShipmentStatus = Client.Retrieve_Shipment_Status("MBLLTAtOr8wKNI2Z44oPj2s81Hea6F", new ArrayOfInt() {1315020});
+           // var ShipmentCancelStatus = Client.Cancel_Shipment("MBLLTAtOr8wKNI2Z44oPj2s81Hea6F", new ArrayOfInt() { 1315020 });
 
             //OrderID	Orderdate	Company	FirstName	LastName	Address1	Address2	City	State	Country	Email	Phone	ShippingMethodID	CODAmount	Custom1	Custom2	Custom3	Custom4	Custom5
             //2180	2014-08-09 00:00:00.000		Hendrik	Tysma	PO Box 102374		Denver	CO	US	hendrik@electroflip.com	9546484936	FedEx (Federal Express) - Home Delivery		1				

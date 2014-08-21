@@ -133,6 +133,23 @@ namespace IST.OrderSynchronizationSystem {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO [OSSShipmentMappings]
+        ///           ([SourceShipmentMethod]
+        ///           ,[DestinationShipmentMethod]
+        ///           ,[THubToMBMap])
+        ///     VALUES
+        ///           (@SourceShipMethod,
+        ///           @DestinationShipMethod,
+        ///           @THubToMBMap)
+        ///    .
+        /// </summary>
+        internal static string staging_sql_InsertTHubToMbMapping {
+            get {
+                return ResourceManager.GetString("staging_sql_InsertTHubToMbMapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Cast(oc.ConfigValue As bigint) As LastExecutedTHubOrderId From OSSConfigurations As oc Where oc.ConfigKey = &apos;LastUpdatedTHubOrderId&apos;.
         /// </summary>
         internal static string staging_sql_LastExecutedTHubOrderId {

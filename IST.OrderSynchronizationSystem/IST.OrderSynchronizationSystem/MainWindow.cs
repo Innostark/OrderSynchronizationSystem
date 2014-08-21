@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -350,79 +351,20 @@ namespace IST.OrderSynchronizationSystem
         private void LoadOrderFromStagingButton_Click(object sender, EventArgs e)
         {
             _ossOrders = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders");
-            if (_ossOrders.Rows.Count > 0) OssOrdersDataGridView.DataSource = _ossOrders;
-            else MessageBox.Show("No Order available is T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (_ossOrders.Rows.Count > 0)
+            {
+                OssOrdersDataGridView.DataSource = _ossOrders;
+            }
+            else
+            {
+                MessageBox.Show("No Order available is T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             NoOfOrdersLabel.Text = "No. of Order: " + _ossOrders.Rows.Count.ToString();
         }
 
-        /*
-         * this.OssOrdersDataGridView.DataBindingComplete += OssOrdersDataGridView_DataBindingComplete;
-            this.OssOrdersDataGridView.CellContentClick += OssOrdersDataGridView_CellContentClick;
-         * */
-
-        private void OssOrdersDataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            if (OssOrdersDataGridView.ColumnCount == 14)
-            {
-                //Format columns and add send button column
-                SetOssOrderDataGridHeaderTextAndColumnVisibility();
-                AddDisableSendButtonToOssOrderDataGridView();
-                EnableDisableSendToMoldingBoxButton();
-            }
-        }
-
-        //private void OssOrdersDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        //{
-        //    DataGridView senderGrid = (DataGridView)sender;
-        //    string apiKey = MoldinboxKeyTextBox.Text;
-
-        //    if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0 && !String.IsNullOrWhiteSpace(apiKey))
-        //    {
-        //        DataRow row = _ossOrders.Rows[e.RowIndex];
-        //        string selectedTHubOrderReferenceNumber = row["THubOrderReferenceNo"].ToString();
-
-
-        //        DataGridViewDisableButtonCell sendToMbButtonCell = (DataGridViewDisableButtonCell)OssOrdersDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
-        //        if (sendToMbButtonCell.Enabled)
-        //        {
-        //            DataRow ossOrderRow = _ossOrders.Rows[e.RowIndex];
-        //            string orderJsonString = ossOrderRow["THubCompleteOrder"].ToString();
-        //            if (!String.IsNullOrWhiteSpace(orderJsonString))
-        //            {
-        //                Shipment[] shipments = new Shipment[1]
-        //                {
-        //                    JsonConvert.DeserializeObject<Shipment>(orderJsonString)
-        //                };
-        //                MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
-
-        //                DateTime shipmentRequestSentOn = DateTime.Now;
-        //                Response[] responses = MoldingBoxHelper.PostShipment(client, apiKey, shipments);
-        //                DateTime shipmentResponseReceivedeOn = DateTime.Now;
-                        
-        //                ossOrderRow["SentToMB"] = true;
-        //                ossOrderRow["SentToMBOn"] = shipmentRequestSentOn;
-        //                ossOrderRow["MBPostShipmentMessage"] = JsonConvert.SerializeObject(new OssShipmentMessage(apiKey, shipments));
-        //                ossOrderRow["MBPostShipmentResponseMessage"] = JsonConvert.SerializeObject(responses);
-
-        //                Response response = responses[0];
-        //                ossOrderRow["MBSuccessfullyReceived"] = response.SuccessfullyReceived;
-        //                ossOrderRow["MBShipmentId"] = response.MBShipmentID.ToString();
-        //                ossOrderRow["MBShipmentSubmitError"] = response.ErrorMessage;
-
-        //                _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
-        //                OssOrdersDataGridView.DataBindings.Clear();
-        //                OssOrdersDataGridView.DataSource = _ossOrders;
-        //            }
-
-        //            SetSendToMoldingBoxCheckBox(e);
-        //            DisableSentToMoldingBoxButton(sendToMbButtonCell);
-        //        }
-        //    }
-        //}
 
         private void DisableSentToMoldingBoxButton(DataGridViewDisableButtonCell sendToMbButtonCell)
         {
-            //((DataGridViewButtonColumn) senderGrid.Columns[eventArgs.ColumnIndex]).ReadOnly = true;
             sendToMbButtonCell.Enabled = false;
             OssOrdersDataGridView.InvalidateCell(sendToMbButtonCell);
         }
@@ -470,13 +412,17 @@ namespace IST.OrderSynchronizationSystem
         private void EnableDisableSendToMoldingBoxButton()
         {
             foreach (DataGridViewRow ossOrdersDataGridRow in OssOrdersDataGridView.Rows)
-            {
-                DataGridViewCheckBoxCell mbSentCell = (DataGridViewCheckBoxCell)ossOrdersDataGridRow.Cells[5];
-                if (mbSentCell != null && ((bool)mbSentCell.Value))
+            {                
+                DataGridViewCheckBoxCell mbSentCell = (DataGridViewCheckBoxCell)ossOrdersDataGridRow.Cells[ossOrdersDataGridRow.Cells.IndexOf(ossOrdersDataGridRow.Cells["SentToMB"])];
+                if (mbSentCell != null && ((bool) mbSentCell.Value))
                 {
-                    DataGridViewDisableButtonCell sendToMbButtonCell = (DataGridViewDisableButtonCell)ossOrdersDataGridRow.Cells[14];
+                    DataGridViewDisableButtonCell sendToMbButtonCell =
+                        (DataGridViewDisableButtonCell)
+                            ossOrdersDataGridRow.Cells[
+                                ossOrdersDataGridRow.Cells.IndexOf(ossOrdersDataGridRow.Cells["btnSendShipMentToMB"])];
                     sendToMbButtonCell.Enabled = false;
                 }
+
             }
         }
 
@@ -490,37 +436,90 @@ namespace IST.OrderSynchronizationSystem
             sendToMoldingBoxButtonColumn.DefaultCellStyle.Font = new Font("Arial", 8.5F, FontStyle.Bold);
             sendToMoldingBoxButtonColumn.UseColumnTextForButtonValue = true;
             sendToMoldingBoxButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            OssOrdersDataGridView.Columns.Add(sendToMoldingBoxButtonColumn);
+            
+            OssOrdersDataGridView.Columns.Insert(14,sendToMoldingBoxButtonColumn);
         }
 
         private void SetOssOrderDataGridHeaderTextAndColumnVisibility()
         {
-            OssOrdersDataGridView.Columns[0].Visible = false;
-            OssOrdersDataGridView.Columns[1].Visible = false;
-            OssOrdersDataGridView.Columns[2].HeaderText = "Order #";
-            OssOrdersDataGridView.Columns[3].HeaderText = "Created On";
-            OssOrdersDataGridView.Columns[4].Visible = false;
-            OssOrdersDataGridView.Columns[5].HeaderText = "MB Sent";
-            OssOrdersDataGridView.Columns[5].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            OssOrdersDataGridView.Columns[6].HeaderText = "MB Sent On";
-            OssOrdersDataGridView.Columns[7].Visible = false;
-            OssOrdersDataGridView.Columns[8].HeaderText = "Shipment Id";
-            OssOrdersDataGridView.Columns[9].HeaderText = "MB Shipment Id";
-            OssOrdersDataGridView.Columns[10].Visible = false;
-            OssOrdersDataGridView.Columns[11].Visible = false;
-            OssOrdersDataGridView.Columns[12].Visible = false;
-            OssOrdersDataGridView.Columns[13].Visible = false;
+            if (OssOrdersDataGridView.Columns["OSSOrderId"] != null)
+                OssOrdersDataGridView.Columns["OSSOrderId"].Visible = false;
+
+            if (OssOrdersDataGridView.Columns["THubOrderId"] != null)
+            {
+                OssOrdersDataGridView.Columns["THubOrderId"].HeaderText = "T-Hub Order Id";
+            }
+            if (OssOrdersDataGridView.Columns["THubOrderReferenceNo"] != null)
+            {
+                OssOrdersDataGridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
+            }
+            if (OssOrdersDataGridView.Columns["CreatedOn"] != null)
+            {
+                OssOrdersDataGridView.Columns["CreatedOn"].HeaderText = "Created On";
+            }
+            if (OssOrdersDataGridView.Columns["THubCompleteOrder"] != null)
+            {
+                OssOrdersDataGridView.Columns["THubCompleteOrder"].Visible = false;//"THub Complete Order";
+            }
+            if (OssOrdersDataGridView.Columns["SentToMB"] != null)
+            {
+                OssOrdersDataGridView.Columns["SentToMB"].HeaderText = "Sent To Molding Box";
+            }
+            if (OssOrdersDataGridView.Columns["SentToMBOn"] != null)
+            {
+                OssOrdersDataGridView.Columns["SentToMBOn"].HeaderText = "Sent To MB On";
+            }
+            if (OssOrdersDataGridView.Columns["MBPostShipmentMessage"] != null)
+            {
+                OssOrdersDataGridView.Columns["MBPostShipmentMessage"].Visible = false;
+            }
+            if (OssOrdersDataGridView.Columns["MBPostShipmentResponseMessage"] != null)
+            {
+                OssOrdersDataGridView.Columns["MBPostShipmentResponseMessage"].Visible = false;
+            }
+            if (OssOrdersDataGridView.Columns["MBSuccessfullyReceived"] != null)
+            {
+                OssOrdersDataGridView.Columns["MBSuccessfullyReceived"].HeaderText = "MB Recieved Message";
+            }
+            if (OssOrdersDataGridView.Columns["MBShipmentId"] != null)
+            {
+                OssOrdersDataGridView.Columns["MBShipmentId"].HeaderText = "MB Shipment Id";
+            }
+            if (OssOrdersDataGridView.Columns["MBShipmentSubmitError"] != null)
+            {
+                OssOrdersDataGridView.Columns["MBShipmentSubmitError"].HeaderText = "MB Shipment Error";
+            }
+            if (OssOrdersDataGridView.Columns["MBShipmentIdSubmitedToThub"] != null)
+            {
+                OssOrdersDataGridView.Columns["MBShipmentIdSubmitedToThub"].Visible = false;
+            }
+            if (OssOrdersDataGridView.Columns["MBShipmentIdSubmitedToThubOn"] != null)
+            {
+                OssOrdersDataGridView.Columns["MBShipmentIdSubmitedToThubOn"].Visible = false;
+            }
+            
+
+            //OssOrdersDataGridView.Columns[5].HeaderText = "MB Sent";
+            //OssOrdersDataGridView.Columns[5].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            //OssOrdersDataGridView.Columns[6].HeaderText = "MB Sent On";
+            //OssOrdersDataGridView.Columns[7].Visible = false;
+            //OssOrdersDataGridView.Columns[8].HeaderText = "Shipment Id";
+            //OssOrdersDataGridView.Columns[9].HeaderText = "MB Shipment Id";
+            //OssOrdersDataGridView.Columns[10].Visible = false;
+            //OssOrdersDataGridView.Columns[11].Visible = false;
+            //OssOrdersDataGridView.Columns[12].Visible = false;
+            //OssOrdersDataGridView.Columns[13].Visible = false;
         }
 
         private void OssOrdersDataGridView_DataBindingComplete_1(object sender, DataGridViewBindingCompleteEventArgs e)
         {
+            SetOssOrderDataGridHeaderTextAndColumnVisibility();
             if (OssOrdersDataGridView.ColumnCount == 14)
             {
-                //Format columns and add send button column
-                SetOssOrderDataGridHeaderTextAndColumnVisibility();
-                AddDisableSendButtonToOssOrderDataGridView();
-                EnableDisableSendToMoldingBoxButton();
+                //Format columns and add send button column                
+                AddDisableSendButtonToOssOrderDataGridView();                
             }
+            EnableDisableSendToMoldingBoxButton();
         }
 
         private void SendToMoldingBoxButton_Click(object sender, EventArgs e)
@@ -534,16 +533,14 @@ namespace IST.OrderSynchronizationSystem
         {
             DataGridView senderGrid = (DataGridView)sender;
             string apiKey = MoldinboxKeyTextBox.Text;
-
             MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
-            shipmentMethods = client.Retrieve_Shipping_Methods();
-
+            
+            
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0 && !String.IsNullOrWhiteSpace(apiKey))
             {
+                shipmentMethods = client.Retrieve_Shipping_Methods();
                 DataRow row = _ossOrders.Rows[e.RowIndex];
-                string selectedTHubOrderReferenceNumber = row["THubOrderReferenceNo"].ToString();
-
-
+                
                 DataGridViewDisableButtonCell sendToMbButtonCell = (DataGridViewDisableButtonCell)OssOrdersDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
                 if (sendToMbButtonCell.Enabled)
                 {
@@ -551,15 +548,19 @@ namespace IST.OrderSynchronizationSystem
                     string orderJsonString = ossOrderRow["THubCompleteOrder"].ToString();
                     if (!String.IsNullOrWhiteSpace(orderJsonString))
                     {
-                        Shipment[] shipments = new Shipment[1]
+                        OssShipment[] shipments = new OssShipment[1]
                         {
-                            JsonConvert.DeserializeObject<Shipment>(orderJsonString)
+                            JsonConvert.DeserializeObject<OssShipment>(orderJsonString)
                         };
 
-                        MapShipment(shipments[0]);
-
+                        MapShipment(shipments[0], shipmentMethods);
+                        Shipment [] shipmentToPost = new Shipment[1];
+                        foreach (OssShipment ossShipment in shipments.ToList())
+                        {
+                            shipmentToPost[0] = CreateFrom(ossShipment);
+                        }
                         DateTime shipmentRequestSentOn = DateTime.Now;
-                        Response[] responses = MoldingBoxHelper.PostShipment(client, apiKey, shipments);
+                        Response[] responses = MoldingBoxHelper.PostShipment(client, apiKey, shipmentToPost);
                         
                         ossOrderRow["SentToMB"] = true;
                         ossOrderRow["SentToMBOn"] = shipmentRequestSentOn;
@@ -582,11 +583,59 @@ namespace IST.OrderSynchronizationSystem
             }
         }
 
-        private Shipment MapShipment(Shipment shipment)
+        private Shipment MapShipment(OssShipment shipment, ShippingMethod [] moldingBoxShippingMethods)
         {
 
-            //string destinationMapping = _orderSyncronizationDatabase.LoadShipmentMethodMapping(true, shipment.ShippingMethodID);
+            string destinationMapping = _orderSyncronizationDatabase.LoadShipmentMethodMapping(true, shipment.WebShipMethod);
+            if (string.IsNullOrEmpty(destinationMapping))
+            {
+                CreateMappingForm form = new CreateMappingForm(_orderSyncronizationDatabase, shipment.WebShipMethod,
+                    moldingBoxShippingMethods);
+                DialogResult result = form.ShowDialog();
+                if (form.DialogResult == DialogResult.OK)
+                {
+                    shipment.ShippingMethodID = form.MbShipMethodId;
+                }
+            }
+            else
+            {
+                ShippingMethod mbShipMethod = moldingBoxShippingMethods.FirstOrDefault(mb => mb.Method == destinationMapping);
+                if (mbShipMethod != null)
+                {
+                    shipment.ShippingMethodID = mbShipMethod.ID;
+                }
+            }
+            
             return shipment;
+        }
+
+        private Shipment CreateFrom(OssShipment source)
+        {
+            return new Shipment
+            {
+                Address1 = source.Address1,
+                Address2 = source.Address2,
+                CODAmount = source.CODAmount,
+                City = source.City,
+                Company = source.Company,
+                Country = source.Country,
+                Custom1 = source.Custom1,
+                Custom2 = source.Custom2,
+                Custom3 = source.Custom3,
+                Custom4 = source.Custom4,
+                Custom5 = source.Custom5,
+                Custom6 = source.Custom6,
+                Email = source.Email,                
+                FirstName = source.FirstName,
+                Items = source.Items,
+                LastName = source.LastName,
+                OrderID = source.OrderID,
+                Orderdate = source.Orderdate,
+                Phone = source.Phone,
+                ShippingMethodID = source.ShippingMethodID,
+                State = source.State,
+                Zip = source.Zip
+            };
         }
     }
 }

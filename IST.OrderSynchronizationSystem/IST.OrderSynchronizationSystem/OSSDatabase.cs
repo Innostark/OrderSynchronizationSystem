@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Transactions;
+using IST.OrderSynchronizationSystem.GUI;
 using IST.OrderSynchronizationSystem.MBAPI;
 using IST.OrderSynchronizationSystem.Models;
 using Newtonsoft.Json;
@@ -184,8 +185,8 @@ namespace IST.OrderSynchronizationSystem
             DataTable ossOrdersTableTHubLoad = CreateStagingOrdersTable_THubLoad();
             foreach (OssShipment ossShipment in stagingShipments)
             {
-                Shipment shipment = ConvertStagingOrderToMoldingBoxShipment(ossShipment);
-                string shipmenJson = JsonConvert.SerializeObject(shipment);
+                //Shipment shipment = ConvertStagingOrderToMoldingBoxShipment(ossShipment);
+                string shipmenJson = JsonConvert.SerializeObject(ossShipment);
                 DataRow ossOrder = CreateStagingOrderRowFromStagingShipment_THubLoad(ossOrdersTableTHubLoad, ossShipment, shipmenJson);
 
                 ossOrdersTableTHubLoad.Rows.Add(ossOrder);
@@ -323,6 +324,7 @@ namespace IST.OrderSynchronizationSystem
             ossOrdersTable.Columns.Add("MBShipmentSubmitError", typeof(string));
             ossOrdersTable.Columns.Add("MBShipmentIdSubmitedToThub", typeof(bool));
             ossOrdersTable.Columns.Add("MBShipmentIdSubmitedToThubOn", typeof(DateTime));
+            
 
             return ossOrdersTable;
         }
@@ -383,7 +385,7 @@ namespace IST.OrderSynchronizationSystem
         {
             using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
             {
-                using (SqlCommand command = new SqlCommand(SqlResource.staging_get_Shipment_Mapping_ThubToMoldingBox))
+                using (SqlCommand command = new SqlCommand(SqlResource.staging_get_Shipment_Mapping_ThubToMoldingBox, stagingDbconnection))
                 {
                     command.Parameters.AddWithValue("@SourceShipment", sourceShipmentMethod);
                     command.Parameters.AddWithValue("@THubToMbFlag", thubToMoldingBox);
@@ -391,11 +393,29 @@ namespace IST.OrderSynchronizationSystem
                     stagingDbconnection.Open();
 
                     object results = command.ExecuteScalar();
+                    stagingDbconnection.Close();
                     if (results == null)
                         return string.Empty;
-                    return (string) results;
+                    return (string) results;                    
                 }
             }
         }
+
+        public bool SaveThubToMbMapping(string sourceShipMethod, string destinationShipMethod, bool THubToMbMap)
+        {
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(SqlResource.staging_sql_InsertTHubToMbMapping, stagingDbconnection))
+                {
+                    command.Parameters.AddWithValue("@SourceShipMethod", sourceShipMethod);
+                    command.Parameters.AddWithValue("@DestinationShipMethod", destinationShipMethod);
+                    command.Parameters.AddWithValue("@THubToMBMap", THubToMbMap);
+                    stagingDbconnection.Open();
+                    return command.ExecuteNonQuery() > 0;                    
+                }
+            }
+        }
+
+
     }
 }

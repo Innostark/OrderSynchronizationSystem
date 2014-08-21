@@ -226,4 +226,15 @@ Where  oi.OrderId = @THubOrderId</value>
   <data name="staging_get_Shipment_Mapping_ThubToMoldingBox" xml:space="preserve">
     <value>Select DestinationShipmentMethod from OSSShipmentMappings where SourceShipmentMethod = @SourceShipment and THubToMBMap = @THubToMbFlag</value>
   </data>
+  <data name="staging_sql_InsertTHubToMbMapping" xml:space="preserve">
+    <value>INSERT INTO [OSSShipmentMappings]
+           ([SourceShipmentMethod]
+           ,[DestinationShipmentMethod]
+           ,[THubToMBMap])
+     VALUES
+           (@SourceShipMethod,
+           @DestinationShipMethod,
+           @THubToMBMap)
+    </value>
+  </data>
 </root>
