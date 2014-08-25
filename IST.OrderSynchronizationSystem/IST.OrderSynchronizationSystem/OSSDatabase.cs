@@ -135,7 +135,7 @@ namespace IST.OrderSynchronizationSystem
             return ossShipments;
         }
 
-        public DataTable LoadOrdersFromStaging(string name)
+        public DataTable LoadOrdersFromStaging(string name, OSSOrderStatus status)
         {
             DataTable stagingOrdersDataTable = CreateStagingOrdersTable(name, true);
             using (
@@ -146,7 +146,7 @@ namespace IST.OrderSynchronizationSystem
                 using (SqlCommand command = new SqlCommand("USPLoadOrdersFromStaging", stagingDbconnection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-
+                    command.Parameters.AddWithValue("@OrderStatus", (int) status);
                     SqlDataReader stagingOrder = command.ExecuteReader();
                     if (stagingOrder.HasRows)
                     {
@@ -313,8 +313,9 @@ namespace IST.OrderSynchronizationSystem
             if (withTableId) ossOrdersTable.Columns.Add("OSSOrderId", typeof(long));
             ossOrdersTable.Columns.Add("THubOrderId", typeof(long));
             ossOrdersTable.Columns.Add("THubOrderReferenceNo", typeof(string));
+            ossOrdersTable.Columns.Add("OrderStatus", typeof(string));
             ossOrdersTable.Columns.Add("CreatedOn", typeof(DateTime));
-            ossOrdersTable.Columns.Add("THubCompleteOrder", typeof (string));
+            ossOrdersTable.Columns.Add("THubCompleteOrder", typeof(string));
             ossOrdersTable.Columns.Add("SentToMB", typeof(bool));
             ossOrdersTable.Columns.Add("SentToMBOn", typeof(DateTime));
             ossOrdersTable.Columns.Add("MBPostShipmentMessage", typeof(string));
@@ -345,6 +346,7 @@ namespace IST.OrderSynchronizationSystem
             stagingRow["MBShipmentSubmitError"] = stagingOrder["MBShipmentSubmitError"];
             stagingRow["MBShipmentIdSubmitedToThub"] = stagingOrder["MBShipmentIdSubmitedToThub"];
             stagingRow["MBShipmentIdSubmitedToThubOn"] = stagingOrder["MBShipmentIdSubmitedToThubOn"];
+            stagingRow["OrderStatus"] = stagingOrder["OrderStatus"] != null ? ((OSSOrderStatus)(int.Parse(stagingOrder["OrderStatus"].ToString()))).ToString() : string.Empty;
         }
 
         internal int UpdateOrderAfterMoldingBoxShipmentRequest(DataRow ossOrderRow)

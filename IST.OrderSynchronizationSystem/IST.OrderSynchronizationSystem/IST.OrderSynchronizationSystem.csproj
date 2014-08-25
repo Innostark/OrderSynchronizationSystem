@@ -69,6 +69,7 @@
     <Compile Include="EncodeDecode.cs" />
     <Compile Include="GUI\DataGridViewDisableButtonCell.cs" />
     <Compile Include="GUI\DataGridViewDisableButtonColumn.cs" />
+    <Compile Include="GUI\OSSOrderStatus.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

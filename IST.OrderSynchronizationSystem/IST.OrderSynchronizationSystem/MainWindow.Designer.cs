@@ -70,7 +70,7 @@
             this.UsernameLabel = new System.Windows.Forms.Label();
             this.DatabaseLabel = new System.Windows.Forms.Label();
             this.ServerLabel = new System.Windows.Forms.Label();
-            this.OSSOrderTabPage = new System.Windows.Forms.TabPage();
+            this.NewOrderTabPage = new System.Windows.Forms.TabPage();
             this.LoadOrderFromStagingGroupBox = new System.Windows.Forms.GroupBox();
             this.NoOfOrdersLabel = new System.Windows.Forms.Label();
             this.DisplayStagingOrderButton = new System.Windows.Forms.Button();
@@ -80,10 +80,21 @@
             this.LoadOrdersFromTHubButton = new System.Windows.Forms.Button();
             this.ManualSendToMoldingBoxGroupBox = new System.Windows.Forms.GroupBox();
             this.SendToMoldingBoxButton = new System.Windows.Forms.Button();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.Exception = new System.Windows.Forms.TabPage();
+            this.ExceptionRefresh = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.OssExceptionGridView = new System.Windows.Forms.DataGridView();
+            this.Completed = new System.Windows.Forms.TabPage();
             this.FormErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.ApplicationStatusStrip = new System.Windows.Forms.StatusStrip();
+            this.CompleteButton = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.OssCompletedGridView = new System.Windows.Forms.DataGridView();
+            this.InFight = new System.Windows.Forms.TabPage();
+            this.InFlightRefresh = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.OssInFlightGridView = new System.Windows.Forms.DataGridView();
             this.ApplicationMenuStrip.SuspendLayout();
             this.MainFormTabControl.SuspendLayout();
             this.ConfigurationTabPage.SuspendLayout();
@@ -91,14 +102,23 @@
             this.AutomaticOrderSynchronizeSettingsGroupBox.SuspendLayout();
             this.StagingDbGroupBox.SuspendLayout();
             this.SourceGroupBox.SuspendLayout();
-            this.OSSOrderTabPage.SuspendLayout();
+            this.NewOrderTabPage.SuspendLayout();
             this.LoadOrderFromStagingGroupBox.SuspendLayout();
             this.OSSOrdersGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OssOrdersDataGridView)).BeginInit();
             this.SyncOrdersWithTHubGroupBox.SuspendLayout();
             this.ManualSendToMoldingBoxGroupBox.SuspendLayout();
+            this.Exception.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.OssExceptionGridView)).BeginInit();
+            this.Completed.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).BeginInit();
             this.ApplicationStatusStrip.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.OssCompletedGridView)).BeginInit();
+            this.InFight.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.OssInFlightGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // ApplicationMenuStrip
@@ -151,8 +171,10 @@
             // MainFormTabControl
             // 
             this.MainFormTabControl.Controls.Add(this.ConfigurationTabPage);
-            this.MainFormTabControl.Controls.Add(this.OSSOrderTabPage);
-            this.MainFormTabControl.Controls.Add(this.tabPage1);
+            this.MainFormTabControl.Controls.Add(this.NewOrderTabPage);
+            this.MainFormTabControl.Controls.Add(this.InFight);
+            this.MainFormTabControl.Controls.Add(this.Exception);
+            this.MainFormTabControl.Controls.Add(this.Completed);
             this.MainFormTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainFormTabControl.Location = new System.Drawing.Point(0, 24);
             this.MainFormTabControl.Name = "MainFormTabControl";
@@ -478,20 +500,20 @@
             this.ServerLabel.TabIndex = 11;
             this.ServerLabel.Text = "Server:";
             // 
-            // OSSOrderTabPage
+            // NewOrderTabPage
             // 
-            this.OSSOrderTabPage.BackColor = System.Drawing.Color.Transparent;
-            this.OSSOrderTabPage.Controls.Add(this.LoadOrderFromStagingGroupBox);
-            this.OSSOrderTabPage.Controls.Add(this.OSSOrdersGroupBox);
-            this.OSSOrderTabPage.Controls.Add(this.SyncOrdersWithTHubGroupBox);
-            this.OSSOrderTabPage.Controls.Add(this.ManualSendToMoldingBoxGroupBox);
-            this.OSSOrderTabPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OSSOrderTabPage.Location = new System.Drawing.Point(4, 22);
-            this.OSSOrderTabPage.Name = "OSSOrderTabPage";
-            this.OSSOrderTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.OSSOrderTabPage.Size = new System.Drawing.Size(1222, 678);
-            this.OSSOrderTabPage.TabIndex = 1;
-            this.OSSOrderTabPage.Text = "T-Hub Orders";
+            this.NewOrderTabPage.BackColor = System.Drawing.Color.Transparent;
+            this.NewOrderTabPage.Controls.Add(this.LoadOrderFromStagingGroupBox);
+            this.NewOrderTabPage.Controls.Add(this.OSSOrdersGroupBox);
+            this.NewOrderTabPage.Controls.Add(this.SyncOrdersWithTHubGroupBox);
+            this.NewOrderTabPage.Controls.Add(this.ManualSendToMoldingBoxGroupBox);
+            this.NewOrderTabPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NewOrderTabPage.Location = new System.Drawing.Point(4, 22);
+            this.NewOrderTabPage.Name = "NewOrderTabPage";
+            this.NewOrderTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.NewOrderTabPage.Size = new System.Drawing.Size(1222, 678);
+            this.NewOrderTabPage.TabIndex = 1;
+            this.NewOrderTabPage.Text = "New";
             // 
             // LoadOrderFromStagingGroupBox
             // 
@@ -622,14 +644,59 @@
             this.SendToMoldingBoxButton.UseVisualStyleBackColor = false;
             this.SendToMoldingBoxButton.Click += new System.EventHandler(this.SendToMoldingBoxButton_Click);
             // 
-            // tabPage1
+            // Exception
             // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(1222, 678);
-            this.tabPage1.TabIndex = 2;
-            this.tabPage1.Text = "...";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.Exception.Controls.Add(this.ExceptionRefresh);
+            this.Exception.Controls.Add(this.groupBox1);
+            this.Exception.Location = new System.Drawing.Point(4, 22);
+            this.Exception.Name = "Exception";
+            this.Exception.Size = new System.Drawing.Size(1222, 678);
+            this.Exception.TabIndex = 2;
+            this.Exception.Text = "Exception";
+            this.Exception.UseVisualStyleBackColor = true;
+            // 
+            // ExceptionRefresh
+            // 
+            this.ExceptionRefresh.BackColor = System.Drawing.Color.BurlyWood;
+            this.ExceptionRefresh.Location = new System.Drawing.Point(9, 10);
+            this.ExceptionRefresh.Name = "ExceptionRefresh";
+            this.ExceptionRefresh.Size = new System.Drawing.Size(75, 23);
+            this.ExceptionRefresh.TabIndex = 1;
+            this.ExceptionRefresh.Text = "Refresh";
+            this.ExceptionRefresh.UseVisualStyleBackColor = false;
+            this.ExceptionRefresh.Click += new System.EventHandler(this.ExceptionRefresh_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.OssExceptionGridView);
+            this.groupBox1.Location = new System.Drawing.Point(8, 39);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(1206, 628);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Orders with Exceptions";
+            // 
+            // OssExceptionGridView
+            // 
+            this.OssExceptionGridView.BackgroundColor = System.Drawing.Color.Wheat;
+            this.OssExceptionGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.OssExceptionGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OssExceptionGridView.Location = new System.Drawing.Point(3, 16);
+            this.OssExceptionGridView.Name = "OssExceptionGridView";
+            this.OssExceptionGridView.Size = new System.Drawing.Size(1200, 609);
+            this.OssExceptionGridView.TabIndex = 0;
+            this.OssExceptionGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssExceptionGridView_DataBindingComplete);
+            // 
+            // Completed
+            // 
+            this.Completed.Controls.Add(this.groupBox2);
+            this.Completed.Controls.Add(this.CompleteButton);
+            this.Completed.Location = new System.Drawing.Point(4, 22);
+            this.Completed.Name = "Completed";
+            this.Completed.Size = new System.Drawing.Size(1222, 678);
+            this.Completed.TabIndex = 3;
+            this.Completed.Text = "Completed";
+            this.Completed.UseVisualStyleBackColor = true;
             // 
             // FormErrorProvider
             // 
@@ -651,6 +718,81 @@
             this.ApplicationStatusStrip.Size = new System.Drawing.Size(1230, 22);
             this.ApplicationStatusStrip.TabIndex = 50;
             this.ApplicationStatusStrip.Text = "Application Status Strip";
+            // 
+            // CompleteButton
+            // 
+            this.CompleteButton.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.CompleteButton.Location = new System.Drawing.Point(9, 10);
+            this.CompleteButton.Name = "CompleteButton";
+            this.CompleteButton.Size = new System.Drawing.Size(75, 23);
+            this.CompleteButton.TabIndex = 0;
+            this.CompleteButton.Text = "Refresh";
+            this.CompleteButton.UseVisualStyleBackColor = false;
+            this.CompleteButton.Click += new System.EventHandler(this.CompleteButton_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.OssCompletedGridView);
+            this.groupBox2.Location = new System.Drawing.Point(9, 39);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(1205, 636);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Completed Orders";
+            // 
+            // OssCompletedGridView
+            // 
+            this.OssCompletedGridView.BackgroundColor = System.Drawing.Color.PaleGreen;
+            this.OssCompletedGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.OssCompletedGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OssCompletedGridView.Location = new System.Drawing.Point(3, 16);
+            this.OssCompletedGridView.Name = "OssCompletedGridView";
+            this.OssCompletedGridView.Size = new System.Drawing.Size(1199, 617);
+            this.OssCompletedGridView.TabIndex = 0;
+            this.OssCompletedGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssCompletedGridView_DataBindingComplete);
+            // 
+            // InFight
+            // 
+            this.InFight.Controls.Add(this.groupBox3);
+            this.InFight.Controls.Add(this.InFlightRefresh);
+            this.InFight.Location = new System.Drawing.Point(4, 22);
+            this.InFight.Name = "InFight";
+            this.InFight.Size = new System.Drawing.Size(1222, 678);
+            this.InFight.TabIndex = 4;
+            this.InFight.Text = "InFlight";
+            this.InFight.UseVisualStyleBackColor = true;
+            // 
+            // InFlightRefresh
+            // 
+            this.InFlightRefresh.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.InFlightRefresh.Location = new System.Drawing.Point(9, 14);
+            this.InFlightRefresh.Name = "InFlightRefresh";
+            this.InFlightRefresh.Size = new System.Drawing.Size(75, 23);
+            this.InFlightRefresh.TabIndex = 0;
+            this.InFlightRefresh.Text = "Refresh";
+            this.InFlightRefresh.UseVisualStyleBackColor = false;
+            this.InFlightRefresh.Click += new System.EventHandler(this.InFlightRefresh_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.OssInFlightGridView);
+            this.groupBox3.Location = new System.Drawing.Point(9, 44);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(1205, 631);
+            this.groupBox3.TabIndex = 1;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "groupBox3";
+            // 
+            // OssInFlightGridView
+            // 
+            this.OssInFlightGridView.BackgroundColor = System.Drawing.SystemColors.InactiveCaption;
+            this.OssInFlightGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.OssInFlightGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OssInFlightGridView.Location = new System.Drawing.Point(3, 16);
+            this.OssInFlightGridView.Name = "OssInFlightGridView";
+            this.OssInFlightGridView.Size = new System.Drawing.Size(1199, 612);
+            this.OssInFlightGridView.TabIndex = 0;
+            this.OssInFlightGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssInFlightGridView_DataBindingComplete);
             // 
             // MainWindow
             // 
@@ -680,16 +822,25 @@
             this.StagingDbGroupBox.PerformLayout();
             this.SourceGroupBox.ResumeLayout(false);
             this.SourceGroupBox.PerformLayout();
-            this.OSSOrderTabPage.ResumeLayout(false);
+            this.NewOrderTabPage.ResumeLayout(false);
             this.LoadOrderFromStagingGroupBox.ResumeLayout(false);
             this.LoadOrderFromStagingGroupBox.PerformLayout();
             this.OSSOrdersGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.OssOrdersDataGridView)).EndInit();
             this.SyncOrdersWithTHubGroupBox.ResumeLayout(false);
             this.ManualSendToMoldingBoxGroupBox.ResumeLayout(false);
+            this.Exception.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.OssExceptionGridView)).EndInit();
+            this.Completed.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).EndInit();
             this.ApplicationStatusStrip.ResumeLayout(false);
             this.ApplicationStatusStrip.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.OssCompletedGridView)).EndInit();
+            this.InFight.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.OssInFlightGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -707,7 +858,7 @@
         private System.Windows.Forms.TabPage ConfigurationTabPage;
         private System.Windows.Forms.GroupBox StagingDbGroupBox;
         private System.Windows.Forms.GroupBox SourceGroupBox;
-        private System.Windows.Forms.TabPage OSSOrderTabPage;
+        private System.Windows.Forms.TabPage NewOrderTabPage;
         private System.Windows.Forms.Button SaveSourceButon;
         private System.Windows.Forms.TextBox SourcePasswordTextBox;
         private System.Windows.Forms.TextBox SourceUsernameTextBox;
@@ -716,7 +867,7 @@
         private System.Windows.Forms.Label UsernameLabel;
         private System.Windows.Forms.Label DatabaseLabel;
         private System.Windows.Forms.Label ServerLabel;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage Exception;
         private System.Windows.Forms.GroupBox AutomaticOrderSynchronizeSettingsGroupBox;
         private System.Windows.Forms.Label SynchronizeIntervalMinutesLabel;
         private System.Windows.Forms.Label SynchronizeIntervalLabel;
@@ -749,6 +900,17 @@
         private System.Windows.Forms.GroupBox MoldingBoxApiKeyGroupBox;
         private System.Windows.Forms.TextBox MoldinboxKeyTextBox;
         private System.Windows.Forms.Label MoldingBoxApiKeyLabel;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button ExceptionRefresh;
+        private System.Windows.Forms.DataGridView OssExceptionGridView;
+        private System.Windows.Forms.TabPage Completed;
+        private System.Windows.Forms.Button CompleteButton;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.DataGridView OssCompletedGridView;
+        private System.Windows.Forms.TabPage InFight;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.DataGridView OssInFlightGridView;
+        private System.Windows.Forms.Button InFlightRefresh;
     }
 }
 
