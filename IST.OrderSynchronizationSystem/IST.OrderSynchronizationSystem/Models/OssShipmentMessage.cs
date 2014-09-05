@@ -1,17 +1,15 @@
-﻿using IST.OrderSynchronizationSystem.MBAPI;
-
-namespace IST.OrderSynchronizationSystem.Models
+﻿namespace IST.OrderSynchronizationSystem.Models
 {
     internal class OssShipmentMessage
     {
         public string ApiKey { get; set; }
 
-        public Shipment[] Shipments { get; set; }
+        public OssShipment[] Shipments { get; set; }
 
-        public OssShipmentMessage(string apiKey, Shipment[] shipments)
+        public OssShipmentMessage(string apiKey, OssShipment[] shipments)
         {
-            this.ApiKey = apiKey;
-            this.Shipments = shipments;
+            ApiKey = apiKey;
+            Shipments = shipments;
         }
     }
 }

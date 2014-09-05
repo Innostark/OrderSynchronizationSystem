@@ -106,6 +106,17 @@ namespace IST.OrderSynchronizationSystem {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to update OSSOrders
+        ///set [THubCompleteOrder] = @CompleteOrder
+        ///where THubOrderReferenceNo = @OssOrderId .
+        /// </summary>
+        internal static string source_sql_UpdateOssOrder {
+            get {
+                return ResourceManager.GetString("source_sql_UpdateOssOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select count(*) from Orders With(NoLock).
         /// </summary>
         internal static string source_sql_verify {

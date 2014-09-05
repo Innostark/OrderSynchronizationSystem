@@ -53,6 +53,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoSynchOrder.cs" />
+    <Compile Include="CancelMessageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CancelMessageForm.Designer.cs">
+      <DependentUpon>CancelMessageForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Connection.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,6 +75,7 @@
     <Compile Include="EncodeDecode.cs" />
     <Compile Include="GUI\DataGridViewDisableButtonCell.cs" />
     <Compile Include="GUI\DataGridViewDisableButtonColumn.cs" />
+    <Compile Include="GUI\OssOrdersGridTypes.cs" />
     <Compile Include="GUI\OSSOrderStatus.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
@@ -99,6 +106,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SqlResource.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="CancelMessageForm.resx">
+      <DependentUpon>CancelMessageForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Connection.resx">
       <DependentUpon>Connection.cs</DependentUpon>
     </EmbeddedResource>

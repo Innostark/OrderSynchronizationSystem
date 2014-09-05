@@ -130,6 +130,9 @@
 From   OrderItems as oi With(NoLock)
 Where  oi.OrderId = @THubOrderId</value>
   </data>
+  
+  
+  
   <data name="source_sql_PullOrdersFromThub" xml:space="preserve">
     <value>Select  Top 1 ord.OrderId As THubOrderID,
        ord.ChannelOrderReference As OrderID, 
@@ -210,6 +213,11 @@ Where  oi.OrderId = @THubOrderId</value>
     From   Orders As ord With(NoLock),
            OrderShippingStatus As oss With(NoLock)
     Where  ord.ChannelOrderReference = 100004947</value>
+  </data>
+  <data name="source_sql_UpdateOssOrder" xml:space="preserve">
+    <value>update OSSOrders
+set [THubCompleteOrder] = @CompleteOrder
+where THubOrderReferenceNo = @OssOrderId </value>
   </data>
   <data name="source_sql_verify" xml:space="preserve">
     <value>Select count(*) from Orders With(NoLock)</value>

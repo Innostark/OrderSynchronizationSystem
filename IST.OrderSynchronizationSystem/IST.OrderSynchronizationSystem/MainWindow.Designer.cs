@@ -40,6 +40,12 @@
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainFormTabControl = new System.Windows.Forms.TabControl();
             this.ConfigurationTabPage = new System.Windows.Forms.TabPage();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.PhoneTextbox = new System.Windows.Forms.TextBox();
+            this.phoneLabel = new System.Windows.Forms.Label();
+            this.EmailTextbox = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.MoldingBoxApiKeyGroupBox = new System.Windows.Forms.GroupBox();
             this.MoldinboxKeyTextBox = new System.Windows.Forms.TextBox();
             this.MoldingBoxApiKeyLabel = new System.Windows.Forms.Label();
@@ -80,24 +86,33 @@
             this.LoadOrdersFromTHubButton = new System.Windows.Forms.Button();
             this.ManualSendToMoldingBoxGroupBox = new System.Windows.Forms.GroupBox();
             this.SendToMoldingBoxButton = new System.Windows.Forms.Button();
+            this.InFight = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.OssInFlightGridView = new System.Windows.Forms.DataGridView();
+            this.InFlightRefresh = new System.Windows.Forms.Button();
             this.Exception = new System.Windows.Forms.TabPage();
             this.ExceptionRefresh = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.OssExceptionGridView = new System.Windows.Forms.DataGridView();
             this.Completed = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.OssCompletedGridView = new System.Windows.Forms.DataGridView();
+            this.CompleteButton = new System.Windows.Forms.Button();
+            this.OnHold = new System.Windows.Forms.TabPage();
+            this.OnHoldGroupBox = new System.Windows.Forms.GroupBox();
+            this.OSSOrderOnHoldGridView = new System.Windows.Forms.DataGridView();
+            this.OnHoldRefresh = new System.Windows.Forms.Button();
             this.FormErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.ApplicationStatusStrip = new System.Windows.Forms.StatusStrip();
-            this.CompleteButton = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.OssCompletedGridView = new System.Windows.Forms.DataGridView();
-            this.InFight = new System.Windows.Forms.TabPage();
-            this.InFlightRefresh = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.OssInFlightGridView = new System.Windows.Forms.DataGridView();
+            this.Canceled = new System.Windows.Forms.TabPage();
+            this.CancelRefresh = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.OssOrdersCanceledOrders = new System.Windows.Forms.DataGridView();
             this.ApplicationMenuStrip.SuspendLayout();
             this.MainFormTabControl.SuspendLayout();
             this.ConfigurationTabPage.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.MoldingBoxApiKeyGroupBox.SuspendLayout();
             this.AutomaticOrderSynchronizeSettingsGroupBox.SuspendLayout();
             this.StagingDbGroupBox.SuspendLayout();
@@ -108,17 +123,23 @@
             ((System.ComponentModel.ISupportInitialize)(this.OssOrdersDataGridView)).BeginInit();
             this.SyncOrdersWithTHubGroupBox.SuspendLayout();
             this.ManualSendToMoldingBoxGroupBox.SuspendLayout();
+            this.InFight.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.OssInFlightGridView)).BeginInit();
             this.Exception.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OssExceptionGridView)).BeginInit();
             this.Completed.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).BeginInit();
-            this.ApplicationStatusStrip.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OssCompletedGridView)).BeginInit();
-            this.InFight.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.OssInFlightGridView)).BeginInit();
+            this.OnHold.SuspendLayout();
+            this.OnHoldGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.OSSOrderOnHoldGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).BeginInit();
+            this.ApplicationStatusStrip.SuspendLayout();
+            this.Canceled.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.OssOrdersCanceledOrders)).BeginInit();
             this.SuspendLayout();
             // 
             // ApplicationMenuStrip
@@ -175,6 +196,8 @@
             this.MainFormTabControl.Controls.Add(this.InFight);
             this.MainFormTabControl.Controls.Add(this.Exception);
             this.MainFormTabControl.Controls.Add(this.Completed);
+            this.MainFormTabControl.Controls.Add(this.OnHold);
+            this.MainFormTabControl.Controls.Add(this.Canceled);
             this.MainFormTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainFormTabControl.Location = new System.Drawing.Point(0, 24);
             this.MainFormTabControl.Name = "MainFormTabControl";
@@ -185,6 +208,8 @@
             // ConfigurationTabPage
             // 
             this.ConfigurationTabPage.BackColor = System.Drawing.Color.Transparent;
+            this.ConfigurationTabPage.Controls.Add(this.splitter1);
+            this.ConfigurationTabPage.Controls.Add(this.groupBox4);
             this.ConfigurationTabPage.Controls.Add(this.MoldingBoxApiKeyGroupBox);
             this.ConfigurationTabPage.Controls.Add(this.AutomaticOrderSynchronizeSettingsGroupBox);
             this.ConfigurationTabPage.Controls.Add(this.StagingDbGroupBox);
@@ -196,6 +221,60 @@
             this.ConfigurationTabPage.Size = new System.Drawing.Size(1222, 678);
             this.ConfigurationTabPage.TabIndex = 0;
             this.ConfigurationTabPage.Text = "Configuration";
+            // 
+            // splitter1
+            // 
+            this.splitter1.Location = new System.Drawing.Point(3, 3);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 672);
+            this.splitter1.TabIndex = 6;
+            this.splitter1.TabStop = false;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.PhoneTextbox);
+            this.groupBox4.Controls.Add(this.phoneLabel);
+            this.groupBox4.Controls.Add(this.EmailTextbox);
+            this.groupBox4.Controls.Add(this.label5);
+            this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.groupBox4.Location = new System.Drawing.Point(8, 252);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(468, 55);
+            this.groupBox4.TabIndex = 5;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Default Phone/Email ";
+            // 
+            // PhoneTextbox
+            // 
+            this.PhoneTextbox.Location = new System.Drawing.Point(302, 19);
+            this.PhoneTextbox.Name = "PhoneTextbox";
+            this.PhoneTextbox.Size = new System.Drawing.Size(156, 20);
+            this.PhoneTextbox.TabIndex = 18;
+            // 
+            // phoneLabel
+            // 
+            this.phoneLabel.AutoSize = true;
+            this.phoneLabel.Location = new System.Drawing.Point(247, 23);
+            this.phoneLabel.Name = "phoneLabel";
+            this.phoneLabel.Size = new System.Drawing.Size(38, 13);
+            this.phoneLabel.TabIndex = 17;
+            this.phoneLabel.Text = "Phone";
+            // 
+            // EmailTextbox
+            // 
+            this.EmailTextbox.Location = new System.Drawing.Point(69, 20);
+            this.EmailTextbox.Name = "EmailTextbox";
+            this.EmailTextbox.Size = new System.Drawing.Size(156, 20);
+            this.EmailTextbox.TabIndex = 16;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(18, 25);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(32, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Email";
             // 
             // MoldingBoxApiKeyGroupBox
             // 
@@ -236,7 +315,7 @@
             this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SynchronizeIntervalLabel);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SynchronizeButton);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AutomaticOrderSynchronizeSettingsGroupBox.Location = new System.Drawing.Point(8, 252);
+            this.AutomaticOrderSynchronizeSettingsGroupBox.Location = new System.Drawing.Point(482, 252);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Name = "AutomaticOrderSynchronizeSettingsGroupBox";
             this.AutomaticOrderSynchronizeSettingsGroupBox.Size = new System.Drawing.Size(462, 55);
             this.AutomaticOrderSynchronizeSettingsGroupBox.TabIndex = 3;
@@ -644,6 +723,59 @@
             this.SendToMoldingBoxButton.UseVisualStyleBackColor = false;
             this.SendToMoldingBoxButton.Click += new System.EventHandler(this.SendToMoldingBoxButton_Click);
             // 
+            // InFight
+            // 
+            this.InFight.Controls.Add(this.groupBox3);
+            this.InFight.Controls.Add(this.InFlightRefresh);
+            this.InFight.Location = new System.Drawing.Point(4, 22);
+            this.InFight.Name = "InFight";
+            this.InFight.Size = new System.Drawing.Size(1222, 678);
+            this.InFight.TabIndex = 4;
+            this.InFight.Text = "InFlight";
+            this.InFight.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.OssInFlightGridView);
+            this.groupBox3.Location = new System.Drawing.Point(9, 44);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(1205, 631);
+            this.groupBox3.TabIndex = 1;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "groupBox3";
+            // 
+            // OssInFlightGridView
+            // 
+            this.OssInFlightGridView.AllowUserToAddRows = false;
+            this.OssInFlightGridView.AllowUserToDeleteRows = false;
+            this.OssInFlightGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.OssInFlightGridView.BackgroundColor = System.Drawing.SystemColors.InactiveCaption;
+            this.OssInFlightGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+            this.OssInFlightGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+            this.OssInFlightGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.OssInFlightGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.OssInFlightGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OssInFlightGridView.Location = new System.Drawing.Point(3, 16);
+            this.OssInFlightGridView.MultiSelect = false;
+            this.OssInFlightGridView.Name = "OssInFlightGridView";
+            this.OssInFlightGridView.RowHeadersVisible = false;
+            this.OssInFlightGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.OssInFlightGridView.Size = new System.Drawing.Size(1199, 612);
+            this.OssInFlightGridView.TabIndex = 0;
+            this.OssInFlightGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OssInFlightGridView_CellClick);
+            this.OssInFlightGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssInFlightGridView_DataBindingComplete);
+            // 
+            // InFlightRefresh
+            // 
+            this.InFlightRefresh.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.InFlightRefresh.Location = new System.Drawing.Point(9, 14);
+            this.InFlightRefresh.Name = "InFlightRefresh";
+            this.InFlightRefresh.Size = new System.Drawing.Size(75, 23);
+            this.InFlightRefresh.TabIndex = 0;
+            this.InFlightRefresh.Text = "Refresh";
+            this.InFlightRefresh.UseVisualStyleBackColor = false;
+            this.InFlightRefresh.Click += new System.EventHandler(this.InFlightRefresh_Click);
+            // 
             // Exception
             // 
             this.Exception.Controls.Add(this.ExceptionRefresh);
@@ -678,13 +810,24 @@
             // 
             // OssExceptionGridView
             // 
+            this.OssExceptionGridView.AllowUserToAddRows = false;
+            this.OssExceptionGridView.AllowUserToDeleteRows = false;
+            this.OssExceptionGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.OssExceptionGridView.BackgroundColor = System.Drawing.Color.Wheat;
+            this.OssExceptionGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+            this.OssExceptionGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+            this.OssExceptionGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.OssExceptionGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.OssExceptionGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OssExceptionGridView.Location = new System.Drawing.Point(3, 16);
+            this.OssExceptionGridView.MultiSelect = false;
             this.OssExceptionGridView.Name = "OssExceptionGridView";
+            this.OssExceptionGridView.ReadOnly = true;
+            this.OssExceptionGridView.RowHeadersVisible = false;
+            this.OssExceptionGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.OssExceptionGridView.Size = new System.Drawing.Size(1200, 609);
             this.OssExceptionGridView.TabIndex = 0;
+            this.OssExceptionGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OssExceptionGridView_CellContentClick);
             this.OssExceptionGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssExceptionGridView_DataBindingComplete);
             // 
             // Completed
@@ -697,6 +840,101 @@
             this.Completed.TabIndex = 3;
             this.Completed.Text = "Completed";
             this.Completed.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.OssCompletedGridView);
+            this.groupBox2.Location = new System.Drawing.Point(9, 39);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(1205, 636);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Completed Orders";
+            // 
+            // OssCompletedGridView
+            // 
+            this.OssCompletedGridView.AllowUserToAddRows = false;
+            this.OssCompletedGridView.AllowUserToDeleteRows = false;
+            this.OssCompletedGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.OssCompletedGridView.BackgroundColor = System.Drawing.Color.PaleGreen;
+            this.OssCompletedGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+            this.OssCompletedGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+            this.OssCompletedGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.OssCompletedGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.OssCompletedGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OssCompletedGridView.Location = new System.Drawing.Point(3, 16);
+            this.OssCompletedGridView.MultiSelect = false;
+            this.OssCompletedGridView.Name = "OssCompletedGridView";
+            this.OssCompletedGridView.ReadOnly = true;
+            this.OssCompletedGridView.RowHeadersVisible = false;
+            this.OssCompletedGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.OssCompletedGridView.Size = new System.Drawing.Size(1199, 617);
+            this.OssCompletedGridView.TabIndex = 0;
+            this.OssCompletedGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssCompletedGridView_DataBindingComplete);
+            // 
+            // CompleteButton
+            // 
+            this.CompleteButton.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.CompleteButton.Location = new System.Drawing.Point(9, 10);
+            this.CompleteButton.Name = "CompleteButton";
+            this.CompleteButton.Size = new System.Drawing.Size(75, 23);
+            this.CompleteButton.TabIndex = 0;
+            this.CompleteButton.Text = "Refresh";
+            this.CompleteButton.UseVisualStyleBackColor = false;
+            this.CompleteButton.Click += new System.EventHandler(this.CompleteButton_Click);
+            // 
+            // OnHold
+            // 
+            this.OnHold.Controls.Add(this.OnHoldGroupBox);
+            this.OnHold.Controls.Add(this.OnHoldRefresh);
+            this.OnHold.Location = new System.Drawing.Point(4, 22);
+            this.OnHold.Name = "OnHold";
+            this.OnHold.Size = new System.Drawing.Size(1222, 678);
+            this.OnHold.TabIndex = 5;
+            this.OnHold.Text = "On-Hold";
+            this.OnHold.UseVisualStyleBackColor = true;
+            // 
+            // OnHoldGroupBox
+            // 
+            this.OnHoldGroupBox.Controls.Add(this.OSSOrderOnHoldGridView);
+            this.OnHoldGroupBox.Location = new System.Drawing.Point(9, 44);
+            this.OnHoldGroupBox.Name = "OnHoldGroupBox";
+            this.OnHoldGroupBox.Size = new System.Drawing.Size(1205, 631);
+            this.OnHoldGroupBox.TabIndex = 1;
+            this.OnHoldGroupBox.TabStop = false;
+            this.OnHoldGroupBox.Text = "On-Hold Orders";
+            // 
+            // OSSOrderOnHoldGridView
+            // 
+            this.OSSOrderOnHoldGridView.AllowUserToAddRows = false;
+            this.OSSOrderOnHoldGridView.AllowUserToDeleteRows = false;
+            this.OSSOrderOnHoldGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.OSSOrderOnHoldGridView.BackgroundColor = System.Drawing.Color.BlanchedAlmond;
+            this.OSSOrderOnHoldGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+            this.OSSOrderOnHoldGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+            this.OSSOrderOnHoldGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.OSSOrderOnHoldGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.OSSOrderOnHoldGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OSSOrderOnHoldGridView.Location = new System.Drawing.Point(3, 16);
+            this.OSSOrderOnHoldGridView.MultiSelect = false;
+            this.OSSOrderOnHoldGridView.Name = "OSSOrderOnHoldGridView";
+            this.OSSOrderOnHoldGridView.ReadOnly = true;
+            this.OSSOrderOnHoldGridView.RowHeadersVisible = false;
+            this.OSSOrderOnHoldGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.OSSOrderOnHoldGridView.Size = new System.Drawing.Size(1199, 612);
+            this.OSSOrderOnHoldGridView.TabIndex = 0;
+            this.OSSOrderOnHoldGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OSSOrderOnHoldGridView_DataBindingComplete);
+            // 
+            // OnHoldRefresh
+            // 
+            this.OnHoldRefresh.BackColor = System.Drawing.Color.SandyBrown;
+            this.OnHoldRefresh.Location = new System.Drawing.Point(9, 14);
+            this.OnHoldRefresh.Name = "OnHoldRefresh";
+            this.OnHoldRefresh.Size = new System.Drawing.Size(75, 23);
+            this.OnHoldRefresh.TabIndex = 0;
+            this.OnHoldRefresh.Text = "Refresh";
+            this.OnHoldRefresh.UseVisualStyleBackColor = false;
+            this.OnHoldRefresh.Click += new System.EventHandler(this.OnHoldRefresh_Click);
             // 
             // FormErrorProvider
             // 
@@ -719,80 +957,56 @@
             this.ApplicationStatusStrip.TabIndex = 50;
             this.ApplicationStatusStrip.Text = "Application Status Strip";
             // 
-            // CompleteButton
+            // Canceled
             // 
-            this.CompleteButton.BackColor = System.Drawing.Color.DarkSeaGreen;
-            this.CompleteButton.Location = new System.Drawing.Point(9, 10);
-            this.CompleteButton.Name = "CompleteButton";
-            this.CompleteButton.Size = new System.Drawing.Size(75, 23);
-            this.CompleteButton.TabIndex = 0;
-            this.CompleteButton.Text = "Refresh";
-            this.CompleteButton.UseVisualStyleBackColor = false;
-            this.CompleteButton.Click += new System.EventHandler(this.CompleteButton_Click);
+            this.Canceled.Controls.Add(this.groupBox5);
+            this.Canceled.Controls.Add(this.CancelRefresh);
+            this.Canceled.Location = new System.Drawing.Point(4, 22);
+            this.Canceled.Name = "Canceled";
+            this.Canceled.Size = new System.Drawing.Size(1222, 678);
+            this.Canceled.TabIndex = 6;
+            this.Canceled.Text = "Canceled";
+            this.Canceled.UseVisualStyleBackColor = true;
             // 
-            // groupBox2
+            // CancelRefresh
             // 
-            this.groupBox2.Controls.Add(this.OssCompletedGridView);
-            this.groupBox2.Location = new System.Drawing.Point(9, 39);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1205, 636);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Completed Orders";
+            this.CancelRefresh.BackColor = System.Drawing.Color.MistyRose;
+            this.CancelRefresh.Location = new System.Drawing.Point(9, 16);
+            this.CancelRefresh.Name = "CancelRefresh";
+            this.CancelRefresh.Size = new System.Drawing.Size(75, 23);
+            this.CancelRefresh.TabIndex = 0;
+            this.CancelRefresh.Text = "Refresh";
+            this.CancelRefresh.UseVisualStyleBackColor = false;
+            this.CancelRefresh.Click += new System.EventHandler(this.CancelRefresh_Click);
             // 
-            // OssCompletedGridView
+            // groupBox5
             // 
-            this.OssCompletedGridView.BackgroundColor = System.Drawing.Color.PaleGreen;
-            this.OssCompletedGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.OssCompletedGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.OssCompletedGridView.Location = new System.Drawing.Point(3, 16);
-            this.OssCompletedGridView.Name = "OssCompletedGridView";
-            this.OssCompletedGridView.Size = new System.Drawing.Size(1199, 617);
-            this.OssCompletedGridView.TabIndex = 0;
-            this.OssCompletedGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssCompletedGridView_DataBindingComplete);
+            this.groupBox5.Controls.Add(this.OssOrdersCanceledOrders);
+            this.groupBox5.Location = new System.Drawing.Point(9, 46);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(1205, 629);
+            this.groupBox5.TabIndex = 1;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Canceled Orders";
             // 
-            // InFight
+            // OssOrdersCanceledOrders
             // 
-            this.InFight.Controls.Add(this.groupBox3);
-            this.InFight.Controls.Add(this.InFlightRefresh);
-            this.InFight.Location = new System.Drawing.Point(4, 22);
-            this.InFight.Name = "InFight";
-            this.InFight.Size = new System.Drawing.Size(1222, 678);
-            this.InFight.TabIndex = 4;
-            this.InFight.Text = "InFlight";
-            this.InFight.UseVisualStyleBackColor = true;
-            // 
-            // InFlightRefresh
-            // 
-            this.InFlightRefresh.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.InFlightRefresh.Location = new System.Drawing.Point(9, 14);
-            this.InFlightRefresh.Name = "InFlightRefresh";
-            this.InFlightRefresh.Size = new System.Drawing.Size(75, 23);
-            this.InFlightRefresh.TabIndex = 0;
-            this.InFlightRefresh.Text = "Refresh";
-            this.InFlightRefresh.UseVisualStyleBackColor = false;
-            this.InFlightRefresh.Click += new System.EventHandler(this.InFlightRefresh_Click);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.OssInFlightGridView);
-            this.groupBox3.Location = new System.Drawing.Point(9, 44);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1205, 631);
-            this.groupBox3.TabIndex = 1;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "groupBox3";
-            // 
-            // OssInFlightGridView
-            // 
-            this.OssInFlightGridView.BackgroundColor = System.Drawing.SystemColors.InactiveCaption;
-            this.OssInFlightGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.OssInFlightGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.OssInFlightGridView.Location = new System.Drawing.Point(3, 16);
-            this.OssInFlightGridView.Name = "OssInFlightGridView";
-            this.OssInFlightGridView.Size = new System.Drawing.Size(1199, 612);
-            this.OssInFlightGridView.TabIndex = 0;
-            this.OssInFlightGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssInFlightGridView_DataBindingComplete);
+            this.OssOrdersCanceledOrders.AllowUserToAddRows = false;
+            this.OssOrdersCanceledOrders.AllowUserToDeleteRows = false;
+            this.OssOrdersCanceledOrders.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.OssOrdersCanceledOrders.BackgroundColor = System.Drawing.Color.Pink;
+            this.OssOrdersCanceledOrders.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+            this.OssOrdersCanceledOrders.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.OssOrdersCanceledOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.OssOrdersCanceledOrders.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OssOrdersCanceledOrders.Location = new System.Drawing.Point(3, 16);
+            this.OssOrdersCanceledOrders.MultiSelect = false;
+            this.OssOrdersCanceledOrders.Name = "OssOrdersCanceledOrders";
+            this.OssOrdersCanceledOrders.ReadOnly = true;
+            this.OssOrdersCanceledOrders.RowHeadersVisible = false;
+            this.OssOrdersCanceledOrders.Size = new System.Drawing.Size(1199, 610);
+            this.OssOrdersCanceledOrders.TabIndex = 0;
+            this.OssOrdersCanceledOrders.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssOrdersCanceledOrders_DataBindingComplete);
             // 
             // MainWindow
             // 
@@ -814,6 +1028,8 @@
             this.ApplicationMenuStrip.PerformLayout();
             this.MainFormTabControl.ResumeLayout(false);
             this.ConfigurationTabPage.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.MoldingBoxApiKeyGroupBox.ResumeLayout(false);
             this.MoldingBoxApiKeyGroupBox.PerformLayout();
             this.AutomaticOrderSynchronizeSettingsGroupBox.ResumeLayout(false);
@@ -829,18 +1045,24 @@
             ((System.ComponentModel.ISupportInitialize)(this.OssOrdersDataGridView)).EndInit();
             this.SyncOrdersWithTHubGroupBox.ResumeLayout(false);
             this.ManualSendToMoldingBoxGroupBox.ResumeLayout(false);
+            this.InFight.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.OssInFlightGridView)).EndInit();
             this.Exception.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.OssExceptionGridView)).EndInit();
             this.Completed.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.OssCompletedGridView)).EndInit();
+            this.OnHold.ResumeLayout(false);
+            this.OnHoldGroupBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.OSSOrderOnHoldGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).EndInit();
             this.ApplicationStatusStrip.ResumeLayout(false);
             this.ApplicationStatusStrip.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.OssCompletedGridView)).EndInit();
-            this.InFight.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.OssInFlightGridView)).EndInit();
+            this.Canceled.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.OssOrdersCanceledOrders)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -911,6 +1133,20 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.DataGridView OssInFlightGridView;
         private System.Windows.Forms.Button InFlightRefresh;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.TextBox PhoneTextbox;
+        private System.Windows.Forms.Label phoneLabel;
+        private System.Windows.Forms.TextBox EmailTextbox;
+        private System.Windows.Forms.TabPage OnHold;
+        private System.Windows.Forms.GroupBox OnHoldGroupBox;
+        private System.Windows.Forms.DataGridView OSSOrderOnHoldGridView;
+        private System.Windows.Forms.Button OnHoldRefresh;
+        private System.Windows.Forms.TabPage Canceled;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.DataGridView OssOrdersCanceledOrders;
+        private System.Windows.Forms.Button CancelRefresh;
     }
 }
 

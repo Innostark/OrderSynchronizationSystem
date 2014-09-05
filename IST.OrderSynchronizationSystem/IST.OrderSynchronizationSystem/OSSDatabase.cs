@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
 using System.Transactions;
 using IST.OrderSynchronizationSystem.GUI;
 using IST.OrderSynchronizationSystem.MBAPI;
@@ -89,13 +90,6 @@ namespace IST.OrderSynchronizationSystem
                 {
                     using (SqlCommand ordersCommand = new SqlCommand(SqlResource.source_sql_PullOrdersFromThub, tHubDbConnection))
                     {
-                        //ordersCommand.Parameters.Add("@LastExecutedTHubOrderId", SqlDbType.BigInt).Value = lastExecutedTHubOrderId;
-                        //TODO: Replace query predicate with following predicate
-                        //Where  ord.IsCompleteOrderFlag = 1
-                        //And    ord.ShippingStatusId = oss.ShippingStatusId
-                        //And    Upper(oss.ShippingStatusName) In ('PUBLISHED', 'SHIPPED', 'SKIP')
-                        //And    ord.OrderId = '100004947'
-                        //==And    ord.OrderId &gt; @LastExecutedTHubOrderId
                         tHubDbConnection.Open();
                         SqlDataReader orderResults = ordersCommand.ExecuteReader();
                         if (orderResults.HasRows)
@@ -138,9 +132,7 @@ namespace IST.OrderSynchronizationSystem
         public DataTable LoadOrdersFromStaging(string name, OSSOrderStatus status)
         {
             DataTable stagingOrdersDataTable = CreateStagingOrdersTable(name, true);
-            using (
-                SqlConnection stagingDbconnection =
-                    new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
             {
                 stagingDbconnection.Open();
                 using (SqlCommand command = new SqlCommand("USPLoadOrdersFromStaging", stagingDbconnection))
@@ -238,6 +230,61 @@ namespace IST.OrderSynchronizationSystem
             };
         }
 
+        public void ReloadShipmentToStaging()
+        {
+            OssShipment ossShipment = new OssShipment();
+            #region Load From T-Hub
+
+            using (SqlConnection tHubDbConnection = new SqlConnection(_sourceSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                using (SqlCommand ordersCommand = new SqlCommand(SqlResource.source_sql_PullOrdersFromThub, tHubDbConnection))
+                {
+                    tHubDbConnection.Open();
+                    SqlDataReader orderResults = ordersCommand.ExecuteReader();
+                    if (orderResults.HasRows)
+                    {
+                        while (orderResults.Read())
+                        {
+                            ossShipment = ConvertSourceOrderToStagingShipment(orderResults);
+                        }
+                    }
+                    tHubDbConnection.Close();
+                }
+                tHubDbConnection.Open();
+                    List<Item> orderItems = new List<Item>();
+                    long thubOrderId = ossShipment.ThubOrderId;
+                    using (SqlCommand orderItemsCommand = new SqlCommand(SqlResource.source_sql_PullOrderItems, tHubDbConnection))
+                    {
+                        orderItemsCommand.Parameters.AddWithValue("@THubOrderId", thubOrderId);
+                        SqlDataReader orderItemResults = orderItemsCommand.ExecuteReader();
+                        if (orderItemResults.HasRows)
+                        {
+                            while (orderItemResults.Read())
+                            {
+                                orderItems.Add(ConvertSourceOrderItemToStagingItem(orderItemResults));
+                            }
+                            ossShipment.Items = orderItems.ToArray();
+                        }
+                        orderItemResults.Close();
+                    }
+                tHubDbConnection.Close();
+            }
+
+            using (SqlConnection stagingConnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                using (SqlCommand updateOrderCommand = new SqlCommand(SqlResource.source_sql_UpdateOssOrder, stagingConnection))
+                {
+                    string shipmenJson = JsonConvert.SerializeObject(ossShipment);
+                    updateOrderCommand.Parameters.AddWithValue("@CompleteOrder", shipmenJson);
+                    updateOrderCommand.Parameters.AddWithValue("@OssOrderId", ossShipment.OrderID);
+                    stagingConnection.Open();
+                    int rowsAffected = updateOrderCommand.ExecuteNonQuery();
+                }
+            }
+            #endregion
+
+        }
+
         private static Item ConvertSourceOrderItemToStagingItem(IDataRecord orderItem)
         {
             //TODO: Replace the Hard Coded SKU with live
@@ -325,6 +372,13 @@ namespace IST.OrderSynchronizationSystem
             ossOrdersTable.Columns.Add("MBShipmentSubmitError", typeof(string));
             ossOrdersTable.Columns.Add("MBShipmentIdSubmitedToThub", typeof(bool));
             ossOrdersTable.Columns.Add("MBShipmentIdSubmitedToThubOn", typeof(DateTime));
+
+            ossOrdersTable.Columns.Add("LastSyncWithMBOn", typeof(DateTime));
+            ossOrdersTable.Columns.Add("THubUpdatedOn", typeof(DateTime));
+            ossOrdersTable.Columns.Add("MBTrackingNumber", typeof(string));
+            ossOrdersTable.Columns.Add("CancelMessage", typeof(string));
+
+
             
 
             return ossOrdersTable;
@@ -346,6 +400,7 @@ namespace IST.OrderSynchronizationSystem
             stagingRow["MBShipmentSubmitError"] = stagingOrder["MBShipmentSubmitError"];
             stagingRow["MBShipmentIdSubmitedToThub"] = stagingOrder["MBShipmentIdSubmitedToThub"];
             stagingRow["MBShipmentIdSubmitedToThubOn"] = stagingOrder["MBShipmentIdSubmitedToThubOn"];
+            stagingRow["CancelMessage"] = stagingOrder["CancelMessage"];
             stagingRow["OrderStatus"] = stagingOrder["OrderStatus"] != null ? ((OSSOrderStatus)(int.Parse(stagingOrder["OrderStatus"].ToString()))).ToString() : string.Empty;
         }
 
@@ -372,6 +427,8 @@ namespace IST.OrderSynchronizationSystem
                         command.Parameters.AddWithValue("@MBSuccessfullyReceived", ossOrderRow["MBSuccessfullyReceived"]);
                         command.Parameters.AddWithValue("@MBShipmentId", ossOrderRow["MBShipmentId"]);
                         command.Parameters.AddWithValue("@MBShipmentSubmitError", ossOrderRow["MBShipmentSubmitError"]);
+                        command.Parameters.AddWithValue("@OrderStatus", ossOrderRow["OrderStatus"]);
+                        command.Parameters.AddWithValue("@CancelMessage", ossOrderRow["CancelMessage"]);
 
                         recordsUpdated = command.ExecuteNonQuery();
                     }

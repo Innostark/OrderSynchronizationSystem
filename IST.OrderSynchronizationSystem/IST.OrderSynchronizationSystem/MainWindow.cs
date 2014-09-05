@@ -359,7 +359,7 @@ namespace IST.OrderSynchronizationSystem
             {
                 MessageBox.Show("No New Order available is T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            NoOfOrdersLabel.Text = "No. of Order: " + _ossOrders.Rows.Count.ToString();
+            NoOfOrdersLabel.Text = "No. of Order: " + _ossOrders.Rows.Count;
         }
 
 
@@ -369,16 +369,19 @@ namespace IST.OrderSynchronizationSystem
             OssOrdersDataGridView.InvalidateCell(sendToMbButtonCell);
         }
 
-        private void SetSendToMoldingBoxCheckBox(DataGridViewCellEventArgs eventArgs)
+        private void SetSendToMoldingBoxCheckBox(DataGridView gridView, DataGridViewCellEventArgs eventArgs)
         {
-            if (OssOrdersDataGridView.ColumnCount == 15)
+
+            DataGridViewCheckBoxCell mbSentCell =
+                (DataGridViewCheckBoxCell)
+                    gridView.Rows[eventArgs.RowIndex].Cells[
+                        gridView.Rows[eventArgs.RowIndex].Cells.IndexOf(
+                            gridView.Rows[eventArgs.RowIndex].Cells["SentToMB"])];
+            if (mbSentCell != null && !((bool) mbSentCell.Value))
             {
-                DataGridViewCheckBoxCell mbSentCell = (DataGridViewCheckBoxCell) OssOrdersDataGridView.Rows[eventArgs.RowIndex].Cells[6];
-                if (mbSentCell != null && !((bool) mbSentCell.Value))
-                {
-                    mbSentCell.Value = true;
-                }
+                mbSentCell.Value = true;
             }
+
         }
 
         private void LoadConfigurationFromAppConfig()
@@ -409,9 +412,9 @@ namespace IST.OrderSynchronizationSystem
             }
         }
 
-        private void EnableDisableSendToMoldingBoxButton()
+        private void EnableDisableSendToMoldingBoxButton(DataGridView gridview)
         {
-            foreach (DataGridViewRow ossOrdersDataGridRow in OssOrdersDataGridView.Rows)
+            foreach (DataGridViewRow ossOrdersDataGridRow in gridview.Rows)
             {                
                 DataGridViewCheckBoxCell mbSentCell = (DataGridViewCheckBoxCell)ossOrdersDataGridRow.Cells[ossOrdersDataGridRow.Cells.IndexOf(ossOrdersDataGridRow.Cells["SentToMB"])];
                 if (mbSentCell != null && ((bool) mbSentCell.Value))
@@ -422,103 +425,481 @@ namespace IST.OrderSynchronizationSystem
                                 ossOrdersDataGridRow.Cells.IndexOf(ossOrdersDataGridRow.Cells["btnSendShipMentToMB"])];
                     sendToMbButtonCell.Enabled = false;
                 }
-
             }
         }
 
-        private void AddDisableSendButtonToOssOrderDataGridView()
+        private void AddSendButtonToGridView(DataGridView gridView)
         {
             DataGridViewDisableButtonColumn sendToMoldingBoxButtonColumn = new DataGridViewDisableButtonColumn();
             sendToMoldingBoxButtonColumn.HeaderText = "Send To MB";
             sendToMoldingBoxButtonColumn.Text = "Send >";
+            sendToMoldingBoxButtonColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             sendToMoldingBoxButtonColumn.Name = "btnSendShipMentToMB";
             sendToMoldingBoxButtonColumn.ToolTipText = "Click to submit order to ModingBox for processing.";
             sendToMoldingBoxButtonColumn.DefaultCellStyle.Font = new Font("Arial", 8.5F, FontStyle.Bold);
             sendToMoldingBoxButtonColumn.UseColumnTextForButtonValue = true;
             sendToMoldingBoxButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            
-            OssOrdersDataGridView.Columns.Insert(15, sendToMoldingBoxButtonColumn);
+
+            gridView.Columns.Insert(15, sendToMoldingBoxButtonColumn);
         }
 
-        private void SetOssOrderDataGridHeaderTextAndColumnVisibility(DataGridView gridView)
+        private const string RePostString = "Re-Post";
+        private const string CancelString = "Cancel";
+        private const string ReloadString = "Reload";
+        private void AddReloadButtonToGridView(DataGridView gridView)
         {
-            if (gridView.Columns["OSSOrderId"] != null)
-                gridView.Columns["OSSOrderId"].Visible = false;
+            DataGridViewDisableButtonColumn sendToMoldingBoxButtonColumn = new DataGridViewDisableButtonColumn();
+            sendToMoldingBoxButtonColumn.HeaderText = ReloadString;
+            sendToMoldingBoxButtonColumn.Text = ReloadString;
+            sendToMoldingBoxButtonColumn.MinimumWidth = 100;
+            sendToMoldingBoxButtonColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            sendToMoldingBoxButtonColumn.Name = "btnReload";
+            sendToMoldingBoxButtonColumn.ToolTipText = "Click to reload order.";
+            sendToMoldingBoxButtonColumn.DefaultCellStyle.Font = new Font("Arial", 8.5F, FontStyle.Bold);
+            sendToMoldingBoxButtonColumn.UseColumnTextForButtonValue = true;
+            sendToMoldingBoxButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            gridView.Columns.Insert(19, sendToMoldingBoxButtonColumn);
+        }
+        private void AddPostAgainButtonToGridView(DataGridView gridView)
+        {
+            DataGridViewDisableButtonColumn sendToMoldingBoxButtonColumn = new DataGridViewDisableButtonColumn();
+            sendToMoldingBoxButtonColumn.HeaderText = RePostString;
+            sendToMoldingBoxButtonColumn.Text = RePostString;
+            sendToMoldingBoxButtonColumn.MinimumWidth = 100;
+            sendToMoldingBoxButtonColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            sendToMoldingBoxButtonColumn.Name = "btnRepost";
+            sendToMoldingBoxButtonColumn.ToolTipText = "Click to re-post order.";
+            sendToMoldingBoxButtonColumn.DefaultCellStyle.Font = new Font("Arial", 8.5F, FontStyle.Bold);
+            sendToMoldingBoxButtonColumn.UseColumnTextForButtonValue = true;
+            sendToMoldingBoxButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            gridView.Columns.Insert(20, sendToMoldingBoxButtonColumn);
+        }
+        
+        private void AddCancelButtonToGridView(DataGridView gridView)
+        {
+            DataGridViewDisableButtonColumn sendToMoldingBoxButtonColumn = new DataGridViewDisableButtonColumn();
+            sendToMoldingBoxButtonColumn.HeaderText = CancelString;
+            sendToMoldingBoxButtonColumn.Text = CancelString;
+            sendToMoldingBoxButtonColumn.MinimumWidth = 100;
+            sendToMoldingBoxButtonColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            sendToMoldingBoxButtonColumn.Name = "btnCancel";
+            sendToMoldingBoxButtonColumn.ToolTipText = "Click to cancel order.";
+            sendToMoldingBoxButtonColumn.DefaultCellStyle.Font = new Font("Arial", 8.5F, FontStyle.Bold);
+            sendToMoldingBoxButtonColumn.UseColumnTextForButtonValue = true;
+            sendToMoldingBoxButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            if (gridView.Columns["THubOrderId"] != null)
+            gridView.Columns.Insert(21, sendToMoldingBoxButtonColumn);
+        }
+        private void SetOssOrderDataGridHeaderTextAndColumnVisibility(DataGridView gridView, OssOrdersGridTypes gridType)
+        {
+            switch (gridType)
             {
-                gridView.Columns["THubOrderId"].Visible = false;
-            }
-            if (gridView.Columns["THubOrderReferenceNo"] != null)
-            {
-                gridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
-                gridView.Columns["THubOrderReferenceNo"].ReadOnly = true;
-            }
-            if (gridView.Columns["CreatedOn"] != null)
-            {
-                gridView.Columns["CreatedOn"].HeaderText = "OSS Created On";
-                gridView.Columns["CreatedOn"].ReadOnly = true;
-            }
-            if (gridView.Columns["THubCompleteOrder"] != null)
-            {
-                gridView.Columns["THubCompleteOrder"].Visible = false;
-            }
-            if (gridView.Columns["SentToMB"] != null)
-            {
-                gridView.Columns["SentToMB"].HeaderText = "Sent";
-                gridView.Columns["SentToMB"].ReadOnly = true;
-            }
-            if (gridView.Columns["SentToMBOn"] != null)
-            {
-                gridView.Columns["SentToMBOn"].HeaderText = "Sent On";
-                gridView.Columns["SentToMBOn"].ReadOnly = true;
-            }
-            if (gridView.Columns["MBPostShipmentMessage"] != null)
-            {
-                gridView.Columns["MBPostShipmentMessage"].Visible = false;
-            }
-            if (gridView.Columns["MBPostShipmentResponseMessage"] != null)
-            {
-                gridView.Columns["MBPostShipmentResponseMessage"].Visible = false;
-            }
-            if (gridView.Columns["MBSuccessfullyReceived"] != null)
-            {
-                gridView.Columns["MBSuccessfullyReceived"].Visible = false;
-            }
-            if (gridView.Columns["MBShipmentId"] != null)
-            {
-                gridView.Columns["MBShipmentId"].HeaderText = "MB Shipment Id";
-                gridView.Columns["MBShipmentId"].ReadOnly = true;
-            }
-            if (gridView.Columns["MBShipmentSubmitError"] != null)
-            {
-                gridView.Columns["MBShipmentSubmitError"].HeaderText = "MB Shipment Error";
-                gridView.Columns["MBShipmentSubmitError"].ReadOnly = true;
-            }
-            if (gridView.Columns["MBShipmentIdSubmitedToThub"] != null)
-            {
-                gridView.Columns["MBShipmentIdSubmitedToThub"].Visible = false;
-            }
-            if (gridView.Columns["MBShipmentIdSubmitedToThubOn"] != null)
-            {
-                gridView.Columns["MBShipmentIdSubmitedToThubOn"].Visible = false;
-            }
-            if (gridView.Columns["OrderStatus"] != null)
-            {
-                gridView.Columns["OrderStatus"].HeaderText = "Status";
-                gridView.Columns["OrderStatus"].ReadOnly = true;
-            }
+                case OssOrdersGridTypes.New:
+                {
+                    #region New
+                    
+                    if (gridView.Columns["THubOrderReferenceNo"] != null)
+                    {
+                        gridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
+                        gridView.Columns["THubOrderReferenceNo"].ReadOnly = true;
+                        gridView.Columns["THubOrderReferenceNo"].Width = 100;
+                    }
+                    if (gridView.Columns["CreatedOn"] != null)
+                    {
+                        gridView.Columns["CreatedOn"].HeaderText = "OSS Created On";
+                        gridView.Columns["CreatedOn"].ReadOnly = true;
+                        gridView.Columns["CreatedOn"].Width = 150;
+                    }                    
+                    if (gridView.Columns["THubCompleteOrder"] != null)
+                    {
+                        gridView.Columns["THubCompleteOrder"].HeaderText = "Complete Order";
+                        gridView.Columns["THubCompleteOrder"].ReadOnly = true;
+                        gridView.Columns["THubCompleteOrder"].MinimumWidth = 600;
+                    }
+                    if (gridView.Columns["OSSOrderId"] != null)
+                        gridView.Columns["OSSOrderId"].Visible = false;
+                    if (gridView.Columns["THubOrderId"] != null)
+                        gridView.Columns["THubOrderId"].Visible = false;
+                    if (gridView.Columns["OrderStatus"] != null)
+                        gridView.Columns["OrderStatus"].Visible = false;
+                    if (gridView.Columns["SentToMB"] != null)
+                        gridView.Columns["SentToMB"].Visible = false;                    
+                    if (gridView.Columns["SentToMBOn"] != null)
+                        gridView.Columns["SentToMBOn"].Visible = false;                    
+                    if (gridView.Columns["MBPostShipmentMessage"] != null)
+                        gridView.Columns["MBPostShipmentMessage"].Visible = false;                    
+                    if (gridView.Columns["MBPostShipmentResponseMessage"] != null)
+                        gridView.Columns["MBPostShipmentResponseMessage"].Visible = false;                    
+                    if (gridView.Columns["MBSuccessfullyReceived"] != null)
+                        gridView.Columns["MBSuccessfullyReceived"].Visible = false;                    
+                    if (gridView.Columns["MBShipmentSubmitError"] != null)
+                        gridView.Columns["MBShipmentSubmitError"].Visible = false;                                            
+                    if (gridView.Columns["MBShipmentIdSubmitedToThub"] != null)
+                        gridView.Columns["MBShipmentIdSubmitedToThub"].Visible = false;                    
+                    if (gridView.Columns["MBShipmentIdSubmitedToThubOn"] != null)
+                        gridView.Columns["MBShipmentIdSubmitedToThubOn"].Visible = false;                    
+                    if (gridView.Columns["MBShipmentId"] != null)
+                        gridView.Columns["MBShipmentId"].Visible = false;
+                    if (gridView.Columns["LastSyncWithMBOn"] != null)
+                        gridView.Columns["LastSyncWithMBOn"].Visible = false;
+                    if (gridView.Columns["THubUpdatedOn"] != null)
+                        gridView.Columns["THubUpdatedOn"].Visible = false;
+                    if (gridView.Columns["MBTrackingNumber"] != null)
+                        gridView.Columns["MBTrackingNumber"].Visible = false;
+                    if (gridView.Columns["CancelMessage"] != null)
+                        gridView.Columns["CancelMessage"].Visible = false;
+                    #endregion
+                    break;
+                }
+                case OssOrdersGridTypes.Processing:
+                {
+                    #region Processing
+                    
+                    if (gridView.Columns["CreatedOn"] != null)
+                    {
+                        gridView.Columns["CreatedOn"].HeaderText = "OSS Created On";
+                        gridView.Columns["CreatedOn"].ReadOnly = true;
+                        gridView.Columns["CreatedOn"].Width = 150;
+                    }
+                    if (gridView.Columns["THubOrderReferenceNo"] != null)
+                    {
+                        gridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
+                        gridView.Columns["THubOrderReferenceNo"].ReadOnly = true;
+                        gridView.Columns["THubOrderReferenceNo"].Width = 100;
+                    }
+                    if (gridView.Columns["MBShipmentId"] != null)
+                    {
+                        gridView.Columns["MBShipmentId"].HeaderText = "MB Shipment Id";
+                        gridView.Columns["MBShipmentId"].Width = 150;
+                        gridView.Columns["MBShipmentId"].ReadOnly = true;
+                    }
+                    if (gridView.Columns["SentToMBOn"] != null)
+                    {
+                        gridView.Columns["SentToMBOn"].HeaderText = "Posted On";
+                        gridView.Columns["SentToMBOn"].ReadOnly = true;
+                        gridView.Columns["SentToMBOn"].Width = 150;
+                    }
+                    if (gridView.Columns["LastSyncWithMBOn"] != null)
+                    {
+                        gridView.Columns["LastSyncWithMBOn"].HeaderText = "Last Sync with MB On";
+                        gridView.Columns["LastSyncWithMBOn"].ReadOnly = true;
+                        gridView.Columns["LastSyncWithMBOn"].Width = 150;
+                    }
+                    if (gridView.Columns["THubCompleteOrder"] != null)
+                        gridView.Columns["THubCompleteOrder"].Visible = false;
+                    if (gridView.Columns["OSSOrderId"] != null)
+                        gridView.Columns["OSSOrderId"].Visible = false;
+                    if (gridView.Columns["THubOrderId"] != null)
+                        gridView.Columns["THubOrderId"].Visible = false;
+                    if (gridView.Columns["SentToMB"] != null)
+                        gridView.Columns["SentToMB"].Visible = false;
+                    if (gridView.Columns["MBPostShipmentMessage"] != null)
+                        gridView.Columns["MBPostShipmentMessage"].Visible = false;
+                    if (gridView.Columns["MBPostShipmentResponseMessage"] != null)
+                        gridView.Columns["MBPostShipmentResponseMessage"].Visible = false;
+                    if (gridView.Columns["MBSuccessfullyReceived"] != null)
+                        gridView.Columns["MBSuccessfullyReceived"].Visible = false;
+                    if (gridView.Columns["MBShipmentSubmitError"] != null)
+                        gridView.Columns["MBShipmentSubmitError"].Visible = false;
+                    if (gridView.Columns["MBShipmentIdSubmitedToThub"] != null)
+                        gridView.Columns["MBShipmentIdSubmitedToThub"].Visible = false;
+                    if (gridView.Columns["MBShipmentIdSubmitedToThubOn"] != null)
+                        gridView.Columns["MBShipmentIdSubmitedToThubOn"].Visible = false;                    
+                    if (gridView.Columns["OrderStatus"] != null)
+                        gridView.Columns["OrderStatus"].Visible = false;                    
+                    if (gridView.Columns["THubUpdatedOn"] != null)
+                        gridView.Columns["THubUpdatedOn"].Visible = false;
+                    if (gridView.Columns["MBTrackingNumber"] != null)
+                        gridView.Columns["MBTrackingNumber"].Visible = false;
+                    if (gridView.Columns["CancelMessage"] != null)
+                        gridView.Columns["CancelMessage"].Visible = false;
+                    #endregion
+                    break;
+                }                    
+                case OssOrdersGridTypes.Exception:
+                {
+                    #region Exception
+                    if (gridView.Columns["CreatedOn"] != null)
+                    {
+                        gridView.Columns["CreatedOn"].HeaderText = "OSS Created On";
+                        gridView.Columns["CreatedOn"].ReadOnly = true;
+                        gridView.Columns["CreatedOn"].MinimumWidth = 150;
+                    }
+                    if (gridView.Columns["THubOrderReferenceNo"] != null)
+                    {
+                        gridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
+                        gridView.Columns["THubOrderReferenceNo"].ReadOnly = true;
+                        gridView.Columns["THubOrderReferenceNo"].MinimumWidth = 100;
+                    }
+                    if (gridView.Columns["MBShipmentSubmitError"] != null)
+                    {
+                        gridView.Columns["MBShipmentSubmitError"].HeaderText = "Error Message";
+                        gridView.Columns["MBShipmentSubmitError"].ReadOnly = true;
+                        gridView.Columns["MBShipmentSubmitError"].MinimumWidth = 300;
+                    }
+                    if (gridView.Columns["SentToMBOn"] != null)
+                    {
+                        gridView.Columns["SentToMBOn"].HeaderText = "Posted On";
+                        gridView.Columns["SentToMBOn"].ReadOnly = true;
+                        gridView.Columns["SentToMBOn"].MinimumWidth = 100;
+                    }
+                    if (gridView.Columns["THubCompleteOrder"] != null)
+                        gridView.Columns["THubCompleteOrder"].Visible = false;
+                    if (gridView.Columns["OSSOrderId"] != null)
+                        gridView.Columns["OSSOrderId"].Visible = false;
+                    if (gridView.Columns["THubOrderId"] != null)
+                        gridView.Columns["THubOrderId"].Visible = false;
+                    if (gridView.Columns["SentToMB"] != null)
+                        gridView.Columns["SentToMB"].Visible = false;
+                    if (gridView.Columns["MBPostShipmentMessage"] != null)
+                        gridView.Columns["MBPostShipmentMessage"].Visible = false;
+                    if (gridView.Columns["MBPostShipmentResponseMessage"] != null)
+                        gridView.Columns["MBPostShipmentResponseMessage"].Visible = false;
+                    if (gridView.Columns["MBSuccessfullyReceived"] != null)
+                        gridView.Columns["MBSuccessfullyReceived"].Visible = false;
+                    if (gridView.Columns["MBShipmentIdSubmitedToThub"] != null)
+                        gridView.Columns["MBShipmentIdSubmitedToThub"].Visible = false;
+                    if (gridView.Columns["MBShipmentIdSubmitedToThubOn"] != null)
+                        gridView.Columns["MBShipmentIdSubmitedToThubOn"].Visible = false;
+                    if (gridView.Columns["OrderStatus"] != null)
+                        gridView.Columns["OrderStatus"].Visible = false;
+                    if (gridView.Columns["MBShipmentId"] != null)
+                        gridView.Columns["MBShipmentId"].Visible = false;
+                    if (gridView.Columns["LastSyncWithMBOn"] != null)
+                        gridView.Columns["LastSyncWithMBOn"].Visible = false;
+                    if (gridView.Columns["THubUpdatedOn"] != null)
+                        gridView.Columns["THubUpdatedOn"].Visible = false;
+                    if (gridView.Columns["MBTrackingNumber"] != null)
+                        gridView.Columns["MBTrackingNumber"].Visible = false;
+                    if (gridView.Columns["CancelMessage"] != null)
+                        gridView.Columns["CancelMessage"].Visible = false;
+                    #endregion
+                    break;
+                }
+                case OssOrdersGridTypes.Completed:
+                {
+                    #region Completed
+                    if (gridView.Columns["CreatedOn"] != null)
+                    {
+                        gridView.Columns["CreatedOn"].HeaderText = "OSS Created On";
+                        gridView.Columns["CreatedOn"].ReadOnly = true;
+                        //gridView.Columns["CreatedOn"].Width = 110;
+                    }
+                    if (gridView.Columns["THubOrderReferenceNo"] != null)
+                    {
+                        gridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
+                        gridView.Columns["THubOrderReferenceNo"].ReadOnly = true;
+                        //gridView.Columns["THubOrderReferenceNo"].Width = 110;
+                    }
+                    
+                    if (gridView.Columns["SentToMBOn"] != null)
+                    {
+                        gridView.Columns["SentToMBOn"].HeaderText = "Posted On";
+                        gridView.Columns["SentToMBOn"].ReadOnly = true;
+                        //gridView.Columns["SentToMBOn"].Width = 100;
+                    }
+                    if (gridView.Columns["MBShipmentId"] != null)
+                    {
+                        gridView.Columns["MBShipmentId"].HeaderText = "MB Shipment Id";
+                        gridView.Columns["MBShipmentId"].ReadOnly = true;
+                        //gridView.Columns["MBShipmentId"].Width = 150;
+                    }
+                    if (gridView.Columns["LastSyncWithMBOn"] != null)
+                    {
+                        gridView.Columns["LastSyncWithMBOn"].HeaderText = "Last Sync with MB On";
+                        gridView.Columns["LastSyncWithMBOn"].ReadOnly = true;
+                        //gridView.Columns["LastSyncWithMBOn"].Width = 150;
+                    }
+                    if (gridView.Columns["THubUpdatedOn"] != null)
+                    {
+                        gridView.Columns["THubUpdatedOn"].HeaderText = "T-Hub Updated On";
+                        gridView.Columns["THubUpdatedOn"].ReadOnly = true;
+                        //gridView.Columns["THubUpdatedOn"].Width = 150;
+                    }
+                    if (gridView.Columns["MBTrackingNumber"] != null)
+                    {
+                        gridView.Columns["MBTrackingNumber"].HeaderText = "Tracking Number";
+                        gridView.Columns["MBTrackingNumber"].ReadOnly = true;
+                        //gridView.Columns["MBTrackingNumber"].Width = 150;                        
+                    }
+                    if (gridView.Columns["MBShipmentSubmitError"] != null)
+                        gridView.Columns["MBShipmentSubmitError"].Visible = false;
+                    if (gridView.Columns["THubCompleteOrder"] != null)
+                        gridView.Columns["THubCompleteOrder"].Visible = false;
+                    if (gridView.Columns["OSSOrderId"] != null)
+                        gridView.Columns["OSSOrderId"].Visible = false;
+                    if (gridView.Columns["THubOrderId"] != null)
+                        gridView.Columns["THubOrderId"].Visible = false;
+                    if (gridView.Columns["SentToMB"] != null)
+                        gridView.Columns["SentToMB"].Visible = false;
+                    if (gridView.Columns["MBPostShipmentMessage"] != null)
+                        gridView.Columns["MBPostShipmentMessage"].Visible = false;
+                    if (gridView.Columns["MBPostShipmentResponseMessage"] != null)
+                        gridView.Columns["MBPostShipmentResponseMessage"].Visible = false;
+                    if (gridView.Columns["MBSuccessfullyReceived"] != null)
+                        gridView.Columns["MBSuccessfullyReceived"].Visible = false;
+                    if (gridView.Columns["MBShipmentIdSubmitedToThub"] != null)
+                        gridView.Columns["MBShipmentIdSubmitedToThub"].Visible = false;
+                    if (gridView.Columns["MBShipmentIdSubmitedToThubOn"] != null)
+                        gridView.Columns["MBShipmentIdSubmitedToThubOn"].Visible = false;
+                    if (gridView.Columns["OrderStatus"] != null)
+                        gridView.Columns["OrderStatus"].Visible = false;
+                    
+                    if (gridView.Columns["CancelMessage"] != null)
+                        gridView.Columns["CancelMessage"].Visible = false;
+                    
+                    #endregion
+                    break;
+                }
+                case OssOrdersGridTypes.OnHold:
+                {
+                    #region On Hold
+                    if (gridView.Columns["CreatedOn"] != null)
+                    {
+                        gridView.Columns["CreatedOn"].HeaderText = "OSS Created On";
+                        gridView.Columns["CreatedOn"].ReadOnly = true;
+                        gridView.Columns["CreatedOn"].Width = 150;
+                    }
+                    if (gridView.Columns["THubOrderReferenceNo"] != null)
+                    {
+                        gridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
+                        gridView.Columns["THubOrderReferenceNo"].ReadOnly = true;
+                        gridView.Columns["THubOrderReferenceNo"].Width = 100;
+                    }
+                    if (gridView.Columns["MBShipmentSubmitError"] != null)
+                        gridView.Columns["MBShipmentSubmitError"].Visible = false;
+                    if (gridView.Columns["SentToMBOn"] != null)
+                    {
+                        gridView.Columns["SentToMBOn"].HeaderText = "Posted On";
+                        gridView.Columns["SentToMBOn"].ReadOnly = true;
+                        gridView.Columns["SentToMBOn"].Width = 150;
+                    }
+                    if (gridView.Columns["MBShipmentId"] != null)
+                    {
+                        gridView.Columns["MBShipmentId"].HeaderText = "MB Shipment Id";
+                        gridView.Columns["MBShipmentId"].ReadOnly = true;
+                        gridView.Columns["MBShipmentId"].Width = 150;
+                    }
+                    if (gridView.Columns["LastSyncWithMBOn"] != null)
+                    {
+                        gridView.Columns["LastSyncWithMBOn"].HeaderText = "Last Sync with MB On";
+                        gridView.Columns["LastSyncWithMBOn"].ReadOnly = true;
+                        gridView.Columns["LastSyncWithMBOn"].Width = 150;
+                    }
+                    if (gridView.Columns["THubCompleteOrder"] != null)
+                        gridView.Columns["THubCompleteOrder"].Visible = false;
+                    if (gridView.Columns["OSSOrderId"] != null)
+                        gridView.Columns["OSSOrderId"].Visible = false;
+                    if (gridView.Columns["THubOrderId"] != null)
+                        gridView.Columns["THubOrderId"].Visible = false;
+                    if (gridView.Columns["SentToMB"] != null)
+                        gridView.Columns["SentToMB"].Visible = false;
+                    if (gridView.Columns["MBPostShipmentMessage"] != null)
+                        gridView.Columns["MBPostShipmentMessage"].Visible = false;
+                    if (gridView.Columns["MBPostShipmentResponseMessage"] != null)
+                        gridView.Columns["MBPostShipmentResponseMessage"].Visible = false;
+                    if (gridView.Columns["MBSuccessfullyReceived"] != null)
+                        gridView.Columns["MBSuccessfullyReceived"].Visible = false;
+                    if (gridView.Columns["MBShipmentIdSubmitedToThub"] != null)
+                        gridView.Columns["MBShipmentIdSubmitedToThub"].Visible = false;
+                    if (gridView.Columns["MBShipmentIdSubmitedToThubOn"] != null)
+                        gridView.Columns["MBShipmentIdSubmitedToThubOn"].Visible = false;
+                    if (gridView.Columns["OrderStatus"] != null)
+                        gridView.Columns["OrderStatus"].Visible = false;                    
+                    if (gridView.Columns["THubUpdatedOn"] != null)
+                        gridView.Columns["THubUpdatedOn"].Visible = false;
+                    if (gridView.Columns["MBTrackingNumber"] != null)
+                        gridView.Columns["MBTrackingNumber"].Visible = false;
+                    if (gridView.Columns["CancelMessage"] != null)
+                        gridView.Columns["CancelMessage"].Visible = false;
+                    #endregion
+                    break;
+                }
+                case OssOrdersGridTypes.Cancelled:
+                {
+                    #region Canceled
+                    if (gridView.Columns["CreatedOn"] != null)
+                    {
+                        gridView.Columns["CreatedOn"].HeaderText = "OSS Created On";
+                        gridView.Columns["CreatedOn"].ReadOnly = true;
+                        gridView.Columns["CreatedOn"].MinimumWidth = 110;
+                    }
+                    if (gridView.Columns["THubOrderReferenceNo"] != null)
+                    {
+                        gridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
+                        gridView.Columns["THubOrderReferenceNo"].ReadOnly = true;
+                        gridView.Columns["THubOrderReferenceNo"].MinimumWidth = 110;
+                    }
+                    if (gridView.Columns["MBShipmentSubmitError"] != null)
+                    {
+                        gridView.Columns["MBShipmentSubmitError"].HeaderText = "MB Shipment Error";
+                        gridView.Columns["MBShipmentSubmitError"].ReadOnly = true;
+                        gridView.Columns["MBShipmentSubmitError"].MinimumWidth = 250;
+                    }
+                    if (gridView.Columns["SentToMBOn"] != null)
+                    {
+                        gridView.Columns["SentToMBOn"].HeaderText = "Posted On";
+                        gridView.Columns["SentToMBOn"].ReadOnly = true;
+                        gridView.Columns["SentToMBOn"].MinimumWidth = 110;
+                    }
+                    if (gridView.Columns["MBShipmentId"] != null)
+                    {
+                        gridView.Columns["MBShipmentId"].HeaderText = "MB Shipment Id";
+                        gridView.Columns["MBShipmentId"].ReadOnly = true;
+                        gridView.Columns["MBShipmentId"].MinimumWidth = 150;
+                    }
+                    if (gridView.Columns["LastSyncWithMBOn"] != null)
+                    {
+                        gridView.Columns["LastSyncWithMBOn"].HeaderText = "Last Sync with MB On";
+                        gridView.Columns["LastSyncWithMBOn"].ReadOnly = true;
+                        gridView.Columns["LastSyncWithMBOn"].MinimumWidth = 100;
+                    }
+                    if (gridView.Columns["CancelMessage"] != null)
+                    {
+                        gridView.Columns["CancelMessage"].HeaderText = "Cancel Message";
+                        gridView.Columns["CancelMessage"].ReadOnly = true;
+                        gridView.Columns["CancelMessage"].MinimumWidth = 250;
+                    }
+                    if (gridView.Columns["THubCompleteOrder"] != null)
+                        gridView.Columns["THubCompleteOrder"].Visible = false;
+                    if (gridView.Columns["OSSOrderId"] != null)
+                        gridView.Columns["OSSOrderId"].Visible = false;
+                    if (gridView.Columns["THubOrderId"] != null)
+                        gridView.Columns["THubOrderId"].Visible = false;
+                    if (gridView.Columns["SentToMB"] != null)
+                        gridView.Columns["SentToMB"].Visible = false;
+                    if (gridView.Columns["MBPostShipmentMessage"] != null)
+                        gridView.Columns["MBPostShipmentMessage"].Visible = false;
+                    if (gridView.Columns["MBPostShipmentResponseMessage"] != null)
+                        gridView.Columns["MBPostShipmentResponseMessage"].Visible = false;
+                    if (gridView.Columns["MBSuccessfullyReceived"] != null)
+                        gridView.Columns["MBSuccessfullyReceived"].Visible = false;
+                    if (gridView.Columns["MBShipmentIdSubmitedToThub"] != null)
+                        gridView.Columns["MBShipmentIdSubmitedToThub"].Visible = false;
+                    if (gridView.Columns["MBShipmentIdSubmitedToThubOn"] != null)
+                        gridView.Columns["MBShipmentIdSubmitedToThubOn"].Visible = false;
+                    if (gridView.Columns["OrderStatus"] != null)
+                        gridView.Columns["OrderStatus"].Visible = false;
+                    if (gridView.Columns["THubUpdatedOn"] != null)
+                        gridView.Columns["THubUpdatedOn"].Visible = false;
+                    if (gridView.Columns["MBTrackingNumber"] != null)
+                        gridView.Columns["MBTrackingNumber"].Visible = false;
+                    #endregion
+                    break;
+                }
+            }            
         }
 
+        
         private void OssOrdersDataGridView_DataBindingComplete_1(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender);
-            if (OssOrdersDataGridView.ColumnCount == 15)
+            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.New);
+            if (OssOrdersDataGridView.ColumnCount == 19)
             {
                 //Format columns and add send button column                
-                AddDisableSendButtonToOssOrderDataGridView();                
+                AddSendButtonToGridView(OssOrdersDataGridView);                
             }
-            EnableDisableSendToMoldingBoxButton();
+            EnableDisableSendToMoldingBoxButton(OssOrdersDataGridView);
         }
 
         private void SendToMoldingBoxButton_Click(object sender, EventArgs e)
@@ -526,69 +907,139 @@ namespace IST.OrderSynchronizationSystem
 
         }
 
-        private DataTable ShipmentMapping;
-
         private void OssOrdersDataGridView_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
             DataGridView senderGrid = (DataGridView)sender;
             string apiKey = MoldinboxKeyTextBox.Text;            
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0 && !String.IsNullOrWhiteSpace(apiKey))
-            {
-                MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
-                shipmentMethods = client.Retrieve_Shipping_Methods();
-                DataRow row = _ossOrders.Rows[e.RowIndex];
-                
-                DataGridViewDisableButtonCell sendToMbButtonCell = (DataGridViewDisableButtonCell)OssOrdersDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                if (sendToMbButtonCell.Enabled)
+            {                
+                if (((DataGridView)sender).Name == OssOrdersDataGridView.Name)
                 {
-                    DataRow ossOrderRow = _ossOrders.Rows[e.RowIndex];
-                    
-                    string orderJsonString = ossOrderRow["THubCompleteOrder"].ToString();
-                    if (!String.IsNullOrWhiteSpace(orderJsonString))
-                    {
-                        OssShipment[] shipments = new OssShipment[1]
-                        {
-                            JsonConvert.DeserializeObject<OssShipment>(orderJsonString)
-                        };
-
-                        MapShipment(shipments[0], shipmentMethods);
-                        Shipment [] shipmentToPost = new Shipment[1];
-                        foreach (OssShipment ossShipment in shipments.ToList())
-                        {
-                            shipmentToPost[0] = CreateFrom(ossShipment);
-                        }
-                        DateTime shipmentRequestSentOn = DateTime.Now;
-                        Response[] responses = MoldingBoxHelper.PostShipment(client, apiKey, shipmentToPost);
-                        SetOrderStatus(ossOrderRow, shipmentRequestSentOn, responses, shipments, apiKey);
-                        _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
-                        OssOrdersDataGridView.DataBindings.Clear();
-                        OssOrdersDataGridView.DataSource = _ossOrders;                        
-                    }
-                    SetSendToMoldingBoxCheckBox(e);
-                    DisableSentToMoldingBoxButton(sendToMbButtonCell);
+                    HandleSendToMoldingBox(e, senderGrid, apiKey);
                 }
+                else if (((DataGridView) sender).Name == OssExceptionGridView.Name)
+                {
+                    HandleExceptionGridActions(e, senderGrid, apiKey);
+                }                
             }
         }
 
-        private void SetOrderStatus(DataRow ossOrderRow, DateTime shipmentRequestSentOn, Response[] responses, OssShipment[] shipments, string apiKey)
+        
+        
+        private void HandleSendToMoldingBox(DataGridViewCellEventArgs e, DataGridView senderGrid, string apiKey)        
         {
-            
+            MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
+            DataGridViewDisableButtonCell sendToMbButtonCell = (DataGridViewDisableButtonCell)senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            if (sendToMbButtonCell.Enabled)
+            {
+                if (shipmentMethods == null || !shipmentMethods.Any())
+                {
+                    shipmentMethods = client.Retrieve_Shipping_Methods();
+                }
+                DataRow ossOrderRow = ((DataTable) senderGrid.DataSource).Rows[e.RowIndex];
+
+                string orderJsonString = ossOrderRow["THubCompleteOrder"].ToString();
+                if (!String.IsNullOrWhiteSpace(orderJsonString))
+                {
+                    OssShipment[] shipments = new OssShipment[1]
+                    {
+                        JsonConvert.DeserializeObject<OssShipment>(orderJsonString)
+                    };
+
+                    MapShipment(shipments[0], shipmentMethods);
+                    Shipment[] shipmentToPost = new Shipment[1];
+                    foreach (OssShipment ossShipment in shipments.ToList())
+                    {
+                        shipmentToPost[0] = CreateFrom(ossShipment);
+                    }
+                    DateTime shipmentRequestSentOn = DateTime.Now;
+                    Response[] responses = MoldingBoxHelper.PostShipment(client, apiKey, shipmentToPost);
+                    SetOrderStatus(ossOrderRow, shipmentRequestSentOn, responses, shipments, apiKey);
+                    _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
+                    senderGrid.DataBindings.Clear();
+                    senderGrid.DataSource = _ossOrders;
+                }
+                SetSendToMoldingBoxCheckBox(senderGrid, e);
+                DisableSentToMoldingBoxButton(sendToMbButtonCell);
+            }
+        }
+
+        private void RepostShipmentToBoldingBox(DataRow ossOrderRow)
+        {
+            string ApiKey = MoldinboxKeyTextBox.Text; 
+            MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
+            string orderJsonString = ossOrderRow["THubCompleteOrder"].ToString();
+            if (!string.IsNullOrWhiteSpace(orderJsonString))
+            {
+                if (shipmentMethods == null || !shipmentMethods.Any())
+                {
+                    shipmentMethods = client.Retrieve_Shipping_Methods();
+                }
+
+                OssShipment[] shipments = new OssShipment[1]
+                    {
+                        JsonConvert.DeserializeObject<OssShipment>(orderJsonString)
+                    };
+                MapShipment(shipments[0], shipmentMethods);
+                Shipment[] shipmentToPost = new Shipment[1];
+                shipmentToPost[0] = CreateFrom(shipments[0]);
+                DateTime shipmentRequestSentOn = DateTime.Now;
+                Response[] responses = MoldingBoxHelper.PostShipment(client, ApiKey, shipmentToPost);
+                SetOrderStatus(ossOrderRow, shipmentRequestSentOn, responses, shipments, ApiKey);
+                _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);                
+            }
+        }
+        private void HandleExceptionGridActions(DataGridViewCellEventArgs e, DataGridView senderGrid, string apiKey)
+        {
+            MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
+            DataGridViewDisableButtonCell sendToMbButtonCell = (DataGridViewDisableButtonCell)senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            if (sendToMbButtonCell.FormattedValue == CancelString)
+            {
+                CancelMessageForm cancelMessageForm = new CancelMessageForm();
+                DialogResult results = cancelMessageForm.ShowDialog(this);
+                if (cancelMessageForm.Result == DialogResult.OK)
+                {
+                    DataRow ossOrderRow = ((DataTable)senderGrid.DataSource).Rows[e.RowIndex];
+                    ossOrderRow["CancelMessage"] = cancelMessageForm.CancelMessageString;
+                    ossOrderRow["OrderStatus"] = (int)OSSOrderStatus.Canceled;
+                    _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
+                    
+                }
+            }
+            else if (sendToMbButtonCell.Value == ReloadString)
+            {
+                _orderSyncronizationDatabase.ReloadShipmentToStaging();
+            }
+            else if (sendToMbButtonCell.Value == RePostString)
+            {
+                RepostShipmentToBoldingBox(((DataTable) senderGrid.DataSource).Rows[e.RowIndex]);
+            }
+            DataTable ossExceptionDataTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.Exception);
+            senderGrid.DataBindings.Clear();
+            senderGrid.DataSource = ossExceptionDataTable;
+        }
+
+        private void SetOrderStatus(DataRow ossOrderRow, DateTime shipmentRequestSentOn, Response[] responses, OssShipment[] shipments, string apiKey)
+        {            
             Response response = responses[0];
             if (response.MBShipmentID == 0)
             {
+                ossOrderRow["SentToMB"] = false;
                 ossOrderRow["OrderStatus"] = (int) OSSOrderStatus.Exception;
                 ossOrderRow["MBShipmentSubmitError"] = response.ErrorMessage;
             }
             else
             {
-                ossOrderRow["OrderStatus"] = (int)OSSOrderStatus.InFlight;
                 ossOrderRow["SentToMB"] = true;
-                ossOrderRow["SentToMBOn"] = shipmentRequestSentOn;
+                ossOrderRow["OrderStatus"] = (int)OSSOrderStatus.InFlight;                
                 ossOrderRow["MBShipmentId"] = response.MBShipmentID.ToString();
-            }
+            }            
+            ossOrderRow["SentToMBOn"] = shipmentRequestSentOn;
             ossOrderRow["MBPostShipmentMessage"] = JsonConvert.SerializeObject(new OssShipmentMessage(apiKey, shipments));
             ossOrderRow["MBPostShipmentResponseMessage"] = JsonConvert.SerializeObject(responses);
             ossOrderRow["MBSuccessfullyReceived"] = response.SuccessfullyReceived;
+            //ossOrderRow["LastSyncWithMBOn"] = shipmentRequestSentOn;
+            ossOrderRow["CancelMessage"] = string.Empty;
         }
         private void MapShipment(OssShipment shipment, ShippingMethod[] moldingBoxShippingMethods)
         {
@@ -643,6 +1094,8 @@ namespace IST.OrderSynchronizationSystem
             };
         }
 
+        #region Exception Handlers
+
         private void ExceptionRefresh_Click(object sender, EventArgs e)
         {
             DataTable ossExceptionDataTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.Exception);
@@ -658,29 +1111,16 @@ namespace IST.OrderSynchronizationSystem
 
         private void OssExceptionGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView) sender);
-        }
-
-        private void CompleteButton_Click(object sender, EventArgs e)
-        {
-            DataTable ossCompletedDataTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.Completed);
-            if (ossCompletedDataTable.Rows.Count > 0)
-            {
-                OssCompletedGridView.DataSource = ossCompletedDataTable;
+            if (((DataGridView)sender).ColumnCount == 19)
+            {                       
+                AddReloadButtonToGridView((DataGridView)sender);
+                AddPostAgainButtonToGridView((DataGridView)sender);
+                AddCancelButtonToGridView((DataGridView)sender);
             }
-            else
-            {
-                MessageBox.Show("No Completed Order available in T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView) sender, OssOrdersGridTypes.Exception);
         }
-
-        private void OssCompletedGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender);
-        }
-
-        
-
+        #endregion
+        #region Processing Handlers
         private void InFlightRefresh_Click(object sender, EventArgs e)
         {
             DataTable ossInFlightDataTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.InFlight);
@@ -693,10 +1133,74 @@ namespace IST.OrderSynchronizationSystem
                 MessageBox.Show("No In-Flight Order available in T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
-        private void OssInFlightGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        private void OssInFlightGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender);
+            OssOrdersDataGridView_CellContentClick_1(sender, e);
+        }
+        private void OssInFlightGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {            
+            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.Processing);            
+        }
+        #endregion
+        #region Fulfilled Handlers
+        private void CompleteButton_Click(object sender, EventArgs e)
+        {
+            DataTable ossCompletedDataTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.Completed);
+            if (ossCompletedDataTable.Rows.Count > 0)
+            {
+                OssCompletedGridView.DataSource = ossCompletedDataTable;
+            }
+            else
+            {
+                MessageBox.Show("No Completed Order available in T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        private void OssCompletedGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.Completed);
+        }
+        private void OssExceptionGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            OssOrdersDataGridView_CellContentClick_1(sender, e);
+        }
+        #endregion
+        #region On-Hold Handlers
+        private void OnHoldRefresh_Click(object sender, EventArgs e)
+        {
+            DataTable ossOnHoldDatasource = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.OnHold);
+            if (ossOnHoldDatasource.Rows.Count > 0)
+            {
+                OSSOrderOnHoldGridView.DataSource = ossOnHoldDatasource;
+            }
+            else
+            {
+                MessageBox.Show("No On-Hold Order available in T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        private void OSSOrderOnHoldGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.OnHold);
+        }
+        #endregion
+
+
+        private void OssOrdersCanceledOrders_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.Cancelled);
+        }
+
+        private void CancelRefresh_Click(object sender, EventArgs e)
+        {
+            DataTable ossCanceledTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.Canceled);
+            if (ossCanceledTable.Rows.Count > 0)
+            {
+                OssOrdersCanceledOrders.DataSource = ossCanceledTable;
+            }
+            else
+            {
+                OssOrdersCanceledOrders.DataBindings.Clear();
+                MessageBox.Show("No Canceled Order available in T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }
