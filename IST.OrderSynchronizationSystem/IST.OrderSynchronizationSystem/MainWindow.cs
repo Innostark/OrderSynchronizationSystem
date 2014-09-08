@@ -446,6 +446,7 @@ namespace IST.OrderSynchronizationSystem
         private const string RePostString = "Re-Post";
         private const string CancelString = "Cancel";
         private const string ReloadString = "Reload";
+        private const string SyncWithMb = "Synch With MB";
         private void AddReloadButtonToGridView(DataGridView gridView)
         {
             DataGridViewDisableButtonColumn sendToMoldingBoxButtonColumn = new DataGridViewDisableButtonColumn();
@@ -489,6 +490,21 @@ namespace IST.OrderSynchronizationSystem
             sendToMoldingBoxButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
             gridView.Columns.Insert(21, sendToMoldingBoxButtonColumn);
+        }
+        private void AddSyncButtonToGridView(DataGridView gridView)
+        {
+            DataGridViewDisableButtonColumn synchwithMoldingBoxButtonColumn = new DataGridViewDisableButtonColumn();
+            synchwithMoldingBoxButtonColumn.HeaderText = SyncWithMb;
+            synchwithMoldingBoxButtonColumn.Text = SyncWithMb;
+            synchwithMoldingBoxButtonColumn.MinimumWidth = 100;
+            synchwithMoldingBoxButtonColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            synchwithMoldingBoxButtonColumn.Name = "btnSyncToMb";
+            synchwithMoldingBoxButtonColumn.ToolTipText = "Click to Sync with Molding Box.";
+            synchwithMoldingBoxButtonColumn.DefaultCellStyle.Font = new Font("Arial", 8.5F, FontStyle.Bold);
+            synchwithMoldingBoxButtonColumn.UseColumnTextForButtonValue = true;
+            synchwithMoldingBoxButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            gridView.Columns.Insert(19, synchwithMoldingBoxButtonColumn);
         }
         private void SetOssOrderDataGridHeaderTextAndColumnVisibility(DataGridView gridView, OssOrdersGridTypes gridType)
         {
@@ -920,7 +936,11 @@ namespace IST.OrderSynchronizationSystem
                 else if (((DataGridView) sender).Name == OssExceptionGridView.Name)
                 {
                     HandleExceptionGridActions(e, senderGrid, apiKey);
-                }                
+                }
+                else if (((DataGridView) sender).Name == OssInFlightGridView.Name)
+                {
+                    SyncWithMoldingBox(((DataTable)senderGrid.DataSource).Rows[e.RowIndex]);
+                }
             }
         }
 
@@ -934,7 +954,7 @@ namespace IST.OrderSynchronizationSystem
             {
                 if (shipmentMethods == null || !shipmentMethods.Any())
                 {
-                    shipmentMethods = client.Retrieve_Shipping_Methods();
+                    shipmentMethods = client.Retrieve_Merchant_Shipping_Methods(apiKey);
                 }
                 DataRow ossOrderRow = ((DataTable) senderGrid.DataSource).Rows[e.RowIndex];
 
@@ -973,7 +993,7 @@ namespace IST.OrderSynchronizationSystem
             {
                 if (shipmentMethods == null || !shipmentMethods.Any())
                 {
-                    shipmentMethods = client.Retrieve_Shipping_Methods();
+                    shipmentMethods = client.Retrieve_Merchant_Shipping_Methods(ApiKey);
                 }
 
                 OssShipment[] shipments = new OssShipment[1]
@@ -1013,12 +1033,40 @@ namespace IST.OrderSynchronizationSystem
             else if (sendToMbButtonCell.Value == RePostString)
             {
                 RepostShipmentToBoldingBox(((DataTable) senderGrid.DataSource).Rows[e.RowIndex]);
-            }
+            }            
             DataTable ossExceptionDataTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.Exception);
             senderGrid.DataBindings.Clear();
             senderGrid.DataSource = ossExceptionDataTable;
         }
 
+        private void SyncWithMoldingBox(DataRow ossOrderRow)
+        {
+            string orderId = ossOrderRow["THubOrderId"].ToString();
+            string apiKey = MoldinboxKeyTextBox.Text;
+            MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
+            StatusResponse[] statusResponse = client.Retrieve_Shipment_Status(apiKey, new ArrayOfInt() { int.Parse(orderId) });
+            if (statusResponse[0].ShipmentExists)
+            {
+                if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Completed) // Handle in processing
+                {
+                    _orderSyncronizationDatabase.UpdateOrderTrackingAndOssStatus(statusResponse[0], long.Parse(orderId));                    
+                }
+                else if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.InFlight)
+                {
+                    _orderSyncronizationDatabase.UpdateLastSyncDateOfOrder(long.Parse(orderId));
+                }
+                else if (statusResponse[0].ShipmentStatusID == (int) OSSOrderStatus.OnHold)
+                {
+                    _orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId),
+                        OSSOrderStatus.OnHold);
+                }
+                else if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Canceled)
+                {
+                    _orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId),
+                        OSSOrderStatus.Canceled);
+                }
+            }            
+        }
         private void SetOrderStatus(DataRow ossOrderRow, DateTime shipmentRequestSentOn, Response[] responses, OssShipment[] shipments, string apiKey)
         {            
             Response response = responses[0];
@@ -1138,7 +1186,11 @@ namespace IST.OrderSynchronizationSystem
             OssOrdersDataGridView_CellContentClick_1(sender, e);
         }
         private void OssInFlightGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {            
+        {
+            if (((DataGridView) sender).ColumnCount == 19)
+            {
+                AddSyncButtonToGridView((DataGridView) sender);
+            }
             SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.Processing);            
         }
         #endregion

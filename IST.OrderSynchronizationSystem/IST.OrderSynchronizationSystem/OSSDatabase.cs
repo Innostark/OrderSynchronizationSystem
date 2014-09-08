@@ -84,7 +84,7 @@ namespace IST.OrderSynchronizationSystem
             List<OssShipment> ossShipments = new List<OssShipment>();
             using (TransactionScope scope = new TransactionScope())
             {
-                long lastExecutedTHubOrderId = GetLastExecutedTHubOrderId();
+                //TODO: long lastExecutedTHubOrderId = GetLastExecutedTHubOrderId();
 
                 using (SqlConnection tHubDbConnection = new SqlConnection(_sourceSqlConnectionConnectionStringBuilder.ConnectionString))
                 {
@@ -125,10 +125,30 @@ namespace IST.OrderSynchronizationSystem
                 }
                 scope.Complete();
             }
-
+            
             return ossShipments;
         }
 
+        private void LogOrder(int LogType, long OrderId, string LogText)
+        {
+            //source_sql_Insert_Log
+            using (
+                SqlConnection tHubDbConnection =
+                    new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                using (SqlCommand logCommand = new SqlCommand(SqlResource.source_sql_Insert_Log, tHubDbConnection))
+                {
+                    logCommand.Parameters.AddWithValue("@LogTypeId", LogType);
+                    logCommand.Parameters.AddWithValue("@OrderId", OrderId);
+                    logCommand.Parameters.AddWithValue("@LogText", LogText);
+                    logCommand.Parameters.AddWithValue("@CreatedOn", DateTime.Now);
+
+                    tHubDbConnection.Open();
+                    int logCreated = logCommand.ExecuteNonQuery();
+                    tHubDbConnection.Close();
+                }
+            }
+        }
         public DataTable LoadOrdersFromStaging(string name, OSSOrderStatus status)
         {
             DataTable stagingOrdersDataTable = CreateStagingOrdersTable(name, true);
@@ -185,9 +205,15 @@ namespace IST.OrderSynchronizationSystem
             }
             using (TransactionScope transaction = new TransactionScope())
             {
+
                 using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
                 {
                     stagingDbconnection.Open();
+                    foreach (OssShipment ossShipment in stagingShipments)
+                    {
+                        LogOrder(1, ossShipment.ThubOrderId, "Order Created on staging.");
+                    }
+                    
                     using (SqlCommand command = new SqlCommand("USPCreateOSSOrders", stagingDbconnection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
@@ -198,9 +224,82 @@ namespace IST.OrderSynchronizationSystem
                 }
                 transaction.Complete();
             }
-
             return numberOfRecordsAffected;
         }
+
+        public void UpdateLastSyncDateOfOrder(long OssOrderId)
+        {
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                stagingDbconnection.Open();
+                using (SqlCommand command = new SqlCommand(SqlResource.source_sql_UpdateOrderSyncStatus, stagingDbconnection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@DateTimeNow", DateTime.Now);
+                    
+                    command.Parameters.AddWithValue("@THubOrderId", OssOrderId);
+                    var rowsUpdate = command.ExecuteNonQuery();
+                }
+                stagingDbconnection.Close();
+            }            
+        }
+
+        public void UpdateOrderTrackingAndOssStatus(StatusResponse response, long OrderKey)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                using (SqlConnection sourceConnection =
+                    new SqlConnection(_sourceSqlConnectionConnectionStringBuilder.ConnectionString))
+                {
+                    using (
+                        SqlCommand command = new SqlCommand(SqlResource.staging_sql_InsertShipmentTrackingDetails,
+                            sourceConnection))
+                    {
+                        command.Parameters.AddWithValue("@OrderKey", OrderKey);
+                        command.Parameters.AddWithValue("@TrackingUrl", response.TrackingURL);
+                        command.Parameters.AddWithValue("@TrackingNumber", response.TrackingNumber);
+                        command.Parameters.AddWithValue("@ShipmentDate", DateTime.Now);
+                        
+                        sourceConnection.Open();
+                        var itemsInserted = command.ExecuteNonQuery();
+                    }
+
+                }
+                using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+                {
+                    stagingDbconnection.Open();
+                    using (SqlCommand command = new SqlCommand(SqlResource.source_sql_UpdateOrderCompleted, stagingDbconnection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@DateTimeNow", DateTime.Now);
+                        command.Parameters.AddWithValue("@OrderStatus", (short)OSSOrderStatus.Completed);
+                        command.Parameters.AddWithValue("@THubOrderId", OrderKey);                        
+                        var rowsUpdate = command.ExecuteNonQuery();
+                    }
+                    stagingDbconnection.Close();
+                }
+                scope.Complete();
+            }
+        }
+
+        public void UpdateOrderStatusCanceledOrOnHold(long OrderKey, OSSOrderStatus orderStatus)
+        {
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                stagingDbconnection.Open();
+                using (SqlCommand command = new SqlCommand(SqlResource.source_sql_UpdateOrderCompleted, stagingDbconnection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@DateTimeNow", DateTime.Now);
+                    command.Parameters.AddWithValue("@OrderStatus", (short)OSSOrderStatus.Completed);
+                    command.Parameters.AddWithValue("@THubOrderId", OrderKey);
+                    var rowsUpdate = command.ExecuteNonQuery();
+                }
+                stagingDbconnection.Close();
+            }
+
+        }
+
 
         private static OssShipment ConvertSourceOrderToStagingShipment(IDataRecord order)
         {

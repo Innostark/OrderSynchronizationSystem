@@ -61,6 +61,25 @@ namespace IST.OrderSynchronizationSystem {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO [dbo].[Logs]
+        ///  ([LogTypeId]
+        ///  ,[OSSOrderId]
+        ///  ,[LogText]
+        ///  ,[CreatedOn])
+        ///  VALUES
+        ///  (@LogTypeId,
+        ///  @OSSOrderId,
+        ///  @LogText,
+        ///  @CreatedOn
+        ///  ).
+        /// </summary>
+        internal static string source_sql_Insert_Log {
+            get {
+                return ResourceManager.GetString("source_sql_Insert_Log", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select oi.ItemCode As SKU,
         ///       oi.ItemDescription As &apos;Description&apos;,
         ///	   Cast(oi.Quantity As int) As Quantity,
@@ -106,6 +125,31 @@ namespace IST.OrderSynchronizationSystem {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to UPDATE [dbo].[OSSOrders]
+        ///      SET [LastSyncWithMBOn] = @DateTimeNow,
+        ///	    [OrderStatus] = @OrderStatus
+        ///      WHERE [THubOrderId] = @THubOrderId
+        ///  .
+        /// </summary>
+        internal static string source_sql_UpdateOrderCompleted {
+            get {
+                return ResourceManager.GetString("source_sql_UpdateOrderCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPDATE [dbo].[OSSOrders]
+        ///      SET [LastSyncWithMBOn] = @DateTimeNow
+        ///      WHERE [THubOrderId] = @THubOrderId
+        ///  .
+        /// </summary>
+        internal static string source_sql_UpdateOrderSyncStatus {
+            get {
+                return ResourceManager.GetString("source_sql_UpdateOrderSyncStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to update OSSOrders
         ///set [THubCompleteOrder] = @CompleteOrder
         ///where THubOrderReferenceNo = @OssOrderId .
@@ -140,6 +184,26 @@ namespace IST.OrderSynchronizationSystem {
         internal static string staging_sql_CreateOssOrders {
             get {
                 return ResourceManager.GetString("staging_sql_CreateOssOrders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///      INSERT INTO [dbo].[ShipmentTracking]
+        ///           ([ORDER_KEY]
+        ///           ,[REF_NUMBER_WEB]
+        ///           ,[LeadTrackingNumber]
+        ///           ,[ShipDate])
+        ///     VALUES
+        ///           (@OrderKey
+        ///           ,@TrackingUrl
+        ///           ,@TrackingNumber
+        ///           ,@ShipmentDate)
+        ///    .
+        /// </summary>
+        internal static string staging_sql_InsertShipmentTrackingDetails {
+            get {
+                return ResourceManager.GetString("staging_sql_InsertShipmentTrackingDetails", resourceCulture);
             }
         }
         

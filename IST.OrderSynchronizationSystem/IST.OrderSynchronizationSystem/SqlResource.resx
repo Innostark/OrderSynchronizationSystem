@@ -130,9 +130,23 @@
 From   OrderItems as oi With(NoLock)
 Where  oi.OrderId = @THubOrderId</value>
   </data>
+
+
   
-  
-  
+<data name="source_sql_Insert_Log" xml:space="preserve">
+    <value>INSERT INTO [dbo].[Logs]
+  ([LogTypeId]
+  ,[OSSOrderId]
+  ,[LogText]
+  ,[CreatedOn])
+  VALUES
+  (@LogTypeId,
+  @OSSOrderId,
+  @LogText,
+  @CreatedOn
+  )</value>
+  </data>
+
   <data name="source_sql_PullOrdersFromThub" xml:space="preserve">
     <value>Select  Top 1 ord.OrderId As THubOrderID,
        ord.ChannelOrderReference As OrderID, 
@@ -222,6 +236,34 @@ where THubOrderReferenceNo = @OssOrderId </value>
   <data name="source_sql_verify" xml:space="preserve">
     <value>Select count(*) from Orders With(NoLock)</value>
   </data>
+  <data name="source_sql_UpdateOrderSyncStatus" xml:space="preserve">
+    <value>UPDATE [dbo].[OSSOrders]
+      SET [LastSyncWithMBOn] = @DateTimeNow
+      WHERE [THubOrderId] = @THubOrderId
+  </value>
+  </data>
+  <data name="source_sql_UpdateOrderCompleted" xml:space="preserve">
+    <value>UPDATE [dbo].[OSSOrders]
+      SET [LastSyncWithMBOn] = @DateTimeNow,
+	    [OrderStatus] = @OrderStatus
+      WHERE [THubOrderId] = @THubOrderId
+  </value>
+  </data>
+  
+  <data name="staging_sql_InsertShipmentTrackingDetails" xml:space="preserve">
+    <value>
+      INSERT INTO [dbo].[ShipmentTracking]
+           ([ORDER_KEY]
+           ,[REF_NUMBER_WEB]
+           ,[LeadTrackingNumber]
+           ,[ShipDate])
+     VALUES
+           (@OrderKey
+           ,@TrackingUrl
+           ,@TrackingNumber
+           ,@ShipmentDate)
+    </value>
+  </data>  
   <data name="staging_sql_CreateOssOrders" xml:space="preserve">
     <value>USPCreateOSSOrders</value>
   </data>
