@@ -8,14 +8,12 @@ namespace IST.OrderSynchronizationSystem
         public readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         public void Process(Form mainWindow, int frequency)
         {
-            MainWindow mainForm = (MainWindow)mainWindow;
-            mainForm.ApplicationStatusUpdate("Auto Synchronization started.");
+            MainWindow mainForm = (MainWindow)mainWindow;            
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
-                MessageBox.Show("Started");
+                mainForm.ApplicationStatusUpdate("Auto Synchronization started.");
                 Thread.Sleep(5000);
-            }
-            MessageBox.Show("Stopped");
+            }            
         }
     }
 }

@@ -234,9 +234,7 @@ namespace IST.OrderSynchronizationSystem
                 stagingDbconnection.Open();
                 using (SqlCommand command = new SqlCommand(SqlResource.source_sql_UpdateOrderSyncStatus, stagingDbconnection))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@DateTimeNow", DateTime.Now);
-                    
                     command.Parameters.AddWithValue("@THubOrderId", OssOrderId);
                     var rowsUpdate = command.ExecuteNonQuery();
                 }
@@ -269,8 +267,7 @@ namespace IST.OrderSynchronizationSystem
                 {
                     stagingDbconnection.Open();
                     using (SqlCommand command = new SqlCommand(SqlResource.source_sql_UpdateOrderCompleted, stagingDbconnection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
+                    {                        
                         command.Parameters.AddWithValue("@DateTimeNow", DateTime.Now);
                         command.Parameters.AddWithValue("@OrderStatus", (short)OSSOrderStatus.Completed);
                         command.Parameters.AddWithValue("@THubOrderId", OrderKey);                        
@@ -288,10 +285,9 @@ namespace IST.OrderSynchronizationSystem
             {
                 stagingDbconnection.Open();
                 using (SqlCommand command = new SqlCommand(SqlResource.source_sql_UpdateOrderCompleted, stagingDbconnection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
+                {                    
                     command.Parameters.AddWithValue("@DateTimeNow", DateTime.Now);
-                    command.Parameters.AddWithValue("@OrderStatus", (short)OSSOrderStatus.Completed);
+                    command.Parameters.AddWithValue("@OrderStatus", (short)orderStatus);
                     command.Parameters.AddWithValue("@THubOrderId", OrderKey);
                     var rowsUpdate = command.ExecuteNonQuery();
                 }
@@ -435,9 +431,9 @@ namespace IST.OrderSynchronizationSystem
             DataTable ossOrdersTable = new DataTable("OSSOrders");
             ossOrdersTable.Columns.Add("THubOrderId", typeof(long));
             ossOrdersTable.Columns.Add("THubOrderReferenceNo", typeof(string));
-            ossOrdersTable.Columns.Add("CreatedOn", typeof(DateTime));
+            ossOrdersTable.Columns.Add("CreatedOn", typeof(DateTime));            
             ossOrdersTable.Columns.Add("THubCompleteOrder", typeof(string));
-
+            ossOrdersTable.Columns.Add("OrderStatus", typeof(short));
             return ossOrdersTable;
         }
 
@@ -447,6 +443,7 @@ namespace IST.OrderSynchronizationSystem
 
             DataRow ossOrder = stagingOrdersTable.NewRow();
             ossOrder["THubOrderId"] = stagingShipment.ThubOrderId;
+            ossOrder["OrderStatus"] = (short)OSSOrderStatus.New;
             ossOrder["THubOrderReferenceNo"] = stagingShipment.OrderID;
             ossOrder["CreatedOn"] = DateTime.Now;
             ossOrder["THubCompleteOrder"] = shipmentJson;
@@ -501,6 +498,7 @@ namespace IST.OrderSynchronizationSystem
             stagingRow["MBShipmentIdSubmitedToThubOn"] = stagingOrder["MBShipmentIdSubmitedToThubOn"];
             stagingRow["CancelMessage"] = stagingOrder["CancelMessage"];
             stagingRow["OrderStatus"] = stagingOrder["OrderStatus"] != null ? ((OSSOrderStatus)(int.Parse(stagingOrder["OrderStatus"].ToString()))).ToString() : string.Empty;
+            stagingRow["LastSyncWithMBOn"] = stagingOrder["LastSyncWithMBOn"];
         }
 
         internal int UpdateOrderAfterMoldingBoxShipmentRequest(DataRow ossOrderRow)

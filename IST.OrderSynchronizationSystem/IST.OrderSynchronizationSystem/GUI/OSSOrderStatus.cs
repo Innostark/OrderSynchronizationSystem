@@ -2,11 +2,12 @@
 {
     public enum OSSOrderStatus
     {
-        New = 0,
-        InFlight = 1,
-        Exception = 2,
-        Completed = 3,
-        OnHold = 4,
+        New = 0,        
+        Recieved = 1,
+        OnHold = 2,
+        InFlight = 3,
+        Exception = 6,
+        Completed = 4,        
         Canceled = 5
     }
 }

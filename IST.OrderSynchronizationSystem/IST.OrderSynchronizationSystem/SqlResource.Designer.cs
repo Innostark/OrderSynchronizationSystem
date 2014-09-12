@@ -63,12 +63,12 @@ namespace IST.OrderSynchronizationSystem {
         /// <summary>
         ///   Looks up a localized string similar to INSERT INTO [dbo].[Logs]
         ///  ([LogTypeId]
-        ///  ,[OSSOrderId]
+        ///  ,[OrderId]
         ///  ,[LogText]
         ///  ,[CreatedOn])
         ///  VALUES
         ///  (@LogTypeId,
-        ///  @OSSOrderId,
+        ///  @OrderId,
         ///  @LogText,
         ///  @CreatedOn
         ///  ).
@@ -99,7 +99,9 @@ namespace IST.OrderSynchronizationSystem {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select  Top 1 ord.OrderId As THubOrderID,
+        ///   Looks up a localized string similar to 
+        ///      Select  --Top 1 
+        ///		ord.OrderId As THubOrderID,
         ///       ord.ChannelOrderReference As OrderID, 
         ///       ord.OrderDate As Orderdate, 
         ///       Case ord.ShippingAddrSameAsBilling
@@ -116,7 +118,7 @@ namespace IST.OrderSynchronizationSystem {
         ///		When 1
         ///		 Then ord.BAddr_Line1
         ///	   End As Address1,
-        ///       Case ord.Shipp [rest of string was truncated]&quot;;.
+        ///        [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string source_sql_PullOrdersFromThub {
             get {

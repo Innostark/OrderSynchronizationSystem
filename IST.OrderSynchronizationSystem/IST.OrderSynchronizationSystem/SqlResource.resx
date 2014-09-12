@@ -136,19 +136,21 @@ Where  oi.OrderId = @THubOrderId</value>
 <data name="source_sql_Insert_Log" xml:space="preserve">
     <value>INSERT INTO [dbo].[Logs]
   ([LogTypeId]
-  ,[OSSOrderId]
+  ,[OrderId]
   ,[LogText]
   ,[CreatedOn])
   VALUES
   (@LogTypeId,
-  @OSSOrderId,
+  @OrderId,
   @LogText,
   @CreatedOn
   )</value>
   </data>
 
   <data name="source_sql_PullOrdersFromThub" xml:space="preserve">
-    <value>Select  Top 1 ord.OrderId As THubOrderID,
+    <value>
+      Select  --Top 1 
+		ord.OrderId As THubOrderID,
        ord.ChannelOrderReference As OrderID, 
        ord.OrderDate As Orderdate, 
        Case ord.ShippingAddrSameAsBilling
@@ -224,9 +226,14 @@ Where  oi.OrderId = @THubOrderId</value>
 		When 6
 		 Then 'SKIP'
 	   End as [Status]
-    From   Orders As ord With(NoLock),
-           OrderShippingStatus As oss With(NoLock)
-    Where  ord.ChannelOrderReference = 100004947</value>
+    From   Orders As ord With(NoLock)
+    Where 
+	ord.ShippingStatusId = 1 
+	and (ord.PaymentStatusId = 4 or ord.PaymentStatusId = 2)
+	and (IsCompleteOrderFlag = 0 or IsCompleteOrderFlag is null)
+	order by 1 desc, 2 desc, 3
+
+</value>
   </data>
   <data name="source_sql_UpdateOssOrder" xml:space="preserve">
     <value>update OSSOrders

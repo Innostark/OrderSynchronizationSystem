@@ -38,6 +38,7 @@
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.errorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hideWhenMinimizedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainFormTabControl = new System.Windows.Forms.TabControl();
             this.ConfigurationTabPage = new System.Windows.Forms.TabPage();
             this.splitter1 = new System.Windows.Forms.Splitter();
@@ -84,31 +85,34 @@
             this.OssOrdersDataGridView = new System.Windows.Forms.DataGridView();
             this.SyncOrdersWithTHubGroupBox = new System.Windows.Forms.GroupBox();
             this.LoadOrdersFromTHubButton = new System.Windows.Forms.Button();
-            this.ManualSendToMoldingBoxGroupBox = new System.Windows.Forms.GroupBox();
-            this.SendToMoldingBoxButton = new System.Windows.Forms.Button();
             this.InFight = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.OssInFlightGridView = new System.Windows.Forms.DataGridView();
-            this.InFlightRefresh = new System.Windows.Forms.Button();
             this.Exception = new System.Windows.Forms.TabPage();
-            this.ExceptionRefresh = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.OssExceptionGridView = new System.Windows.Forms.DataGridView();
             this.Completed = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.OssCompletedGridView = new System.Windows.Forms.DataGridView();
-            this.CompleteButton = new System.Windows.Forms.Button();
             this.OnHold = new System.Windows.Forms.TabPage();
             this.OnHoldGroupBox = new System.Windows.Forms.GroupBox();
             this.OSSOrderOnHoldGridView = new System.Windows.Forms.DataGridView();
-            this.OnHoldRefresh = new System.Windows.Forms.Button();
-            this.FormErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ApplicationStatusStrip = new System.Windows.Forms.StatusStrip();
             this.Canceled = new System.Windows.Forms.TabPage();
-            this.CancelRefresh = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.OssOrdersCanceledOrders = new System.Windows.Forms.DataGridView();
+            this.FormErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.menuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
+            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ApplicationStatusStrip = new System.Windows.Forms.StatusStrip();
+            this.CancelOrdersLabel = new System.Windows.Forms.Label();
+            this.OnHoldOrdersLabel = new System.Windows.Forms.Label();
+            this.CompletedOrdersLabel = new System.Windows.Forms.Label();
+            this.ExceptionOrdersLabel = new System.Windows.Forms.Label();
+            this.InFlightOrdersLabel = new System.Windows.Forms.Label();
             this.ApplicationMenuStrip.SuspendLayout();
             this.MainFormTabControl.SuspendLayout();
             this.ConfigurationTabPage.SuspendLayout();
@@ -122,7 +126,6 @@
             this.OSSOrdersGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OssOrdersDataGridView)).BeginInit();
             this.SyncOrdersWithTHubGroupBox.SuspendLayout();
-            this.ManualSendToMoldingBoxGroupBox.SuspendLayout();
             this.InFight.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OssInFlightGridView)).BeginInit();
@@ -135,11 +138,12 @@
             this.OnHold.SuspendLayout();
             this.OnHoldGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OSSOrderOnHoldGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).BeginInit();
-            this.ApplicationStatusStrip.SuspendLayout();
             this.Canceled.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OssOrdersCanceledOrders)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).BeginInit();
+            this.menuStrip.SuspendLayout();
+            this.ApplicationStatusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // ApplicationMenuStrip
@@ -149,7 +153,7 @@
             this.toolsToolStripMenuItem});
             this.ApplicationMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.ApplicationMenuStrip.Name = "ApplicationMenuStrip";
-            this.ApplicationMenuStrip.Size = new System.Drawing.Size(1230, 24);
+            this.ApplicationMenuStrip.Size = new System.Drawing.Size(1231, 24);
             this.ApplicationMenuStrip.TabIndex = 1;
             this.ApplicationMenuStrip.Text = "Application Menu Strip";
             // 
@@ -172,7 +176,8 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.errorsToolStripMenuItem,
-            this.logToolStripMenuItem});
+            this.logToolStripMenuItem,
+            this.hideWhenMinimizedToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -180,14 +185,21 @@
             // errorsToolStripMenuItem
             // 
             this.errorsToolStripMenuItem.Name = "errorsToolStripMenuItem";
-            this.errorsToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.errorsToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.errorsToolStripMenuItem.Text = "Errors";
             // 
             // logToolStripMenuItem
             // 
             this.logToolStripMenuItem.Name = "logToolStripMenuItem";
-            this.logToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.logToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.logToolStripMenuItem.Text = "Log";
+            // 
+            // hideWhenMinimizedToolStripMenuItem
+            // 
+            this.hideWhenMinimizedToolStripMenuItem.Name = "hideWhenMinimizedToolStripMenuItem";
+            this.hideWhenMinimizedToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.hideWhenMinimizedToolStripMenuItem.Text = "Hide When Minimized";
+            this.hideWhenMinimizedToolStripMenuItem.Click += new System.EventHandler(this.hideWhenMinimizedToolStripMenuItem_Click);
             // 
             // MainFormTabControl
             // 
@@ -202,7 +214,7 @@
             this.MainFormTabControl.Location = new System.Drawing.Point(0, 24);
             this.MainFormTabControl.Name = "MainFormTabControl";
             this.MainFormTabControl.SelectedIndex = 0;
-            this.MainFormTabControl.Size = new System.Drawing.Size(1230, 704);
+            this.MainFormTabControl.Size = new System.Drawing.Size(1231, 636);
             this.MainFormTabControl.TabIndex = 5;
             // 
             // ConfigurationTabPage
@@ -218,7 +230,7 @@
             this.ConfigurationTabPage.Location = new System.Drawing.Point(4, 22);
             this.ConfigurationTabPage.Name = "ConfigurationTabPage";
             this.ConfigurationTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.ConfigurationTabPage.Size = new System.Drawing.Size(1222, 678);
+            this.ConfigurationTabPage.Size = new System.Drawing.Size(1223, 610);
             this.ConfigurationTabPage.TabIndex = 0;
             this.ConfigurationTabPage.Text = "Configuration";
             // 
@@ -226,7 +238,7 @@
             // 
             this.splitter1.Location = new System.Drawing.Point(3, 3);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 672);
+            this.splitter1.Size = new System.Drawing.Size(3, 604);
             this.splitter1.TabIndex = 6;
             this.splitter1.TabStop = false;
             // 
@@ -582,26 +594,25 @@
             // NewOrderTabPage
             // 
             this.NewOrderTabPage.BackColor = System.Drawing.Color.Transparent;
+            this.NewOrderTabPage.Controls.Add(this.NoOfOrdersLabel);
             this.NewOrderTabPage.Controls.Add(this.LoadOrderFromStagingGroupBox);
             this.NewOrderTabPage.Controls.Add(this.OSSOrdersGroupBox);
             this.NewOrderTabPage.Controls.Add(this.SyncOrdersWithTHubGroupBox);
-            this.NewOrderTabPage.Controls.Add(this.ManualSendToMoldingBoxGroupBox);
             this.NewOrderTabPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.NewOrderTabPage.Location = new System.Drawing.Point(4, 22);
             this.NewOrderTabPage.Name = "NewOrderTabPage";
             this.NewOrderTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.NewOrderTabPage.Size = new System.Drawing.Size(1222, 678);
+            this.NewOrderTabPage.Size = new System.Drawing.Size(1223, 610);
             this.NewOrderTabPage.TabIndex = 1;
             this.NewOrderTabPage.Text = "New";
             // 
             // LoadOrderFromStagingGroupBox
             // 
-            this.LoadOrderFromStagingGroupBox.Controls.Add(this.NoOfOrdersLabel);
             this.LoadOrderFromStagingGroupBox.Controls.Add(this.DisplayStagingOrderButton);
             this.LoadOrderFromStagingGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadOrderFromStagingGroupBox.Location = new System.Drawing.Point(227, 6);
             this.LoadOrderFromStagingGroupBox.Name = "LoadOrderFromStagingGroupBox";
-            this.LoadOrderFromStagingGroupBox.Size = new System.Drawing.Size(215, 75);
+            this.LoadOrderFromStagingGroupBox.Size = new System.Drawing.Size(215, 55);
             this.LoadOrderFromStagingGroupBox.TabIndex = 7;
             this.LoadOrderFromStagingGroupBox.TabStop = false;
             this.LoadOrderFromStagingGroupBox.Text = "Load Order from Staging";
@@ -609,11 +620,11 @@
             // NoOfOrdersLabel
             // 
             this.NoOfOrdersLabel.AutoSize = true;
-            this.NoOfOrdersLabel.Location = new System.Drawing.Point(7, 52);
+            this.NoOfOrdersLabel.Location = new System.Drawing.Point(457, 29);
             this.NoOfOrdersLabel.Name = "NoOfOrdersLabel";
-            this.NoOfOrdersLabel.Size = new System.Drawing.Size(76, 13);
+            this.NoOfOrdersLabel.Size = new System.Drawing.Size(115, 15);
             this.NoOfOrdersLabel.TabIndex = 1;
-            this.NoOfOrdersLabel.Text = "No. of Orders: ";
+            this.NoOfOrdersLabel.Text = "Total No. of Orders: ";
             // 
             // DisplayStagingOrderButton
             // 
@@ -631,12 +642,12 @@
             // OSSOrdersGroupBox
             // 
             this.OSSOrdersGroupBox.Controls.Add(this.OssOrdersDataGridView);
-            this.OSSOrdersGroupBox.Location = new System.Drawing.Point(6, 87);
+            this.OSSOrdersGroupBox.Location = new System.Drawing.Point(6, 67);
             this.OSSOrdersGroupBox.Name = "OSSOrdersGroupBox";
-            this.OSSOrdersGroupBox.Size = new System.Drawing.Size(1208, 606);
+            this.OSSOrdersGroupBox.Size = new System.Drawing.Size(1208, 537);
             this.OSSOrdersGroupBox.TabIndex = 7;
             this.OSSOrdersGroupBox.TabStop = false;
-            this.OSSOrdersGroupBox.Text = "Orders";
+            this.OSSOrdersGroupBox.Text = "New Orders";
             // 
             // OssOrdersDataGridView
             // 
@@ -664,13 +675,14 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.OssOrdersDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
+            this.OssOrdersDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OssOrdersDataGridView.GridColor = System.Drawing.Color.Black;
-            this.OssOrdersDataGridView.Location = new System.Drawing.Point(6, 20);
+            this.OssOrdersDataGridView.Location = new System.Drawing.Point(3, 17);
             this.OssOrdersDataGridView.MultiSelect = false;
             this.OssOrdersDataGridView.Name = "OssOrdersDataGridView";
             this.OssOrdersDataGridView.RowHeadersVisible = false;
             this.OssOrdersDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.OssOrdersDataGridView.Size = new System.Drawing.Size(1196, 580);
+            this.OssOrdersDataGridView.Size = new System.Drawing.Size(1202, 517);
             this.OssOrdersDataGridView.TabIndex = 0;
             this.OssOrdersDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OssOrdersDataGridView_CellContentClick_1);
             this.OssOrdersDataGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssOrdersDataGridView_DataBindingComplete_1);
@@ -699,37 +711,13 @@
             this.LoadOrdersFromTHubButton.UseVisualStyleBackColor = false;
             this.LoadOrdersFromTHubButton.Click += new System.EventHandler(this.SynchronizeOrdersFromTHubButton_Click);
             // 
-            // ManualSendToMoldingBoxGroupBox
-            // 
-            this.ManualSendToMoldingBoxGroupBox.Controls.Add(this.SendToMoldingBoxButton);
-            this.ManualSendToMoldingBoxGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ManualSendToMoldingBoxGroupBox.Location = new System.Drawing.Point(481, 6);
-            this.ManualSendToMoldingBoxGroupBox.Name = "ManualSendToMoldingBoxGroupBox";
-            this.ManualSendToMoldingBoxGroupBox.Size = new System.Drawing.Size(463, 55);
-            this.ManualSendToMoldingBoxGroupBox.TabIndex = 5;
-            this.ManualSendToMoldingBoxGroupBox.TabStop = false;
-            this.ManualSendToMoldingBoxGroupBox.Text = "Manual Send to MoldingBox";
-            // 
-            // SendToMoldingBoxButton
-            // 
-            this.SendToMoldingBoxButton.BackColor = System.Drawing.Color.DarkOrange;
-            this.SendToMoldingBoxButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SendToMoldingBoxButton.ForeColor = System.Drawing.Color.Transparent;
-            this.SendToMoldingBoxButton.Location = new System.Drawing.Point(6, 18);
-            this.SendToMoldingBoxButton.Name = "SendToMoldingBoxButton";
-            this.SendToMoldingBoxButton.Size = new System.Drawing.Size(451, 27);
-            this.SendToMoldingBoxButton.TabIndex = 0;
-            this.SendToMoldingBoxButton.Text = "Send All Orders To MoldingBox";
-            this.SendToMoldingBoxButton.UseVisualStyleBackColor = false;
-            this.SendToMoldingBoxButton.Click += new System.EventHandler(this.SendToMoldingBoxButton_Click);
-            // 
             // InFight
             // 
+            this.InFight.Controls.Add(this.InFlightOrdersLabel);
             this.InFight.Controls.Add(this.groupBox3);
-            this.InFight.Controls.Add(this.InFlightRefresh);
             this.InFight.Location = new System.Drawing.Point(4, 22);
             this.InFight.Name = "InFight";
-            this.InFight.Size = new System.Drawing.Size(1222, 678);
+            this.InFight.Size = new System.Drawing.Size(1223, 610);
             this.InFight.TabIndex = 4;
             this.InFight.Text = "InFlight";
             this.InFight.UseVisualStyleBackColor = true;
@@ -737,12 +725,12 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.OssInFlightGridView);
-            this.groupBox3.Location = new System.Drawing.Point(9, 44);
+            this.groupBox3.Location = new System.Drawing.Point(9, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1205, 631);
+            this.groupBox3.Size = new System.Drawing.Size(1205, 580);
             this.groupBox3.TabIndex = 1;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "groupBox3";
+            this.groupBox3.Text = "In-Flight Orders";
             // 
             // OssInFlightGridView
             // 
@@ -760,50 +748,28 @@
             this.OssInFlightGridView.Name = "OssInFlightGridView";
             this.OssInFlightGridView.RowHeadersVisible = false;
             this.OssInFlightGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.OssInFlightGridView.Size = new System.Drawing.Size(1199, 612);
+            this.OssInFlightGridView.Size = new System.Drawing.Size(1199, 561);
             this.OssInFlightGridView.TabIndex = 0;
             this.OssInFlightGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OssInFlightGridView_CellClick);
             this.OssInFlightGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssInFlightGridView_DataBindingComplete);
             // 
-            // InFlightRefresh
-            // 
-            this.InFlightRefresh.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.InFlightRefresh.Location = new System.Drawing.Point(9, 14);
-            this.InFlightRefresh.Name = "InFlightRefresh";
-            this.InFlightRefresh.Size = new System.Drawing.Size(75, 23);
-            this.InFlightRefresh.TabIndex = 0;
-            this.InFlightRefresh.Text = "Refresh";
-            this.InFlightRefresh.UseVisualStyleBackColor = false;
-            this.InFlightRefresh.Click += new System.EventHandler(this.InFlightRefresh_Click);
-            // 
             // Exception
             // 
-            this.Exception.Controls.Add(this.ExceptionRefresh);
+            this.Exception.Controls.Add(this.ExceptionOrdersLabel);
             this.Exception.Controls.Add(this.groupBox1);
             this.Exception.Location = new System.Drawing.Point(4, 22);
             this.Exception.Name = "Exception";
-            this.Exception.Size = new System.Drawing.Size(1222, 678);
+            this.Exception.Size = new System.Drawing.Size(1223, 610);
             this.Exception.TabIndex = 2;
             this.Exception.Text = "Exception";
             this.Exception.UseVisualStyleBackColor = true;
             // 
-            // ExceptionRefresh
-            // 
-            this.ExceptionRefresh.BackColor = System.Drawing.Color.BurlyWood;
-            this.ExceptionRefresh.Location = new System.Drawing.Point(9, 10);
-            this.ExceptionRefresh.Name = "ExceptionRefresh";
-            this.ExceptionRefresh.Size = new System.Drawing.Size(75, 23);
-            this.ExceptionRefresh.TabIndex = 1;
-            this.ExceptionRefresh.Text = "Refresh";
-            this.ExceptionRefresh.UseVisualStyleBackColor = false;
-            this.ExceptionRefresh.Click += new System.EventHandler(this.ExceptionRefresh_Click);
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.OssExceptionGridView);
-            this.groupBox1.Location = new System.Drawing.Point(8, 39);
+            this.groupBox1.Location = new System.Drawing.Point(8, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1206, 628);
+            this.groupBox1.Size = new System.Drawing.Size(1206, 580);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Orders with Exceptions";
@@ -825,18 +791,18 @@
             this.OssExceptionGridView.ReadOnly = true;
             this.OssExceptionGridView.RowHeadersVisible = false;
             this.OssExceptionGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.OssExceptionGridView.Size = new System.Drawing.Size(1200, 609);
+            this.OssExceptionGridView.Size = new System.Drawing.Size(1200, 561);
             this.OssExceptionGridView.TabIndex = 0;
             this.OssExceptionGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OssExceptionGridView_CellContentClick);
             this.OssExceptionGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssExceptionGridView_DataBindingComplete);
             // 
             // Completed
             // 
+            this.Completed.Controls.Add(this.CompletedOrdersLabel);
             this.Completed.Controls.Add(this.groupBox2);
-            this.Completed.Controls.Add(this.CompleteButton);
             this.Completed.Location = new System.Drawing.Point(4, 22);
             this.Completed.Name = "Completed";
-            this.Completed.Size = new System.Drawing.Size(1222, 678);
+            this.Completed.Size = new System.Drawing.Size(1223, 610);
             this.Completed.TabIndex = 3;
             this.Completed.Text = "Completed";
             this.Completed.UseVisualStyleBackColor = true;
@@ -844,9 +810,9 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.OssCompletedGridView);
-            this.groupBox2.Location = new System.Drawing.Point(9, 39);
+            this.groupBox2.Location = new System.Drawing.Point(9, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1205, 636);
+            this.groupBox2.Size = new System.Drawing.Size(1205, 582);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Completed Orders";
@@ -868,28 +834,17 @@
             this.OssCompletedGridView.ReadOnly = true;
             this.OssCompletedGridView.RowHeadersVisible = false;
             this.OssCompletedGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.OssCompletedGridView.Size = new System.Drawing.Size(1199, 617);
+            this.OssCompletedGridView.Size = new System.Drawing.Size(1199, 563);
             this.OssCompletedGridView.TabIndex = 0;
             this.OssCompletedGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssCompletedGridView_DataBindingComplete);
             // 
-            // CompleteButton
-            // 
-            this.CompleteButton.BackColor = System.Drawing.Color.DarkSeaGreen;
-            this.CompleteButton.Location = new System.Drawing.Point(9, 10);
-            this.CompleteButton.Name = "CompleteButton";
-            this.CompleteButton.Size = new System.Drawing.Size(75, 23);
-            this.CompleteButton.TabIndex = 0;
-            this.CompleteButton.Text = "Refresh";
-            this.CompleteButton.UseVisualStyleBackColor = false;
-            this.CompleteButton.Click += new System.EventHandler(this.CompleteButton_Click);
-            // 
             // OnHold
             // 
+            this.OnHold.Controls.Add(this.OnHoldOrdersLabel);
             this.OnHold.Controls.Add(this.OnHoldGroupBox);
-            this.OnHold.Controls.Add(this.OnHoldRefresh);
             this.OnHold.Location = new System.Drawing.Point(4, 22);
             this.OnHold.Name = "OnHold";
-            this.OnHold.Size = new System.Drawing.Size(1222, 678);
+            this.OnHold.Size = new System.Drawing.Size(1223, 610);
             this.OnHold.TabIndex = 5;
             this.OnHold.Text = "On-Hold";
             this.OnHold.UseVisualStyleBackColor = true;
@@ -897,9 +852,9 @@
             // OnHoldGroupBox
             // 
             this.OnHoldGroupBox.Controls.Add(this.OSSOrderOnHoldGridView);
-            this.OnHoldGroupBox.Location = new System.Drawing.Point(9, 44);
+            this.OnHoldGroupBox.Location = new System.Drawing.Point(9, 3);
             this.OnHoldGroupBox.Name = "OnHoldGroupBox";
-            this.OnHoldGroupBox.Size = new System.Drawing.Size(1205, 631);
+            this.OnHoldGroupBox.Size = new System.Drawing.Size(1205, 584);
             this.OnHoldGroupBox.TabIndex = 1;
             this.OnHoldGroupBox.TabStop = false;
             this.OnHoldGroupBox.Text = "On-Hold Orders";
@@ -921,70 +876,27 @@
             this.OSSOrderOnHoldGridView.ReadOnly = true;
             this.OSSOrderOnHoldGridView.RowHeadersVisible = false;
             this.OSSOrderOnHoldGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.OSSOrderOnHoldGridView.Size = new System.Drawing.Size(1199, 612);
+            this.OSSOrderOnHoldGridView.Size = new System.Drawing.Size(1199, 565);
             this.OSSOrderOnHoldGridView.TabIndex = 0;
             this.OSSOrderOnHoldGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OSSOrderOnHoldGridView_DataBindingComplete);
             // 
-            // OnHoldRefresh
-            // 
-            this.OnHoldRefresh.BackColor = System.Drawing.Color.SandyBrown;
-            this.OnHoldRefresh.Location = new System.Drawing.Point(9, 14);
-            this.OnHoldRefresh.Name = "OnHoldRefresh";
-            this.OnHoldRefresh.Size = new System.Drawing.Size(75, 23);
-            this.OnHoldRefresh.TabIndex = 0;
-            this.OnHoldRefresh.Text = "Refresh";
-            this.OnHoldRefresh.UseVisualStyleBackColor = false;
-            this.OnHoldRefresh.Click += new System.EventHandler(this.OnHoldRefresh_Click);
-            // 
-            // FormErrorProvider
-            // 
-            this.FormErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
-            this.FormErrorProvider.ContainerControl = this;
-            // 
-            // toolStripStatus
-            // 
-            this.toolStripStatus.Name = "toolStripStatus";
-            this.toolStripStatus.Size = new System.Drawing.Size(39, 17);
-            this.toolStripStatus.Text = "Ready";
-            // 
-            // ApplicationStatusStrip
-            // 
-            this.ApplicationStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatus});
-            this.ApplicationStatusStrip.Location = new System.Drawing.Point(0, 728);
-            this.ApplicationStatusStrip.Name = "ApplicationStatusStrip";
-            this.ApplicationStatusStrip.Size = new System.Drawing.Size(1230, 22);
-            this.ApplicationStatusStrip.TabIndex = 50;
-            this.ApplicationStatusStrip.Text = "Application Status Strip";
-            // 
             // Canceled
             // 
+            this.Canceled.Controls.Add(this.CancelOrdersLabel);
             this.Canceled.Controls.Add(this.groupBox5);
-            this.Canceled.Controls.Add(this.CancelRefresh);
             this.Canceled.Location = new System.Drawing.Point(4, 22);
             this.Canceled.Name = "Canceled";
-            this.Canceled.Size = new System.Drawing.Size(1222, 678);
+            this.Canceled.Size = new System.Drawing.Size(1223, 610);
             this.Canceled.TabIndex = 6;
             this.Canceled.Text = "Canceled";
             this.Canceled.UseVisualStyleBackColor = true;
             // 
-            // CancelRefresh
-            // 
-            this.CancelRefresh.BackColor = System.Drawing.Color.MistyRose;
-            this.CancelRefresh.Location = new System.Drawing.Point(9, 16);
-            this.CancelRefresh.Name = "CancelRefresh";
-            this.CancelRefresh.Size = new System.Drawing.Size(75, 23);
-            this.CancelRefresh.TabIndex = 0;
-            this.CancelRefresh.Text = "Refresh";
-            this.CancelRefresh.UseVisualStyleBackColor = false;
-            this.CancelRefresh.Click += new System.EventHandler(this.CancelRefresh_Click);
-            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.OssOrdersCanceledOrders);
-            this.groupBox5.Location = new System.Drawing.Point(9, 46);
+            this.groupBox5.Location = new System.Drawing.Point(9, 3);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(1205, 629);
+            this.groupBox5.Size = new System.Drawing.Size(1205, 582);
             this.groupBox5.TabIndex = 1;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Canceled Orders";
@@ -1004,15 +916,124 @@
             this.OssOrdersCanceledOrders.Name = "OssOrdersCanceledOrders";
             this.OssOrdersCanceledOrders.ReadOnly = true;
             this.OssOrdersCanceledOrders.RowHeadersVisible = false;
-            this.OssOrdersCanceledOrders.Size = new System.Drawing.Size(1199, 610);
+            this.OssOrdersCanceledOrders.Size = new System.Drawing.Size(1199, 563);
             this.OssOrdersCanceledOrders.TabIndex = 0;
             this.OssOrdersCanceledOrders.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.OssOrdersCanceledOrders_DataBindingComplete);
+            // 
+            // FormErrorProvider
+            // 
+            this.FormErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
+            this.FormErrorProvider.ContainerControl = this;
+            // 
+            // notifyIcon
+            // 
+            this.notifyIcon.ContextMenuStrip = this.menuStrip;
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "Order Synchronization System.";
+            this.notifyIcon.Visible = true;
+            this.notifyIcon.DoubleClick += new System.EventHandler(this.notifyIcon_DoubleClick);
+            // 
+            // menuStrip
+            // 
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1});
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(93, 26);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(92, 22);
+            this.toolStripMenuItem1.Text = "Exit";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // toolStripStatus
+            // 
+            this.toolStripStatus.Name = "toolStripStatus";
+            this.toolStripStatus.Size = new System.Drawing.Size(39, 17);
+            this.toolStripStatus.Text = "Ready";
+            // 
+            // toolStripSplitButton1
+            // 
+            this.toolStripSplitButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripSplitButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripSplitButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refreshToolStripMenuItem});
+            this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
+            this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripSplitButton1.Name = "toolStripSplitButton1";
+            this.toolStripSplitButton1.Size = new System.Drawing.Size(32, 20);
+            this.toolStripSplitButton1.Text = "toolStripSplitButton1";
+            // 
+            // refreshToolStripMenuItem
+            // 
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.refreshToolStripMenuItem.Text = "Refresh";
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            // 
+            // ApplicationStatusStrip
+            // 
+            this.ApplicationStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatus,
+            this.toolStripSplitButton1});
+            this.ApplicationStatusStrip.Location = new System.Drawing.Point(0, 660);
+            this.ApplicationStatusStrip.Name = "ApplicationStatusStrip";
+            this.ApplicationStatusStrip.Size = new System.Drawing.Size(1231, 22);
+            this.ApplicationStatusStrip.TabIndex = 50;
+            this.ApplicationStatusStrip.Text = "Application Status Strip";
+            this.ApplicationStatusStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ApplicationStatusStrip_ItemClicked);
+            // 
+            // CancelOrdersLabel
+            // 
+            this.CancelOrdersLabel.AutoSize = true;
+            this.CancelOrdersLabel.Location = new System.Drawing.Point(9, 588);
+            this.CancelOrdersLabel.Name = "CancelOrdersLabel";
+            this.CancelOrdersLabel.Size = new System.Drawing.Size(100, 13);
+            this.CancelOrdersLabel.TabIndex = 2;
+            this.CancelOrdersLabel.Text = "Total No. of Orders:";
+            // 
+            // OnHoldOrdersLabel
+            // 
+            this.OnHoldOrdersLabel.AutoSize = true;
+            this.OnHoldOrdersLabel.Location = new System.Drawing.Point(9, 590);
+            this.OnHoldOrdersLabel.Name = "OnHoldOrdersLabel";
+            this.OnHoldOrdersLabel.Size = new System.Drawing.Size(94, 13);
+            this.OnHoldOrdersLabel.TabIndex = 2;
+            this.OnHoldOrdersLabel.Text = "Total No. of Ordes";
+            // 
+            // CompletedOrdersLabel
+            // 
+            this.CompletedOrdersLabel.AutoSize = true;
+            this.CompletedOrdersLabel.Location = new System.Drawing.Point(9, 588);
+            this.CompletedOrdersLabel.Name = "CompletedOrdersLabel";
+            this.CompletedOrdersLabel.Size = new System.Drawing.Size(100, 13);
+            this.CompletedOrdersLabel.TabIndex = 2;
+            this.CompletedOrdersLabel.Text = "Total No. of Orders:";
+            // 
+            // ExceptionOrdersLabel
+            // 
+            this.ExceptionOrdersLabel.AutoSize = true;
+            this.ExceptionOrdersLabel.Location = new System.Drawing.Point(8, 586);
+            this.ExceptionOrdersLabel.Name = "ExceptionOrdersLabel";
+            this.ExceptionOrdersLabel.Size = new System.Drawing.Size(100, 13);
+            this.ExceptionOrdersLabel.TabIndex = 1;
+            this.ExceptionOrdersLabel.Text = "Total No. of Orders:";
+            // 
+            // InFlightOrdersLabel
+            // 
+            this.InFlightOrdersLabel.AutoSize = true;
+            this.InFlightOrdersLabel.Location = new System.Drawing.Point(9, 586);
+            this.InFlightOrdersLabel.Name = "InFlightOrdersLabel";
+            this.InFlightOrdersLabel.Size = new System.Drawing.Size(100, 13);
+            this.InFlightOrdersLabel.TabIndex = 2;
+            this.InFlightOrdersLabel.Text = "Total No. of Orders:";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1230, 750);
+            this.ClientSize = new System.Drawing.Size(1231, 682);
             this.Controls.Add(this.MainFormTabControl);
             this.Controls.Add(this.ApplicationStatusStrip);
             this.Controls.Add(this.ApplicationMenuStrip);
@@ -1020,10 +1041,10 @@
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.ApplicationMenuStrip;
             this.Name = "MainWindow";
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "OSS  (Order Synchronization System)";
             this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.Resize += new System.EventHandler(this.MainWindow_Resize);
             this.ApplicationMenuStrip.ResumeLayout(false);
             this.ApplicationMenuStrip.PerformLayout();
             this.MainFormTabControl.ResumeLayout(false);
@@ -1039,30 +1060,35 @@
             this.SourceGroupBox.ResumeLayout(false);
             this.SourceGroupBox.PerformLayout();
             this.NewOrderTabPage.ResumeLayout(false);
+            this.NewOrderTabPage.PerformLayout();
             this.LoadOrderFromStagingGroupBox.ResumeLayout(false);
-            this.LoadOrderFromStagingGroupBox.PerformLayout();
             this.OSSOrdersGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.OssOrdersDataGridView)).EndInit();
             this.SyncOrdersWithTHubGroupBox.ResumeLayout(false);
-            this.ManualSendToMoldingBoxGroupBox.ResumeLayout(false);
             this.InFight.ResumeLayout(false);
+            this.InFight.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.OssInFlightGridView)).EndInit();
             this.Exception.ResumeLayout(false);
+            this.Exception.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.OssExceptionGridView)).EndInit();
             this.Completed.ResumeLayout(false);
+            this.Completed.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.OssCompletedGridView)).EndInit();
             this.OnHold.ResumeLayout(false);
+            this.OnHold.PerformLayout();
             this.OnHoldGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.OSSOrderOnHoldGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).EndInit();
-            this.ApplicationStatusStrip.ResumeLayout(false);
-            this.ApplicationStatusStrip.PerformLayout();
             this.Canceled.ResumeLayout(false);
+            this.Canceled.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.OssOrdersCanceledOrders)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).EndInit();
+            this.menuStrip.ResumeLayout(false);
+            this.ApplicationStatusStrip.ResumeLayout(false);
+            this.ApplicationStatusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1108,10 +1134,6 @@
         private System.Windows.Forms.TextBox SourceServerTextBox;
         private System.Windows.Forms.ErrorProvider FormErrorProvider;
         private System.Windows.Forms.MaskedTextBox maskedTextBox1;
-        public System.Windows.Forms.StatusStrip ApplicationStatusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatus;
-        private System.Windows.Forms.GroupBox ManualSendToMoldingBoxGroupBox;
-        private System.Windows.Forms.Button SendToMoldingBoxButton;
         private System.Windows.Forms.GroupBox SyncOrdersWithTHubGroupBox;
         private System.Windows.Forms.Button LoadOrdersFromTHubButton;
         private System.Windows.Forms.GroupBox OSSOrdersGroupBox;
@@ -1123,16 +1145,13 @@
         private System.Windows.Forms.TextBox MoldinboxKeyTextBox;
         private System.Windows.Forms.Label MoldingBoxApiKeyLabel;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button ExceptionRefresh;
         private System.Windows.Forms.DataGridView OssExceptionGridView;
         private System.Windows.Forms.TabPage Completed;
-        private System.Windows.Forms.Button CompleteButton;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView OssCompletedGridView;
         private System.Windows.Forms.TabPage InFight;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.DataGridView OssInFlightGridView;
-        private System.Windows.Forms.Button InFlightRefresh;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Splitter splitter1;
@@ -1142,11 +1161,22 @@
         private System.Windows.Forms.TabPage OnHold;
         private System.Windows.Forms.GroupBox OnHoldGroupBox;
         private System.Windows.Forms.DataGridView OSSOrderOnHoldGridView;
-        private System.Windows.Forms.Button OnHoldRefresh;
         private System.Windows.Forms.TabPage Canceled;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.DataGridView OssOrdersCanceledOrders;
-        private System.Windows.Forms.Button CancelRefresh;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.ContextMenuStrip menuStrip;
+        private System.Windows.Forms.ToolStripMenuItem hideWhenMinimizedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        public System.Windows.Forms.StatusStrip ApplicationStatusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatus;
+        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton1;
+        private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
+        private System.Windows.Forms.Label OnHoldOrdersLabel;
+        private System.Windows.Forms.Label CancelOrdersLabel;
+        private System.Windows.Forms.Label CompletedOrdersLabel;
+        private System.Windows.Forms.Label ExceptionOrdersLabel;
+        private System.Windows.Forms.Label InFlightOrdersLabel;
     }
 }
 

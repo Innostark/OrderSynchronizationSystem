@@ -35,7 +35,7 @@ namespace IST.OrderSynchronizationSystem
         private string _stagingPassword = String.Empty;
         private DataTable _ossOrders = null;
         private ShippingMethod[] shipmentMethods;
-
+        private bool hideWhenMinimized;
         public MainWindow(bool programState)
         {
             InitializeComponent();
@@ -218,7 +218,10 @@ namespace IST.OrderSynchronizationSystem
                 Invoke(d, new object[] {text});
             }
             else
+            {
+                ShowNotificationText(text);
                 toolStripStatus.Text = text;
+            }
         }
 
         private bool VarifySourceDatabase()
@@ -357,6 +360,7 @@ namespace IST.OrderSynchronizationSystem
             }
             else
             {
+                OssOrdersDataGridView.DataBindings.Clear();
                 MessageBox.Show("No New Order available is T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             NoOfOrdersLabel.Text = "No. of Order: " + _ossOrders.Rows.Count;
@@ -918,11 +922,6 @@ namespace IST.OrderSynchronizationSystem
             EnableDisableSendToMoldingBoxButton(OssOrdersDataGridView);
         }
 
-        private void SendToMoldingBoxButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void OssOrdersDataGridView_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
             DataGridView senderGrid = (DataGridView)sender;
@@ -935,7 +934,7 @@ namespace IST.OrderSynchronizationSystem
                 }
                 else if (((DataGridView) sender).Name == OssExceptionGridView.Name)
                 {
-                    HandleExceptionGridActions(e, senderGrid, apiKey);
+                    HandleExceptionGridActions(e, senderGrid);
                 }
                 else if (((DataGridView) sender).Name == OssInFlightGridView.Name)
                 {
@@ -1009,9 +1008,8 @@ namespace IST.OrderSynchronizationSystem
                 _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);                
             }
         }
-        private void HandleExceptionGridActions(DataGridViewCellEventArgs e, DataGridView senderGrid, string apiKey)
-        {
-            MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
+        private void HandleExceptionGridActions(DataGridViewCellEventArgs e, DataGridView senderGrid)
+        {            
             DataGridViewDisableButtonCell sendToMbButtonCell = (DataGridViewDisableButtonCell)senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex];
             if (sendToMbButtonCell.FormattedValue == CancelString)
             {
@@ -1022,8 +1020,7 @@ namespace IST.OrderSynchronizationSystem
                     DataRow ossOrderRow = ((DataTable)senderGrid.DataSource).Rows[e.RowIndex];
                     ossOrderRow["CancelMessage"] = cancelMessageForm.CancelMessageString;
                     ossOrderRow["OrderStatus"] = (int)OSSOrderStatus.Canceled;
-                    _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
-                    
+                    _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);                    
                 }
             }
             else if (sendToMbButtonCell.Value == ReloadString)
@@ -1041,17 +1038,18 @@ namespace IST.OrderSynchronizationSystem
 
         private void SyncWithMoldingBox(DataRow ossOrderRow)
         {
+            string mbShipmentID = ossOrderRow["MBShipmentId"].ToString();
             string orderId = ossOrderRow["THubOrderId"].ToString();
             string apiKey = MoldinboxKeyTextBox.Text;
             MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
-            StatusResponse[] statusResponse = client.Retrieve_Shipment_Status(apiKey, new ArrayOfInt() { int.Parse(orderId) });
+            StatusResponse[] statusResponse = client.Retrieve_Shipment_Status(apiKey, new ArrayOfInt() { int.Parse(mbShipmentID) });
             if (statusResponse[0].ShipmentExists)
             {
                 if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Completed) // Handle in processing
                 {
                     _orderSyncronizationDatabase.UpdateOrderTrackingAndOssStatus(statusResponse[0], long.Parse(orderId));                    
                 }
-                else if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.InFlight)
+                else if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.InFlight || statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Recieved)
                 {
                     _orderSyncronizationDatabase.UpdateLastSyncDateOfOrder(long.Parse(orderId));
                 }
@@ -1085,8 +1083,7 @@ namespace IST.OrderSynchronizationSystem
             ossOrderRow["SentToMBOn"] = shipmentRequestSentOn;
             ossOrderRow["MBPostShipmentMessage"] = JsonConvert.SerializeObject(new OssShipmentMessage(apiKey, shipments));
             ossOrderRow["MBPostShipmentResponseMessage"] = JsonConvert.SerializeObject(responses);
-            ossOrderRow["MBSuccessfullyReceived"] = response.SuccessfullyReceived;
-            //ossOrderRow["LastSyncWithMBOn"] = shipmentRequestSentOn;
+            ossOrderRow["MBSuccessfullyReceived"] = response.SuccessfullyReceived;            
             ossOrderRow["CancelMessage"] = string.Empty;
         }
         private void MapShipment(OssShipment shipment, ShippingMethod[] moldingBoxShippingMethods)
@@ -1144,7 +1141,7 @@ namespace IST.OrderSynchronizationSystem
 
         #region Exception Handlers
 
-        private void ExceptionRefresh_Click(object sender, EventArgs e)
+        private void ExceptionRefresh()
         {
             DataTable ossExceptionDataTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.Exception);
             if (ossExceptionDataTable.Rows.Count > 0)
@@ -1153,8 +1150,10 @@ namespace IST.OrderSynchronizationSystem
             }
             else
             {
+                OssExceptionGridView.DataBindings.Clear();
                 MessageBox.Show("No Exception Order available in T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            ExceptionOrdersLabel.Text = "Total No. of Orders: " + ossExceptionDataTable.Rows.Count;
         }
 
         private void OssExceptionGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -1164,12 +1163,13 @@ namespace IST.OrderSynchronizationSystem
                 AddReloadButtonToGridView((DataGridView)sender);
                 AddPostAgainButtonToGridView((DataGridView)sender);
                 AddCancelButtonToGridView((DataGridView)sender);
+                
             }
             SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView) sender, OssOrdersGridTypes.Exception);
         }
         #endregion
         #region Processing Handlers
-        private void InFlightRefresh_Click(object sender, EventArgs e)
+        private void InFlightRefresh()
         {
             DataTable ossInFlightDataTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.InFlight);
             if (ossInFlightDataTable.Rows.Count > 0)
@@ -1178,8 +1178,10 @@ namespace IST.OrderSynchronizationSystem
             }
             else
             {
+                OssInFlightGridView.DataBindings.Clear();
                 MessageBox.Show("No In-Flight Order available in T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            InFlightOrdersLabel.Text = "Total No. of Orders: " + ossInFlightDataTable.Rows.Count;
         }
         private void OssInFlightGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1195,7 +1197,7 @@ namespace IST.OrderSynchronizationSystem
         }
         #endregion
         #region Fulfilled Handlers
-        private void CompleteButton_Click(object sender, EventArgs e)
+        private void CompleteRefresh()
         {
             DataTable ossCompletedDataTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.Completed);
             if (ossCompletedDataTable.Rows.Count > 0)
@@ -1204,8 +1206,10 @@ namespace IST.OrderSynchronizationSystem
             }
             else
             {
+                OssCompletedGridView.DataBindings.Clear();
                 MessageBox.Show("No Completed Order available in T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            CompletedOrdersLabel.Text = "Total No. of Orders: " + ossCompletedDataTable.Rows.Count;
         }
         private void OssCompletedGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
@@ -1217,7 +1221,7 @@ namespace IST.OrderSynchronizationSystem
         }
         #endregion
         #region On-Hold Handlers
-        private void OnHoldRefresh_Click(object sender, EventArgs e)
+        private void OnHoldRefresh()
         {
             DataTable ossOnHoldDatasource = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.OnHold);
             if (ossOnHoldDatasource.Rows.Count > 0)
@@ -1226,22 +1230,23 @@ namespace IST.OrderSynchronizationSystem
             }
             else
             {
+                OSSOrderOnHoldGridView.DataBindings.Clear();
                 MessageBox.Show("No On-Hold Order available in T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            OnHoldOrdersLabel.Text = "Total No. of Orders: " + ossOnHoldDatasource.Rows.Count;
         }
         private void OSSOrderOnHoldGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.OnHold);
         }
         #endregion
-
-
+        #region Cancel handlers
         private void OssOrdersCanceledOrders_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.Cancelled);
         }
 
-        private void CancelRefresh_Click(object sender, EventArgs e)
+        private void CancelRefresh()
         {
             DataTable ossCanceledTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.Canceled);
             if (ossCanceledTable.Rows.Count > 0)
@@ -1253,6 +1258,98 @@ namespace IST.OrderSynchronizationSystem
                 OssOrdersCanceledOrders.DataBindings.Clear();
                 MessageBox.Show("No Canceled Order available in T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            CancelOrdersLabel.Text = "Total No. of Orders: " + ossCanceledTable.Rows.Count;
+        }
+        #endregion
+        private void MainWindow_Resize(object sender, EventArgs e)
+        {            
+            notifyIcon.BalloonTipText = "Running";
+            notifyIcon.BalloonTipTitle = "Order Synchronization System.";
+            if (hideWhenMinimized && this.WindowState == FormWindowState.Minimized)
+            {
+                notifyIcon.Visible = true;
+                notifyIcon.ShowBalloonTip(3000);
+                ShowInTaskbar = false;
+            }
+            else if (FormWindowState.Normal == WindowState)
+            {
+                notifyIcon.Visible = false;
+                Show();
+                ShowInTaskbar = true;
+            }
+        }
+
+        private void ShowNotificationText(string text)
+        {
+            notifyIcon.BalloonTipText = "Running";
+            notifyIcon.BalloonTipTitle = "Order Synchronization System.";
+            notifyIcon.Visible = true;
+            notifyIcon.ShowBalloonTip(3000);
+        }
+
+        private void notifyIcon_DoubleClick(object sender, EventArgs e)
+        {
+            Show();
+            WindowState = FormWindowState.Normal;            
+        }
+
+        private void hideWhenMinimizedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (((ToolStripMenuItem) sender).Checked)
+            {
+                hideWhenMinimized = ((ToolStripMenuItem) sender).Checked = false;
+            }
+            else
+            {
+                hideWhenMinimized = ((ToolStripMenuItem)sender).Checked = true;
+            }
+        }
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void ApplicationStatusStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch (MainFormTabControl.SelectedTab.Name)
+            {
+                case "NewOrderTabPage":
+                {
+                    LoadOrderFromStagingButton_Click(null, null);
+                    break;
+                }
+                case "InFight":
+                {
+                    InFlightRefresh();
+                    break;
+                }
+                case "Exception":
+                {
+                    ExceptionRefresh();
+                    break;
+                }
+                case "Completed":
+                {
+                    CompleteRefresh();
+                    break;
+                }
+                case "OnHold":
+                {
+                    OnHoldRefresh();
+                    break;
+                }
+                case "Canceled":
+                {
+                    CancelRefresh();
+                    break;
+                }                       
+            }
+            
         }
     }
 }
