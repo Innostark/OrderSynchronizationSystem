@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Transactions;
 using IST.OrderSynchronizationSystem.GUI;
@@ -87,10 +88,11 @@ namespace IST.OrderSynchronizationSystem
                 //TODO: long lastExecutedTHubOrderId = GetLastExecutedTHubOrderId();
 
                 using (SqlConnection tHubDbConnection = new SqlConnection(_sourceSqlConnectionConnectionStringBuilder.ConnectionString))
-                {
+                {                    
                     using (SqlCommand ordersCommand = new SqlCommand(SqlResource.source_sql_PullOrdersFromThub, tHubDbConnection))
                     {
                         tHubDbConnection.Open();
+                        ordersCommand.Parameters.AddWithValue("@LastFetchedOrderId", GetOrSetMaximumOrderIdFetched(-1));
                         SqlDataReader orderResults = ordersCommand.ExecuteReader();
                         if (orderResults.HasRows)
                         {
@@ -123,18 +125,16 @@ namespace IST.OrderSynchronizationSystem
                     }
                     tHubDbConnection.Close();
                 }
+               
+                
                 scope.Complete();
             }
-            
             return ossShipments;
         }
 
-        private void LogOrder(int LogType, long OrderId, string LogText)
-        {
-            //source_sql_Insert_Log
-            using (
-                SqlConnection tHubDbConnection =
-                    new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+        public void LogOrder(int LogType, long OrderId, string LogText)
+        {            
+            using (SqlConnection tHubDbConnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
             {
                 using (SqlCommand logCommand = new SqlCommand(SqlResource.source_sql_Insert_Log, tHubDbConnection))
                 {
@@ -177,23 +177,8 @@ namespace IST.OrderSynchronizationSystem
             return stagingOrdersDataTable;
         }
 
-        private long GetLastExecutedTHubOrderId()
+        internal DataTable InsertShipmentsToStaging(List<OssShipment> stagingShipments)
         {
-            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
-            {
-                stagingDbconnection.Open();
-                using (SqlCommand command = new SqlCommand(SqlResource.staging_sql_LastExecutedTHubOrderId, stagingDbconnection))
-                {
-                    long lastExecutedTHubOrderId = (long)command.ExecuteScalar();
-                    stagingDbconnection.Close();
-                    return lastExecutedTHubOrderId;
-                }
-            }
-        }
-
-        internal int InsertShipmentsToStaging(List<OssShipment> stagingShipments)
-        {
-            int numberOfRecordsAffected = int.MinValue;
             DataTable ossOrdersTableTHubLoad = CreateStagingOrdersTable_THubLoad();
             foreach (OssShipment ossShipment in stagingShipments)
             {
@@ -211,20 +196,20 @@ namespace IST.OrderSynchronizationSystem
                     stagingDbconnection.Open();
                     foreach (OssShipment ossShipment in stagingShipments)
                     {
-                        LogOrder(1, ossShipment.ThubOrderId, "Order Created on staging.");
+                        LogOrder(1, ossShipment.ThubOrderId, string.Format("Order Created on staging. Order Details: OrderId: {0}", ossShipment.ThubOrderId));
                     }
                     
                     using (SqlCommand command = new SqlCommand("USPCreateOSSOrders", stagingDbconnection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddWithValue("@createOssOrders", ossOrdersTableTHubLoad);
-                        numberOfRecordsAffected = command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
                     }
                     stagingDbconnection.Close();
                 }
                 transaction.Complete();
             }
-            return numberOfRecordsAffected;
+            return ossOrdersTableTHubLoad;
         }
 
         public void UpdateLastSyncDateOfOrder(long OssOrderId)
@@ -325,16 +310,18 @@ namespace IST.OrderSynchronizationSystem
             };
         }
 
-        public void ReloadShipmentToStaging()
+        public void ReloadShipmentToStaging(long THubOrderId)
         {
             OssShipment ossShipment = new OssShipment();
             #region Load From T-Hub
 
             using (SqlConnection tHubDbConnection = new SqlConnection(_sourceSqlConnectionConnectionStringBuilder.ConnectionString))
             {
-                using (SqlCommand ordersCommand = new SqlCommand(SqlResource.source_sql_PullOrdersFromThub, tHubDbConnection))
+                using (SqlCommand ordersCommand = new SqlCommand(SqlResource.source_sql_PullOrdersFromThub_ForReaload, tHubDbConnection))
                 {
                     tHubDbConnection.Open();
+                    ordersCommand.Parameters.AddWithValue("@ThubOrderId", THubOrderId);
+                    
                     SqlDataReader orderResults = ordersCommand.ExecuteReader();
                     if (orderResults.HasRows)
                     {
@@ -372,6 +359,8 @@ namespace IST.OrderSynchronizationSystem
                     string shipmenJson = JsonConvert.SerializeObject(ossShipment);
                     updateOrderCommand.Parameters.AddWithValue("@CompleteOrder", shipmenJson);
                     updateOrderCommand.Parameters.AddWithValue("@OssOrderId", ossShipment.OrderID);
+                    updateOrderCommand.Parameters.AddWithValue("@OrderStatus", (short)OSSOrderStatus.New);
+                    
                     stagingConnection.Open();
                     int rowsAffected = updateOrderCommand.ExecuteNonQuery();
                 }
@@ -468,15 +457,11 @@ namespace IST.OrderSynchronizationSystem
             ossOrdersTable.Columns.Add("MBShipmentSubmitError", typeof(string));
             ossOrdersTable.Columns.Add("MBShipmentIdSubmitedToThub", typeof(bool));
             ossOrdersTable.Columns.Add("MBShipmentIdSubmitedToThubOn", typeof(DateTime));
-
             ossOrdersTable.Columns.Add("LastSyncWithMBOn", typeof(DateTime));
             ossOrdersTable.Columns.Add("THubUpdatedOn", typeof(DateTime));
             ossOrdersTable.Columns.Add("MBTrackingNumber", typeof(string));
             ossOrdersTable.Columns.Add("CancelMessage", typeof(string));
-
-
-            
-
+            ossOrdersTable.Columns.Add("MBShipmentMethod", typeof(string));
             return ossOrdersTable;
         }
 
@@ -499,6 +484,7 @@ namespace IST.OrderSynchronizationSystem
             stagingRow["CancelMessage"] = stagingOrder["CancelMessage"];
             stagingRow["OrderStatus"] = stagingOrder["OrderStatus"] != null ? ((OSSOrderStatus)(int.Parse(stagingOrder["OrderStatus"].ToString()))).ToString() : string.Empty;
             stagingRow["LastSyncWithMBOn"] = stagingOrder["LastSyncWithMBOn"];
+            stagingRow["MBShipmentMethod"] = stagingOrder["MBShipmentMethod"];
         }
 
         internal int UpdateOrderAfterMoldingBoxShipmentRequest(DataRow ossOrderRow)
@@ -526,6 +512,7 @@ namespace IST.OrderSynchronizationSystem
                         command.Parameters.AddWithValue("@MBShipmentSubmitError", ossOrderRow["MBShipmentSubmitError"]);
                         command.Parameters.AddWithValue("@OrderStatus", ossOrderRow["OrderStatus"]);
                         command.Parameters.AddWithValue("@CancelMessage", ossOrderRow["CancelMessage"]);
+                        command.Parameters.AddWithValue("@MBShipmentMethod", ossOrderRow["MBShipmentMethod"]);
 
                         recordsUpdated = command.ExecuteNonQuery();
                     }
@@ -572,6 +559,135 @@ namespace IST.OrderSynchronizationSystem
             }
         }
 
+        public DataTable LoadMappingsFromStagingDatabase()
+        {
+            DataTable shipmentMappingDatatable = CreateShipmentMappingTable();
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                stagingDbconnection.Open();
+                using (SqlCommand command = new SqlCommand(SqlResource.source_LoadShipmentMapping, stagingDbconnection))
+                {
+                    SqlDataReader shipmentMappingReader = command.ExecuteReader();
+                    if (shipmentMappingReader.HasRows)
+                    {
+                        while (shipmentMappingReader.Read())
+                        {
+                            DataRow mappingRow = shipmentMappingDatatable.NewRow();
+                            LoadShipmentMappingRow(shipmentMappingReader, mappingRow);
+                            shipmentMappingDatatable.Rows.Add(mappingRow);
+                        }
+                    }
+                }
+                stagingDbconnection.Close();
+            }
+            return shipmentMappingDatatable;
 
+        }
+        private static DataTable CreateShipmentMappingTable()
+        {
+            DataTable ossOrdersTable = new DataTable("ShipmentMappingTable");
+            ossOrdersTable.Columns.Add("OSSShipmentMappingsId", typeof(long));
+            ossOrdersTable.Columns.Add("SourceShipmentMethod", typeof(string));
+            ossOrdersTable.Columns.Add("DestinationShipmentMethod", typeof(string));
+            return ossOrdersTable;
+        }
+        private static void LoadShipmentMappingRow(IDataRecord shipemtnRecord, DataRow shipmentDataRow)
+        {
+            shipmentDataRow["OSSShipmentMappingsId"] = shipemtnRecord["OSSShipmentMappingsId"];
+            shipmentDataRow["SourceShipmentMethod"] = shipemtnRecord["SourceShipmentMethod"];
+            shipmentDataRow["DestinationShipmentMethod"] = shipemtnRecord["DestinationShipmentMethod"];
+        }
+
+
+        public DataTable LoadLogsFromDatabase()
+        {
+            DataTable LogDataTable = CreateLogsTable();
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                stagingDbconnection.Open();
+                using (SqlCommand command = new SqlCommand(SqlResource.source_LoadLogs, stagingDbconnection))
+                {
+                    SqlDataReader LogDataReader = command.ExecuteReader();
+                    if (LogDataReader.HasRows)
+                    {
+                        while (LogDataReader.Read())
+                        {
+                            DataRow mappingRow = LogDataTable.NewRow();
+                            LoadLogReaderRow(LogDataReader, mappingRow);
+                            LogDataTable.Rows.Add(mappingRow);
+                        }
+                    }
+                }
+                stagingDbconnection.Close();
+            }
+            return LogDataTable;
+        }
+        private static DataTable CreateLogsTable()
+        {
+            DataTable LogTable = new DataTable("ShipmentMappingTable");
+            LogTable.Columns.Add("LogId", typeof(long));
+            LogTable.Columns.Add("OrderId", typeof(long));
+            LogTable.Columns.Add("LogText", typeof(string));
+            LogTable.Columns.Add("CreatedOn", typeof(string));
+            
+            return LogTable;
+        }
+        private static void LoadLogReaderRow(IDataRecord shipemtnRecord, DataRow shipmentDataRow)
+        {
+            shipmentDataRow["LogId"] = shipemtnRecord["LogId"];
+            shipmentDataRow["OrderId"] = shipemtnRecord["OrderId"];
+            shipmentDataRow["LogText"] = shipemtnRecord["LogText"];
+            shipmentDataRow["CreatedOn"] = shipemtnRecord["CreatedOn"];
+        }
+
+        public void ClearAllLogs()
+        {
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                stagingDbconnection.Open();
+                using (SqlCommand command = new SqlCommand(SqlResource.source_ClearLogs, stagingDbconnection))
+                {
+                    var rowsAffected = command.ExecuteNonQuery();
+                }
+                stagingDbconnection.Close();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the maximum Order id fetched from THUB database
+        /// </summary>
+        /// <param name="idToSet">Set -1 to get the value. Othewise, parameter's values will be updated in the database</param>        
+        public long GetOrSetMaximumOrderIdFetched(long idToSet) // < 0 = get
+        {
+            if (idToSet < 0)
+            {
+                long idToReturn = 0;
+                using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+                {
+                    stagingDbconnection.Open();
+                    using (SqlCommand command = new SqlCommand(SqlResource.source_GetOssLastSyncOrderId, stagingDbconnection))
+                    {
+                        var objectToReturn = command.ExecuteScalar();
+                        if (objectToReturn != null)
+                        {
+                            long.TryParse(objectToReturn.ToString(), out idToReturn);
+                        }
+                    }
+                    stagingDbconnection.Close();
+                }
+                return idToReturn;
+            }
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                stagingDbconnection.Open();
+                using (SqlCommand command = new SqlCommand(SqlResource.source_SetOssLastSyncOrderId, stagingDbconnection))
+                {
+                    command.Parameters.AddWithValue("@LastValuesReturn", idToSet);
+                    var objectToReturn = command.ExecuteScalar();                        
+                }
+                stagingDbconnection.Close();
+            }
+            return -1;
+        }
     }
 }

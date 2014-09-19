@@ -132,8 +132,8 @@ Where  oi.OrderId = @THubOrderId</value>
   </data>
 
 
-  
-<data name="source_sql_Insert_Log" xml:space="preserve">
+
+  <data name="source_sql_Insert_Log" xml:space="preserve">
     <value>INSERT INTO [dbo].[Logs]
   ([LogTypeId]
   ,[OrderId]
@@ -231,13 +231,102 @@ Where  oi.OrderId = @THubOrderId</value>
 	ord.ShippingStatusId = 1 
 	and (ord.PaymentStatusId = 4 or ord.PaymentStatusId = 2)
 	and (IsCompleteOrderFlag = 0 or IsCompleteOrderFlag is null)
+  and ord.OrderId > @LastFetchedOrderId
 	order by 1 desc, 2 desc, 3
 
 </value>
   </data>
+  <data name="source_sql_PullOrdersFromThub_ForReaload" xml:space="preserve">
+    <value>
+      Select  --Top 1 
+		ord.OrderId As THubOrderID,
+       ord.ChannelOrderReference As OrderID, 
+       ord.OrderDate As Orderdate, 
+       Case ord.ShippingAddrSameAsBilling
+	    When 0
+		 Then ord.SAddr_Company
+		When 1
+		 Then ord.BAddr_Company
+	   End As Company,
+       ord.SAddr_FirstName As FirstName,
+       ord.SAddr_LastName As LastName,
+       Case ord.ShippingAddrSameAsBilling
+	    When 0
+	     Then ord.SAddr_Line1
+		When 1
+		 Then ord.BAddr_Line1
+	   End As Address1,
+       Case ord.ShippingAddrSameAsBilling
+	    When 0
+	     Then ord.SAddr_Line2
+		When 1
+		 Then ord.BAddr_Line2
+	   End As Address2,
+       Case ord.ShippingAddrSameAsBilling
+	    When 0
+	     Then ord.SAddr_City
+		When 1
+		 Then ord.BAddr_City
+	   End As City,
+       Case ord.ShippingAddrSameAsBilling
+	    When 0
+	     Then ord.SAddr_State
+		When 1
+		 Then ord.BAddr_State
+	   End As 'State',
+       Case ord.ShippingAddrSameAsBilling
+	    When 0
+	     Then ord.SAddr_Zip
+		When 1
+		 Then ord.BAddr_Zip
+	   End As Zip,
+       Case ord.ShippingAddrSameAsBilling
+	    When 0
+	     Then ord.SAddr_Country
+		When 1
+		 Then ord.BAddr_Country
+	   End As Country,
+       Case ord.ShippingAddrSameAsBilling
+	    When 0
+	     Then ord.SAddr_Email1
+		 When 1
+		 Then ord.BAddr_Email1
+	   End As Email,
+       Case ord.ShippingAddrSameAsBilling
+	    When 0
+	     Then ord.SAddr_Phone1
+		 When 1
+		 Then ord.BAddr_Phone1
+	   End As Phone,
+       WebShipMethod,
+       0.00 As CODAmount,
+       ord.CustomValue1 As Custom1,
+       ord.CustomValue2 As Custom2,
+       ord.CustomValue3 As Custom3,
+       ord.CustomValue4 As Custom4,
+       ord.CustomValue5 As Custom5,
+       '' As Custom6,
+	   ord.IsCompleteOrderFlag,
+	   Case ord.ShippingStatusId
+	    When 3
+		 Then 'SHIPPED'
+		When 5
+		 Then 'PUBLISHED'
+		When 6
+		 Then 'SKIP'
+	   End as [Status]
+    From   Orders As ord With(NoLock)
+    Where 
+	ord.OrderId = @ThubOrderId
+	and ord.ShippingStatusId = 1 
+	and (ord.PaymentStatusId = 4 or ord.PaymentStatusId = 2)
+	and (IsCompleteOrderFlag = 0 or IsCompleteOrderFlag is null)
+	order by 1 desc, 2 desc, 3
+</value>
+  </data>
   <data name="source_sql_UpdateOssOrder" xml:space="preserve">
     <value>update OSSOrders
-set [THubCompleteOrder] = @CompleteOrder
+set [THubCompleteOrder] = @CompleteOrder, [OrderStatus] = @OrderStatus
 where THubOrderReferenceNo = @OssOrderId </value>
   </data>
   <data name="source_sql_verify" xml:space="preserve">
@@ -256,7 +345,7 @@ where THubOrderReferenceNo = @OssOrderId </value>
       WHERE [THubOrderId] = @THubOrderId
   </value>
   </data>
-  
+
   <data name="staging_sql_InsertShipmentTrackingDetails" xml:space="preserve">
     <value>
       INSERT INTO [dbo].[ShipmentTracking]
@@ -270,7 +359,7 @@ where THubOrderReferenceNo = @OssOrderId </value>
            ,@TrackingNumber
            ,@ShipmentDate)
     </value>
-  </data>  
+  </data>
   <data name="staging_sql_CreateOssOrders" xml:space="preserve">
     <value>USPCreateOSSOrders</value>
   </data>
@@ -292,6 +381,36 @@ where THubOrderReferenceNo = @OssOrderId </value>
            (@SourceShipMethod,
            @DestinationShipMethod,
            @THubToMBMap)
+    </value>
+  </data>
+  <data name="source_LoadShipmentMapping" xml:space="preserve">
+    <value>SELECT [OSSShipmentMappingsId]
+      ,[SourceShipmentMethod]
+      ,[DestinationShipmentMethod]      
+  FROM [dbo].[OSSShipmentMappings]
+</value>
+    </data>
+  <data name="source_LoadLogs" xml:space="preserve">
+    <value>SELECT [LogId]      
+      ,[OrderId]
+      ,[LogText]
+      ,[CreatedOn]
+  FROM [dbo].[Logs]
+  order by CreatedOn desc
+</value>
+  </data>
+  <data name="source_ClearLogs" xml:space="preserve">
+    <value>Delete from [Logs]
+</value>
+  </data>
+  <data name="source_GetOssLastSyncOrderId" xml:space="preserve">
+    <value>select top 1 LastSynchOrderId
+        from OssLastSyncOrderDetail
+    </value>
+  </data>
+  <data name="source_SetOssLastSyncOrderId" xml:space="preserve">
+    <value>delete from OssLastSyncOrderDetail
+      insert into OssLastSyncOrderDetail ([LastSynchOrderId]) values (@LastValuesReturn)
     </value>
   </data>
 </root>

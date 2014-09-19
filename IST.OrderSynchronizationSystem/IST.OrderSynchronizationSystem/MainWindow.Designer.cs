@@ -35,10 +35,13 @@
             this.ApplicationMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.shipmentMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewSystemLogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hideWhenMinimizedToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.errorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hideWhenMinimizedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainFormTabControl = new System.Windows.Forms.TabControl();
             this.ConfigurationTabPage = new System.Windows.Forms.TabPage();
             this.splitter1 = new System.Windows.Forms.Splitter();
@@ -50,11 +53,14 @@
             this.MoldingBoxApiKeyGroupBox = new System.Windows.Forms.GroupBox();
             this.MoldinboxKeyTextBox = new System.Windows.Forms.TextBox();
             this.MoldingBoxApiKeyLabel = new System.Windows.Forms.Label();
+            this.SynchronizeButton = new System.Windows.Forms.Button();
             this.AutomaticOrderSynchronizeSettingsGroupBox = new System.Windows.Forms.GroupBox();
-            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+            this.SyncMoldingBoxIntervalTextbox = new System.Windows.Forms.MaskedTextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.SyncNewOrderTextbox = new System.Windows.Forms.MaskedTextBox();
             this.SynchronizeIntervalMinutesLabel = new System.Windows.Forms.Label();
             this.SynchronizeIntervalLabel = new System.Windows.Forms.Label();
-            this.SynchronizeButton = new System.Windows.Forms.Button();
             this.StagingDbGroupBox = new System.Windows.Forms.GroupBox();
             this.CancelStagingButton = new System.Windows.Forms.Button();
             this.StagingServerTextBox = new System.Windows.Forms.TextBox();
@@ -78,26 +84,31 @@
             this.DatabaseLabel = new System.Windows.Forms.Label();
             this.ServerLabel = new System.Windows.Forms.Label();
             this.NewOrderTabPage = new System.Windows.Forms.TabPage();
-            this.LoadOrderFromStagingGroupBox = new System.Windows.Forms.GroupBox();
             this.NoOfOrdersLabel = new System.Windows.Forms.Label();
+            this.LoadOrderFromStagingGroupBox = new System.Windows.Forms.GroupBox();
             this.DisplayStagingOrderButton = new System.Windows.Forms.Button();
             this.OSSOrdersGroupBox = new System.Windows.Forms.GroupBox();
             this.OssOrdersDataGridView = new System.Windows.Forms.DataGridView();
             this.SyncOrdersWithTHubGroupBox = new System.Windows.Forms.GroupBox();
             this.LoadOrdersFromTHubButton = new System.Windows.Forms.Button();
             this.InFight = new System.Windows.Forms.TabPage();
+            this.InFlightOrdersLabel = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.OssInFlightGridView = new System.Windows.Forms.DataGridView();
             this.Exception = new System.Windows.Forms.TabPage();
+            this.ExceptionOrdersLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.OssExceptionGridView = new System.Windows.Forms.DataGridView();
             this.Completed = new System.Windows.Forms.TabPage();
+            this.CompletedOrdersLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.OssCompletedGridView = new System.Windows.Forms.DataGridView();
             this.OnHold = new System.Windows.Forms.TabPage();
+            this.OnHoldOrdersLabel = new System.Windows.Forms.Label();
             this.OnHoldGroupBox = new System.Windows.Forms.GroupBox();
             this.OSSOrderOnHoldGridView = new System.Windows.Forms.DataGridView();
             this.Canceled = new System.Windows.Forms.TabPage();
+            this.CancelOrdersLabel = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.OssOrdersCanceledOrders = new System.Windows.Forms.DataGridView();
             this.FormErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
@@ -105,14 +116,8 @@
             this.menuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
-            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripButton = new System.Windows.Forms.ToolStripSplitButton();
             this.ApplicationStatusStrip = new System.Windows.Forms.StatusStrip();
-            this.CancelOrdersLabel = new System.Windows.Forms.Label();
-            this.OnHoldOrdersLabel = new System.Windows.Forms.Label();
-            this.CompletedOrdersLabel = new System.Windows.Forms.Label();
-            this.ExceptionOrdersLabel = new System.Windows.Forms.Label();
-            this.InFlightOrdersLabel = new System.Windows.Forms.Label();
             this.ApplicationMenuStrip.SuspendLayout();
             this.MainFormTabControl.SuspendLayout();
             this.ConfigurationTabPage.SuspendLayout();
@@ -150,10 +155,11 @@
             // 
             this.ApplicationMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.viewToolStripMenuItem,
             this.toolsToolStripMenuItem});
             this.ApplicationMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.ApplicationMenuStrip.Name = "ApplicationMenuStrip";
-            this.ApplicationMenuStrip.Size = new System.Drawing.Size(1231, 24);
+            this.ApplicationMenuStrip.Size = new System.Drawing.Size(1234, 24);
             this.ApplicationMenuStrip.TabIndex = 1;
             this.ApplicationMenuStrip.Text = "Application Menu Strip";
             // 
@@ -172,12 +178,42 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.shipmentMappingsToolStripMenuItem,
+            this.viewSystemLogsToolStripMenuItem,
+            this.hideWhenMinimizedToolStripMenuItem1});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // shipmentMappingsToolStripMenuItem
+            // 
+            this.shipmentMappingsToolStripMenuItem.Name = "shipmentMappingsToolStripMenuItem";
+            this.shipmentMappingsToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.shipmentMappingsToolStripMenuItem.Text = "Shipment Mappings";
+            this.shipmentMappingsToolStripMenuItem.Click += new System.EventHandler(this.shipmentMappingsToolStripMenuItem_Click);
+            // 
+            // viewSystemLogsToolStripMenuItem
+            // 
+            this.viewSystemLogsToolStripMenuItem.Name = "viewSystemLogsToolStripMenuItem";
+            this.viewSystemLogsToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.viewSystemLogsToolStripMenuItem.Text = "View System Logs";
+            this.viewSystemLogsToolStripMenuItem.Click += new System.EventHandler(this.viewSystemLogsToolStripMenuItem_Click);
+            // 
+            // hideWhenMinimizedToolStripMenuItem1
+            // 
+            this.hideWhenMinimizedToolStripMenuItem1.Name = "hideWhenMinimizedToolStripMenuItem1";
+            this.hideWhenMinimizedToolStripMenuItem1.Size = new System.Drawing.Size(192, 22);
+            this.hideWhenMinimizedToolStripMenuItem1.Text = "Hide When &Minimized";
+            this.hideWhenMinimizedToolStripMenuItem1.Click += new System.EventHandler(this.hideWhenMinimizedToolStripMenuItem1_Click);
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.errorsToolStripMenuItem,
-            this.logToolStripMenuItem,
-            this.hideWhenMinimizedToolStripMenuItem});
+            this.logToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -185,21 +221,14 @@
             // errorsToolStripMenuItem
             // 
             this.errorsToolStripMenuItem.Name = "errorsToolStripMenuItem";
-            this.errorsToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.errorsToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.errorsToolStripMenuItem.Text = "Errors";
             // 
             // logToolStripMenuItem
             // 
             this.logToolStripMenuItem.Name = "logToolStripMenuItem";
-            this.logToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.logToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.logToolStripMenuItem.Text = "Log";
-            // 
-            // hideWhenMinimizedToolStripMenuItem
-            // 
-            this.hideWhenMinimizedToolStripMenuItem.Name = "hideWhenMinimizedToolStripMenuItem";
-            this.hideWhenMinimizedToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.hideWhenMinimizedToolStripMenuItem.Text = "Hide When Minimized";
-            this.hideWhenMinimizedToolStripMenuItem.Click += new System.EventHandler(this.hideWhenMinimizedToolStripMenuItem_Click);
             // 
             // MainFormTabControl
             // 
@@ -214,7 +243,7 @@
             this.MainFormTabControl.Location = new System.Drawing.Point(0, 24);
             this.MainFormTabControl.Name = "MainFormTabControl";
             this.MainFormTabControl.SelectedIndex = 0;
-            this.MainFormTabControl.Size = new System.Drawing.Size(1231, 636);
+            this.MainFormTabControl.Size = new System.Drawing.Size(1234, 636);
             this.MainFormTabControl.TabIndex = 5;
             // 
             // ConfigurationTabPage
@@ -223,6 +252,7 @@
             this.ConfigurationTabPage.Controls.Add(this.splitter1);
             this.ConfigurationTabPage.Controls.Add(this.groupBox4);
             this.ConfigurationTabPage.Controls.Add(this.MoldingBoxApiKeyGroupBox);
+            this.ConfigurationTabPage.Controls.Add(this.SynchronizeButton);
             this.ConfigurationTabPage.Controls.Add(this.AutomaticOrderSynchronizeSettingsGroupBox);
             this.ConfigurationTabPage.Controls.Add(this.StagingDbGroupBox);
             this.ConfigurationTabPage.Controls.Add(this.SourceGroupBox);
@@ -230,7 +260,7 @@
             this.ConfigurationTabPage.Location = new System.Drawing.Point(4, 22);
             this.ConfigurationTabPage.Name = "ConfigurationTabPage";
             this.ConfigurationTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.ConfigurationTabPage.Size = new System.Drawing.Size(1223, 610);
+            this.ConfigurationTabPage.Size = new System.Drawing.Size(1226, 610);
             this.ConfigurationTabPage.TabIndex = 0;
             this.ConfigurationTabPage.Text = "Configuration";
             // 
@@ -251,7 +281,7 @@
             this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.groupBox4.Location = new System.Drawing.Point(8, 252);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(468, 55);
+            this.groupBox4.Size = new System.Drawing.Size(494, 55);
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Default Phone/Email ";
@@ -260,13 +290,13 @@
             // 
             this.PhoneTextbox.Location = new System.Drawing.Point(302, 19);
             this.PhoneTextbox.Name = "PhoneTextbox";
-            this.PhoneTextbox.Size = new System.Drawing.Size(156, 20);
+            this.PhoneTextbox.Size = new System.Drawing.Size(180, 20);
             this.PhoneTextbox.TabIndex = 18;
             // 
             // phoneLabel
             // 
             this.phoneLabel.AutoSize = true;
-            this.phoneLabel.Location = new System.Drawing.Point(247, 23);
+            this.phoneLabel.Location = new System.Drawing.Point(245, 23);
             this.phoneLabel.Name = "phoneLabel";
             this.phoneLabel.Size = new System.Drawing.Size(38, 13);
             this.phoneLabel.TabIndex = 17;
@@ -276,7 +306,7 @@
             // 
             this.EmailTextbox.Location = new System.Drawing.Point(69, 20);
             this.EmailTextbox.Name = "EmailTextbox";
-            this.EmailTextbox.Size = new System.Drawing.Size(156, 20);
+            this.EmailTextbox.Size = new System.Drawing.Size(162, 20);
             this.EmailTextbox.TabIndex = 16;
             // 
             // label5
@@ -294,7 +324,7 @@
             this.MoldingBoxApiKeyGroupBox.Controls.Add(this.MoldingBoxApiKeyLabel);
             this.MoldingBoxApiKeyGroupBox.Location = new System.Drawing.Point(8, 178);
             this.MoldingBoxApiKeyGroupBox.Name = "MoldingBoxApiKeyGroupBox";
-            this.MoldingBoxApiKeyGroupBox.Size = new System.Drawing.Size(936, 68);
+            this.MoldingBoxApiKeyGroupBox.Size = new System.Drawing.Size(994, 68);
             this.MoldingBoxApiKeyGroupBox.TabIndex = 4;
             this.MoldingBoxApiKeyGroupBox.TabStop = false;
             this.MoldingBoxApiKeyGroupBox.Text = "Molding Box API Key";
@@ -320,33 +350,76 @@
             this.MoldingBoxApiKeyLabel.TabIndex = 16;
             this.MoldingBoxApiKeyLabel.Text = "Key:";
             // 
+            // SynchronizeButton
+            // 
+            this.SynchronizeButton.Image = global::IST.OrderSynchronizationSystem.Properties.Resources.PlayImage;
+            this.SynchronizeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.SynchronizeButton.Location = new System.Drawing.Point(892, 313);
+            this.SynchronizeButton.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
+            this.SynchronizeButton.Name = "SynchronizeButton";
+            this.SynchronizeButton.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
+            this.SynchronizeButton.Size = new System.Drawing.Size(110, 30);
+            this.SynchronizeButton.TabIndex = 14;
+            this.SynchronizeButton.Text = "Start";
+            this.SynchronizeButton.UseVisualStyleBackColor = true;
+            this.SynchronizeButton.Click += new System.EventHandler(this.SynchronizeButton_Click);
+            // 
             // AutomaticOrderSynchronizeSettingsGroupBox
             // 
-            this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.maskedTextBox1);
+            this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SyncMoldingBoxIntervalTextbox);
+            this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.label7);
+            this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.label6);
+            this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SyncNewOrderTextbox);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SynchronizeIntervalMinutesLabel);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SynchronizeIntervalLabel);
-            this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SynchronizeButton);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AutomaticOrderSynchronizeSettingsGroupBox.Location = new System.Drawing.Point(482, 252);
+            this.AutomaticOrderSynchronizeSettingsGroupBox.Location = new System.Drawing.Point(508, 252);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Name = "AutomaticOrderSynchronizeSettingsGroupBox";
-            this.AutomaticOrderSynchronizeSettingsGroupBox.Size = new System.Drawing.Size(462, 55);
+            this.AutomaticOrderSynchronizeSettingsGroupBox.Size = new System.Drawing.Size(494, 55);
             this.AutomaticOrderSynchronizeSettingsGroupBox.TabIndex = 3;
             this.AutomaticOrderSynchronizeSettingsGroupBox.TabStop = false;
             this.AutomaticOrderSynchronizeSettingsGroupBox.Text = "Automatic Order Synchronize Settings";
             // 
-            // maskedTextBox1
+            // SyncMoldingBoxIntervalTextbox
             // 
-            this.maskedTextBox1.Location = new System.Drawing.Point(167, 21);
-            this.maskedTextBox1.Mask = "000";
-            this.maskedTextBox1.Name = "maskedTextBox1";
-            this.maskedTextBox1.Size = new System.Drawing.Size(48, 20);
-            this.maskedTextBox1.TabIndex = 13;
+            this.SyncMoldingBoxIntervalTextbox.Location = new System.Drawing.Point(420, 22);
+            this.SyncMoldingBoxIntervalTextbox.Mask = "000";
+            this.SyncMoldingBoxIntervalTextbox.Name = "SyncMoldingBoxIntervalTextbox";
+            this.SyncMoldingBoxIntervalTextbox.Size = new System.Drawing.Size(48, 20);
+            this.SyncMoldingBoxIntervalTextbox.TabIndex = 16;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.ForeColor = System.Drawing.Color.DarkRed;
+            this.label7.Location = new System.Drawing.Point(384, 25);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(34, 13);
+            this.label7.TabIndex = 15;
+            this.label7.Text = "(mins)";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(247, 25);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(141, 13);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "Sync to Moldingbox Interval:";
+            // 
+            // SyncNewOrderTextbox
+            // 
+            this.SyncNewOrderTextbox.Location = new System.Drawing.Point(170, 22);
+            this.SyncNewOrderTextbox.Mask = "000";
+            this.SyncNewOrderTextbox.Name = "SyncNewOrderTextbox";
+            this.SyncNewOrderTextbox.Size = new System.Drawing.Size(48, 20);
+            this.SyncNewOrderTextbox.TabIndex = 13;
             // 
             // SynchronizeIntervalMinutesLabel
             // 
             this.SynchronizeIntervalMinutesLabel.AutoSize = true;
             this.SynchronizeIntervalMinutesLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.SynchronizeIntervalMinutesLabel.Location = new System.Drawing.Point(119, 25);
+            this.SynchronizeIntervalMinutesLabel.Location = new System.Drawing.Point(133, 25);
             this.SynchronizeIntervalMinutesLabel.Name = "SynchronizeIntervalMinutesLabel";
             this.SynchronizeIntervalMinutesLabel.Size = new System.Drawing.Size(34, 13);
             this.SynchronizeIntervalMinutesLabel.TabIndex = 3;
@@ -357,23 +430,9 @@
             this.SynchronizeIntervalLabel.AutoSize = true;
             this.SynchronizeIntervalLabel.Location = new System.Drawing.Point(6, 25);
             this.SynchronizeIntervalLabel.Name = "SynchronizeIntervalLabel";
-            this.SynchronizeIntervalLabel.Size = new System.Drawing.Size(106, 13);
+            this.SynchronizeIntervalLabel.Size = new System.Drawing.Size(131, 13);
             this.SynchronizeIntervalLabel.TabIndex = 1;
-            this.SynchronizeIntervalLabel.Text = "Synchronize Interval:";
-            // 
-            // SynchronizeButton
-            // 
-            this.SynchronizeButton.Image = global::IST.OrderSynchronizationSystem.Properties.Resources.PlayImage;
-            this.SynchronizeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.SynchronizeButton.Location = new System.Drawing.Point(346, 16);
-            this.SynchronizeButton.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
-            this.SynchronizeButton.Name = "SynchronizeButton";
-            this.SynchronizeButton.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
-            this.SynchronizeButton.Size = new System.Drawing.Size(110, 30);
-            this.SynchronizeButton.TabIndex = 14;
-            this.SynchronizeButton.Text = "Start";
-            this.SynchronizeButton.UseVisualStyleBackColor = true;
-            this.SynchronizeButton.Click += new System.EventHandler(this.SynchronizeButton_Click);
+            this.SynchronizeIntervalLabel.Text = "Sync New Orders Interval:";
             // 
             // StagingDbGroupBox
             // 
@@ -388,7 +447,7 @@
             this.StagingDbGroupBox.Controls.Add(this.StagingPasswordTextBox);
             this.StagingDbGroupBox.Controls.Add(this.StagingUsernameTextBox);
             this.StagingDbGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StagingDbGroupBox.Location = new System.Drawing.Point(472, 6);
+            this.StagingDbGroupBox.Location = new System.Drawing.Point(529, 6);
             this.StagingDbGroupBox.Name = "StagingDbGroupBox";
             this.StagingDbGroupBox.Size = new System.Drawing.Size(473, 166);
             this.StagingDbGroupBox.TabIndex = 2;
@@ -602,9 +661,18 @@
             this.NewOrderTabPage.Location = new System.Drawing.Point(4, 22);
             this.NewOrderTabPage.Name = "NewOrderTabPage";
             this.NewOrderTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.NewOrderTabPage.Size = new System.Drawing.Size(1223, 610);
+            this.NewOrderTabPage.Size = new System.Drawing.Size(1226, 610);
             this.NewOrderTabPage.TabIndex = 1;
             this.NewOrderTabPage.Text = "New";
+            // 
+            // NoOfOrdersLabel
+            // 
+            this.NoOfOrdersLabel.AutoSize = true;
+            this.NoOfOrdersLabel.Location = new System.Drawing.Point(457, 29);
+            this.NoOfOrdersLabel.Name = "NoOfOrdersLabel";
+            this.NoOfOrdersLabel.Size = new System.Drawing.Size(115, 15);
+            this.NoOfOrdersLabel.TabIndex = 1;
+            this.NoOfOrdersLabel.Text = "Total No. of Orders: ";
             // 
             // LoadOrderFromStagingGroupBox
             // 
@@ -616,15 +684,6 @@
             this.LoadOrderFromStagingGroupBox.TabIndex = 7;
             this.LoadOrderFromStagingGroupBox.TabStop = false;
             this.LoadOrderFromStagingGroupBox.Text = "Load Order from Staging";
-            // 
-            // NoOfOrdersLabel
-            // 
-            this.NoOfOrdersLabel.AutoSize = true;
-            this.NoOfOrdersLabel.Location = new System.Drawing.Point(457, 29);
-            this.NoOfOrdersLabel.Name = "NoOfOrdersLabel";
-            this.NoOfOrdersLabel.Size = new System.Drawing.Size(115, 15);
-            this.NoOfOrdersLabel.TabIndex = 1;
-            this.NoOfOrdersLabel.Text = "Total No. of Orders: ";
             // 
             // DisplayStagingOrderButton
             // 
@@ -717,10 +776,19 @@
             this.InFight.Controls.Add(this.groupBox3);
             this.InFight.Location = new System.Drawing.Point(4, 22);
             this.InFight.Name = "InFight";
-            this.InFight.Size = new System.Drawing.Size(1223, 610);
+            this.InFight.Size = new System.Drawing.Size(1226, 610);
             this.InFight.TabIndex = 4;
             this.InFight.Text = "InFlight";
             this.InFight.UseVisualStyleBackColor = true;
+            // 
+            // InFlightOrdersLabel
+            // 
+            this.InFlightOrdersLabel.AutoSize = true;
+            this.InFlightOrdersLabel.Location = new System.Drawing.Point(9, 586);
+            this.InFlightOrdersLabel.Name = "InFlightOrdersLabel";
+            this.InFlightOrdersLabel.Size = new System.Drawing.Size(100, 13);
+            this.InFlightOrdersLabel.TabIndex = 2;
+            this.InFlightOrdersLabel.Text = "Total No. of Orders:";
             // 
             // groupBox3
             // 
@@ -759,10 +827,19 @@
             this.Exception.Controls.Add(this.groupBox1);
             this.Exception.Location = new System.Drawing.Point(4, 22);
             this.Exception.Name = "Exception";
-            this.Exception.Size = new System.Drawing.Size(1223, 610);
+            this.Exception.Size = new System.Drawing.Size(1226, 610);
             this.Exception.TabIndex = 2;
             this.Exception.Text = "Exception";
             this.Exception.UseVisualStyleBackColor = true;
+            // 
+            // ExceptionOrdersLabel
+            // 
+            this.ExceptionOrdersLabel.AutoSize = true;
+            this.ExceptionOrdersLabel.Location = new System.Drawing.Point(8, 586);
+            this.ExceptionOrdersLabel.Name = "ExceptionOrdersLabel";
+            this.ExceptionOrdersLabel.Size = new System.Drawing.Size(100, 13);
+            this.ExceptionOrdersLabel.TabIndex = 1;
+            this.ExceptionOrdersLabel.Text = "Total No. of Orders:";
             // 
             // groupBox1
             // 
@@ -802,10 +879,19 @@
             this.Completed.Controls.Add(this.groupBox2);
             this.Completed.Location = new System.Drawing.Point(4, 22);
             this.Completed.Name = "Completed";
-            this.Completed.Size = new System.Drawing.Size(1223, 610);
+            this.Completed.Size = new System.Drawing.Size(1226, 610);
             this.Completed.TabIndex = 3;
             this.Completed.Text = "Completed";
             this.Completed.UseVisualStyleBackColor = true;
+            // 
+            // CompletedOrdersLabel
+            // 
+            this.CompletedOrdersLabel.AutoSize = true;
+            this.CompletedOrdersLabel.Location = new System.Drawing.Point(9, 588);
+            this.CompletedOrdersLabel.Name = "CompletedOrdersLabel";
+            this.CompletedOrdersLabel.Size = new System.Drawing.Size(100, 13);
+            this.CompletedOrdersLabel.TabIndex = 2;
+            this.CompletedOrdersLabel.Text = "Total No. of Orders:";
             // 
             // groupBox2
             // 
@@ -844,10 +930,19 @@
             this.OnHold.Controls.Add(this.OnHoldGroupBox);
             this.OnHold.Location = new System.Drawing.Point(4, 22);
             this.OnHold.Name = "OnHold";
-            this.OnHold.Size = new System.Drawing.Size(1223, 610);
+            this.OnHold.Size = new System.Drawing.Size(1226, 610);
             this.OnHold.TabIndex = 5;
             this.OnHold.Text = "On-Hold";
             this.OnHold.UseVisualStyleBackColor = true;
+            // 
+            // OnHoldOrdersLabel
+            // 
+            this.OnHoldOrdersLabel.AutoSize = true;
+            this.OnHoldOrdersLabel.Location = new System.Drawing.Point(9, 590);
+            this.OnHoldOrdersLabel.Name = "OnHoldOrdersLabel";
+            this.OnHoldOrdersLabel.Size = new System.Drawing.Size(94, 13);
+            this.OnHoldOrdersLabel.TabIndex = 2;
+            this.OnHoldOrdersLabel.Text = "Total No. of Ordes";
             // 
             // OnHoldGroupBox
             // 
@@ -886,10 +981,19 @@
             this.Canceled.Controls.Add(this.groupBox5);
             this.Canceled.Location = new System.Drawing.Point(4, 22);
             this.Canceled.Name = "Canceled";
-            this.Canceled.Size = new System.Drawing.Size(1223, 610);
+            this.Canceled.Size = new System.Drawing.Size(1226, 610);
             this.Canceled.TabIndex = 6;
             this.Canceled.Text = "Canceled";
             this.Canceled.UseVisualStyleBackColor = true;
+            // 
+            // CancelOrdersLabel
+            // 
+            this.CancelOrdersLabel.AutoSize = true;
+            this.CancelOrdersLabel.Location = new System.Drawing.Point(9, 588);
+            this.CancelOrdersLabel.Name = "CancelOrdersLabel";
+            this.CancelOrdersLabel.Size = new System.Drawing.Size(100, 13);
+            this.CancelOrdersLabel.TabIndex = 2;
+            this.CancelOrdersLabel.Text = "Total No. of Orders:";
             // 
             // groupBox5
             // 
@@ -953,93 +1057,40 @@
             this.toolStripStatus.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatus.Text = "Ready";
             // 
-            // toolStripSplitButton1
+            // ToolStripButton
             // 
-            this.toolStripSplitButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripSplitButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripSplitButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.refreshToolStripMenuItem});
-            this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
-            this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton1.Name = "toolStripSplitButton1";
-            this.toolStripSplitButton1.Size = new System.Drawing.Size(32, 20);
-            this.toolStripSplitButton1.Text = "toolStripSplitButton1";
-            // 
-            // refreshToolStripMenuItem
-            // 
-            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.refreshToolStripMenuItem.Text = "Refresh";
-            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            this.ToolStripButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.ToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ToolStripButton.Image = global::IST.OrderSynchronizationSystem.Properties.Resources.loading1;
+            this.ToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ToolStripButton.Name = "ToolStripButton";
+            this.ToolStripButton.Size = new System.Drawing.Size(32, 20);
+            this.ToolStripButton.Text = "Refresh";
+            this.ToolStripButton.ButtonClick += new System.EventHandler(this.ToolStripButton_ButtonClick);
             // 
             // ApplicationStatusStrip
             // 
             this.ApplicationStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatus,
-            this.toolStripSplitButton1});
+            this.ToolStripButton});
             this.ApplicationStatusStrip.Location = new System.Drawing.Point(0, 660);
             this.ApplicationStatusStrip.Name = "ApplicationStatusStrip";
-            this.ApplicationStatusStrip.Size = new System.Drawing.Size(1231, 22);
+            this.ApplicationStatusStrip.Size = new System.Drawing.Size(1234, 22);
             this.ApplicationStatusStrip.TabIndex = 50;
             this.ApplicationStatusStrip.Text = "Application Status Strip";
-            this.ApplicationStatusStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ApplicationStatusStrip_ItemClicked);
-            // 
-            // CancelOrdersLabel
-            // 
-            this.CancelOrdersLabel.AutoSize = true;
-            this.CancelOrdersLabel.Location = new System.Drawing.Point(9, 588);
-            this.CancelOrdersLabel.Name = "CancelOrdersLabel";
-            this.CancelOrdersLabel.Size = new System.Drawing.Size(100, 13);
-            this.CancelOrdersLabel.TabIndex = 2;
-            this.CancelOrdersLabel.Text = "Total No. of Orders:";
-            // 
-            // OnHoldOrdersLabel
-            // 
-            this.OnHoldOrdersLabel.AutoSize = true;
-            this.OnHoldOrdersLabel.Location = new System.Drawing.Point(9, 590);
-            this.OnHoldOrdersLabel.Name = "OnHoldOrdersLabel";
-            this.OnHoldOrdersLabel.Size = new System.Drawing.Size(94, 13);
-            this.OnHoldOrdersLabel.TabIndex = 2;
-            this.OnHoldOrdersLabel.Text = "Total No. of Ordes";
-            // 
-            // CompletedOrdersLabel
-            // 
-            this.CompletedOrdersLabel.AutoSize = true;
-            this.CompletedOrdersLabel.Location = new System.Drawing.Point(9, 588);
-            this.CompletedOrdersLabel.Name = "CompletedOrdersLabel";
-            this.CompletedOrdersLabel.Size = new System.Drawing.Size(100, 13);
-            this.CompletedOrdersLabel.TabIndex = 2;
-            this.CompletedOrdersLabel.Text = "Total No. of Orders:";
-            // 
-            // ExceptionOrdersLabel
-            // 
-            this.ExceptionOrdersLabel.AutoSize = true;
-            this.ExceptionOrdersLabel.Location = new System.Drawing.Point(8, 586);
-            this.ExceptionOrdersLabel.Name = "ExceptionOrdersLabel";
-            this.ExceptionOrdersLabel.Size = new System.Drawing.Size(100, 13);
-            this.ExceptionOrdersLabel.TabIndex = 1;
-            this.ExceptionOrdersLabel.Text = "Total No. of Orders:";
-            // 
-            // InFlightOrdersLabel
-            // 
-            this.InFlightOrdersLabel.AutoSize = true;
-            this.InFlightOrdersLabel.Location = new System.Drawing.Point(9, 586);
-            this.InFlightOrdersLabel.Name = "InFlightOrdersLabel";
-            this.InFlightOrdersLabel.Size = new System.Drawing.Size(100, 13);
-            this.InFlightOrdersLabel.TabIndex = 2;
-            this.InFlightOrdersLabel.Text = "Total No. of Orders:";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1231, 682);
+            this.ClientSize = new System.Drawing.Size(1234, 682);
             this.Controls.Add(this.MainFormTabControl);
             this.Controls.Add(this.ApplicationStatusStrip);
             this.Controls.Add(this.ApplicationMenuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.ApplicationMenuStrip;
+            this.MinimumSize = new System.Drawing.Size(1250, 720);
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "OSS  (Order Synchronization System)";
@@ -1133,7 +1184,7 @@
         private System.Windows.Forms.Button CancelSourceButton;
         private System.Windows.Forms.TextBox SourceServerTextBox;
         private System.Windows.Forms.ErrorProvider FormErrorProvider;
-        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
+        private System.Windows.Forms.MaskedTextBox SyncNewOrderTextbox;
         private System.Windows.Forms.GroupBox SyncOrdersWithTHubGroupBox;
         private System.Windows.Forms.Button LoadOrdersFromTHubButton;
         private System.Windows.Forms.GroupBox OSSOrdersGroupBox;
@@ -1166,17 +1217,22 @@
         private System.Windows.Forms.DataGridView OssOrdersCanceledOrders;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.ContextMenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem hideWhenMinimizedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         public System.Windows.Forms.StatusStrip ApplicationStatusStrip;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatus;
-        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton1;
-        private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSplitButton ToolStripButton;
         private System.Windows.Forms.Label OnHoldOrdersLabel;
         private System.Windows.Forms.Label CancelOrdersLabel;
         private System.Windows.Forms.Label CompletedOrdersLabel;
         private System.Windows.Forms.Label ExceptionOrdersLabel;
         private System.Windows.Forms.Label InFlightOrdersLabel;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem shipmentMappingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hideWhenMinimizedToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem viewSystemLogsToolStripMenuItem;
+        private System.Windows.Forms.MaskedTextBox SyncMoldingBoxIntervalTextbox;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
     }
 }
 

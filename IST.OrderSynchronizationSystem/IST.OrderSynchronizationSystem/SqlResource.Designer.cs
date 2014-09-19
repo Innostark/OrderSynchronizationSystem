@@ -61,6 +61,66 @@ namespace IST.OrderSynchronizationSystem {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete from [Logs]
+        ///.
+        /// </summary>
+        internal static string source_ClearLogs {
+            get {
+                return ResourceManager.GetString("source_ClearLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select top 1 LastSynchOrderId
+        ///        from OssLastSyncOrderDetail
+        ///    .
+        /// </summary>
+        internal static string source_GetOssLastSyncOrderId {
+            get {
+                return ResourceManager.GetString("source_GetOssLastSyncOrderId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT [LogId]      
+        ///      ,[OrderId]
+        ///      ,[LogText]
+        ///      ,[CreatedOn]
+        ///  FROM [dbo].[Logs]
+        ///  order by CreatedOn desc
+        ///.
+        /// </summary>
+        internal static string source_LoadLogs {
+            get {
+                return ResourceManager.GetString("source_LoadLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT [OSSShipmentMappingsId]
+        ///      ,[SourceShipmentMethod]
+        ///      ,[DestinationShipmentMethod]      
+        ///  FROM [dbo].[OSSShipmentMappings]
+        ///.
+        /// </summary>
+        internal static string source_LoadShipmentMapping {
+            get {
+                return ResourceManager.GetString("source_LoadShipmentMapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to delete from OssLastSyncOrderDetail
+        ///      insert into OssLastSyncOrderDetail ([LastSynchOrderId]) values (@LastValuesReturn)
+        ///    .
+        /// </summary>
+        internal static string source_SetOssLastSyncOrderId {
+            get {
+                return ResourceManager.GetString("source_SetOssLastSyncOrderId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to INSERT INTO [dbo].[Logs]
         ///  ([LogTypeId]
         ///  ,[OrderId]
@@ -127,6 +187,34 @@ namespace IST.OrderSynchronizationSystem {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///      Select  --Top 1 
+        ///		ord.OrderId As THubOrderID,
+        ///       ord.ChannelOrderReference As OrderID, 
+        ///       ord.OrderDate As Orderdate, 
+        ///       Case ord.ShippingAddrSameAsBilling
+        ///	    When 0
+        ///		 Then ord.SAddr_Company
+        ///		When 1
+        ///		 Then ord.BAddr_Company
+        ///	   End As Company,
+        ///       ord.SAddr_FirstName As FirstName,
+        ///       ord.SAddr_LastName As LastName,
+        ///       Case ord.ShippingAddrSameAsBilling
+        ///	    When 0
+        ///	     Then ord.SAddr_Line1
+        ///		When 1
+        ///		 Then ord.BAddr_Line1
+        ///	   End As Address1,
+        ///        [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string source_sql_PullOrdersFromThub_ForReaload {
+            get {
+                return ResourceManager.GetString("source_sql_PullOrdersFromThub_ForReaload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to UPDATE [dbo].[OSSOrders]
         ///      SET [LastSyncWithMBOn] = @DateTimeNow,
         ///	    [OrderStatus] = @OrderStatus
@@ -153,7 +241,7 @@ namespace IST.OrderSynchronizationSystem {
         
         /// <summary>
         ///   Looks up a localized string similar to update OSSOrders
-        ///set [THubCompleteOrder] = @CompleteOrder
+        ///set [THubCompleteOrder] = @CompleteOrder, [OrderStatus] = @OrderStatus
         ///where THubOrderReferenceNo = @OssOrderId .
         /// </summary>
         internal static string source_sql_UpdateOssOrder {
