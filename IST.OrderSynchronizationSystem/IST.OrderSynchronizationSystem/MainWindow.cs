@@ -27,6 +27,9 @@ namespace IST.OrderSynchronizationSystem
 
         private delegate void RefreshNewOrderGrid();
 
+        
+
+
         private delegate void SetGridColumnsVisibility(DataGridView gridView, OssOrdersGridTypes gridType);
         public OssDatabase _orderSyncronizationDatabase;
         private OSSConnection _sourceConnectionVariables;
@@ -39,6 +42,8 @@ namespace IST.OrderSynchronizationSystem
         private string _stagingDatabase = String.Empty;
         private string _stagingUsername = String.Empty;
         private string _stagingPassword = String.Empty;
+        private string _defaultEmail = String.Empty;
+        private string _defaultPhone = String.Empty;
         private DataTable _ossOrders = null;
         private ShippingMethod[] shipmentMethods;
         private bool hideWhenMinimized;
@@ -55,7 +60,8 @@ namespace IST.OrderSynchronizationSystem
             _autoSyncActive = programState;
             _autoSyncFrequency = 0;
             _autoSyncMbFrequency = 0;
-            _autoSyncOrder = new AutoSynchOrder();            
+            _autoSyncOrder = new AutoSynchOrder();
+            reloadGridsDelegate = new ReloadGridsDelegate(ReloadAllGrid);
         }
 
         private void InitializeDatabaseParameters()
@@ -79,6 +85,10 @@ namespace IST.OrderSynchronizationSystem
         
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (_autoSyncActive)
+            {
+                _autoSyncOrder.cancellationTokenSource.Cancel();
+            }
             Close();
         }
         private void SynchronizeButton_Click(object sender, EventArgs e)
@@ -91,7 +101,6 @@ namespace IST.OrderSynchronizationSystem
             {
                 PauseAutoSychronization();
             }
-
         }
 
         private void StartPauseToggleButton(bool startSychronization)
@@ -135,14 +144,18 @@ namespace IST.OrderSynchronizationSystem
             ClearAllGrids();
             EnableDisableFieldsForAutoSync(false);            
             StartThread();
-            StartPauseToggleButton(true);
+            
+            StartPauseToggleButton(true);            
             ApplicationStatusUpdate("Auto synchronization started.");
         }
+
+        
 
         private void PauseAutoSychronization()
         {
             StopThread();
             EnableDisableFieldsForAutoSync(true);
+            
             StartPauseToggleButton(false);
             ApplicationStatusUpdate("Auto synchronization stopped.");
         }
@@ -233,13 +246,16 @@ namespace IST.OrderSynchronizationSystem
 
         private void StartThread()
         {
-            Task.Factory.StartNew(() => _autoSyncOrder.Process(this, _autoSyncFrequency));
-            //Task.Factory.StartNew(() => _autoSyncOrder.ProcessMb(this, _autoSyncMbFrequency));
+            Task.Factory.StartNew(() => _autoSyncOrder.Process(this, _autoSyncFrequency), TaskCreationOptions.AttachedToParent);
+            //Task.Factory.StartNew(() => _autoSyncOrder.ProcessMb(this, _autoSyncMbFrequency), TaskCreationOptions.AttachedToParent);
         }
-        private void StopThread()
+        private void StopThread(bool formClosing = false)
         {
             _autoSyncOrder.cancellationTokenSource.Cancel();
-            ReloadAllGrid();
+            if (!formClosing)
+            {
+                ClearAllGrids();
+            }
         }
         public void ApplicationStatusUpdate(string text)
         {
@@ -279,6 +295,16 @@ namespace IST.OrderSynchronizationSystem
             string username = (dbSettings == "Source" ? SourceUsernameTextBox.Text : StagingUsernameTextBox.Text);
             string password = (dbSettings == "Source" ? SourcePasswordTextBox.Text : StagingPasswordTextBox.Text);
 
+            if (string.IsNullOrEmpty(EmailTextbox.Text))
+            {
+                readyToSave = false;
+                errorText = "Please provide a valid default email.";
+            }
+            if (string.IsNullOrEmpty(PhoneTextbox.Text))
+            {
+                readyToSave = false;
+                errorText = "Please provide a valid default phone.";
+            }
             if (String.IsNullOrWhiteSpace(server))
             {
                 readyToSave = false;
@@ -314,6 +340,8 @@ namespace IST.OrderSynchronizationSystem
                     applicationSettings.Settings[dbSettings + "DatabaseName"].Value = database;
                     applicationSettings.Settings[dbSettings + "UserName"].Value = username;
                     applicationSettings.Settings[dbSettings + "Password"].Value = password;
+                    applicationSettings.Settings["DefaultEmail"].Value = EmailTextbox.Text;
+                    applicationSettings.Settings["DefaultPhone"].Value = PhoneTextbox.Text;
                 }
 
                 // Save the changes in App.config file.
@@ -335,6 +363,7 @@ namespace IST.OrderSynchronizationSystem
                     _stagingUsername = username;
                     _stagingPassword = password;
                 }
+
             }
             else
             {
@@ -417,6 +446,15 @@ namespace IST.OrderSynchronizationSystem
                 if (_ossOrders.Rows.Count > 0)
                 {
                     OssOrdersDataGridView.DataSource = _ossOrders;
+                    SetOssOrderDataGridHeaderTextAndColumnVisibility(OssOrdersDataGridView, OssOrdersGridTypes.New);
+                    if (!_autoSyncActive)
+                    {
+                        if (OssOrdersDataGridView.ColumnCount == 20)
+                        {
+                            AddSendButtonToGridView(OssOrdersDataGridView);
+                        }
+                        EnableDisableSendToMoldingBoxButton(OssOrdersDataGridView);
+                    }
                 }
                 else
                 {
@@ -430,7 +468,7 @@ namespace IST.OrderSynchronizationSystem
                 NoOfOrdersLabel.Text = "No. of Order: " + _ossOrders.Rows.Count;
             }
         }
-
+        
         private void DisableSentToMoldingBoxButton(DataGridViewDisableButtonCell sendToMbButtonCell)
         {
             sendToMbButtonCell.Enabled = false;
@@ -477,6 +515,12 @@ namespace IST.OrderSynchronizationSystem
                 StagingUsernameTextBox.Text = _stagingUsername;
                 _stagingPassword = applicationSettings.Settings["StagingPassword"].Value;
                 StagingPasswordTextBox.Text = _stagingPassword;
+
+                _defaultEmail = applicationSettings.Settings["DefaultEmail"].Value;
+                EmailTextbox.Text = _defaultEmail;
+
+                _defaultPhone = applicationSettings.Settings["DefaultPhone"].Value;
+                PhoneTextbox.Text = _defaultPhone;
             }
         }
 
@@ -573,7 +617,7 @@ namespace IST.OrderSynchronizationSystem
         private void SetOssOrderDataGridHeaderTextAndColumnVisibility(DataGridView gridView, OssOrdersGridTypes gridType)
         {
 
-            if (ApplicationStatusStrip.InvokeRequired)
+            if (gridView.InvokeRequired)
             {
                 SetGridColumnsVisibility d = SetOssOrderDataGridHeaderTextAndColumnVisibility;
                 Invoke(d, new object[] {gridView, gridType});
@@ -651,31 +695,31 @@ namespace IST.OrderSynchronizationSystem
                         {
                             gridView.Columns["CreatedOn"].HeaderText = "OSS Created On";
                             gridView.Columns["CreatedOn"].ReadOnly = true;
-                            gridView.Columns["CreatedOn"].Width = 150;
+                            gridView.Columns["CreatedOn"].MinimumWidth = 150;
                         }
                         if (gridView.Columns["THubOrderReferenceNo"] != null)
                         {
                             gridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
                             gridView.Columns["THubOrderReferenceNo"].ReadOnly = true;
-                            gridView.Columns["THubOrderReferenceNo"].Width = 100;
+                            gridView.Columns["THubOrderReferenceNo"].MinimumWidth = 100;
                         }
                         if (gridView.Columns["MBShipmentId"] != null)
                         {
                             gridView.Columns["MBShipmentId"].HeaderText = "MB Shipment Id";
-                            gridView.Columns["MBShipmentId"].Width = 150;
+                            gridView.Columns["MBShipmentId"].MinimumWidth = 150;
                             gridView.Columns["MBShipmentId"].ReadOnly = true;
                         }
                         if (gridView.Columns["SentToMBOn"] != null)
                         {
                             gridView.Columns["SentToMBOn"].HeaderText = "Posted On";
                             gridView.Columns["SentToMBOn"].ReadOnly = true;
-                            gridView.Columns["SentToMBOn"].Width = 150;
+                            gridView.Columns["SentToMBOn"].MinimumWidth = 150;
                         }
                         if (gridView.Columns["LastSyncWithMBOn"] != null)
                         {
                             gridView.Columns["LastSyncWithMBOn"].HeaderText = "Last Sync with MB On";
                             gridView.Columns["LastSyncWithMBOn"].ReadOnly = true;
-                            gridView.Columns["LastSyncWithMBOn"].Width = 150;
+                            gridView.Columns["LastSyncWithMBOn"].MinimumWidth = 150;
                         }
                         if (gridView.Columns["THubCompleteOrder"] != null)
                             gridView.Columns["THubCompleteOrder"].Visible = false;
@@ -707,7 +751,7 @@ namespace IST.OrderSynchronizationSystem
                             gridView.Columns["CancelMessage"].Visible = false;
                         if (gridView.Columns["MBShipmentMethod"] != null)
                             gridView.Columns["MBShipmentMethod"].Visible = false;
-
+                        
                         #endregion
 
                         break;
@@ -720,7 +764,7 @@ namespace IST.OrderSynchronizationSystem
                         {
                             gridView.Columns["CreatedOn"].HeaderText = "OSS Created On";
                             gridView.Columns["CreatedOn"].ReadOnly = true;
-                            gridView.Columns["CreatedOn"].MinimumWidth = 150;
+                            gridView.Columns["CreatedOn"].MinimumWidth = 120;
                         }
                         if (gridView.Columns["THubOrderReferenceNo"] != null)
                         {
@@ -732,7 +776,7 @@ namespace IST.OrderSynchronizationSystem
                         {
                             gridView.Columns["MBShipmentSubmitError"].HeaderText = "Error Message";
                             gridView.Columns["MBShipmentSubmitError"].ReadOnly = true;
-                            gridView.Columns["MBShipmentSubmitError"].MinimumWidth = 300;
+                            gridView.Columns["MBShipmentSubmitError"].MinimumWidth = 400;
                         }
                         if (gridView.Columns["SentToMBOn"] != null)
                         {
@@ -1002,20 +1046,10 @@ namespace IST.OrderSynchronizationSystem
                         break;
                     }
                 }
+                
             }
         }        
-        private void OssOrdersDataGridView_DataBindingComplete_1(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.New);
-            if (!_autoSyncActive)
-            {
-                if (OssOrdersDataGridView.ColumnCount == 20)
-                {                    
-                    AddSendButtonToGridView(OssOrdersDataGridView);
-                }
-                EnableDisableSendToMoldingBoxButton(OssOrdersDataGridView);
-            }            
-        }
+        
 
         private void OssOrdersDataGridView_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
@@ -1136,6 +1170,8 @@ namespace IST.OrderSynchronizationSystem
         {
             string mbShipmentID = ossOrderRow["MBShipmentId"].ToString();
             string orderId = ossOrderRow["THubOrderId"].ToString();
+            string orderChannelRefNumber = ossOrderRow["THubOrderReferenceNo"].ToString();
+            string mbShipmentMethod = ossOrderRow["MBShipmentMethod"].ToString();
             apiKey = MoldinboxKeyTextBox.Text;
             MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
             StatusResponse[] statusResponse = client.Retrieve_Shipment_Status(apiKey, new ArrayOfInt() { int.Parse(mbShipmentID) });
@@ -1143,7 +1179,7 @@ namespace IST.OrderSynchronizationSystem
             {
                 if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Completed) // Handle in processing
                 {
-                    _orderSyncronizationDatabase.UpdateOrderTrackingAndOssStatus(statusResponse[0], long.Parse(orderId));                    
+                    _orderSyncronizationDatabase.UpdateOrderTrackingAndOssStatus(statusResponse[0], long.Parse(orderId), orderChannelRefNumber, mbShipmentMethod);                    
                 }
                 else if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.InFlight || statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Recieved)
                 {
@@ -1174,6 +1210,7 @@ namespace IST.OrderSynchronizationSystem
                 ossOrderRow["SentToMB"] = true;
                 ossOrderRow["OrderStatus"] = (int)OSSOrderStatus.InFlight;                
                 ossOrderRow["MBShipmentId"] = response.MBShipmentID.ToString();
+                ossOrderRow["MBShipmentSubmitError"] = string.Empty;
             }
             ossOrderRow["MBShipmentMethod"] = MBShipmentMethod;
             ossOrderRow["SentToMBOn"] = shipmentRequestSentOn;
@@ -1208,6 +1245,7 @@ namespace IST.OrderSynchronizationSystem
             }
             return string.Empty;
         }
+
         private Shipment CreateFrom(OssShipment source)
         {
             return new Shipment
@@ -1245,6 +1283,17 @@ namespace IST.OrderSynchronizationSystem
             if (ossExceptionDataTable.Rows.Count > 0)
             {
                 OssExceptionGridView.DataSource = ossExceptionDataTable;
+                if (!_autoSyncActive)
+                {
+                    if (OssExceptionGridView.ColumnCount == 20)
+                    {
+                        AddReloadButtonToGridView(OssExceptionGridView);
+                        AddPostAgainButtonToGridView(OssExceptionGridView);
+                        AddCancelButtonToGridView(OssExceptionGridView);
+
+                    }
+                }
+                SetOssOrderDataGridHeaderTextAndColumnVisibility(OssExceptionGridView, OssOrdersGridTypes.Exception);
             }
             else
             {
@@ -1256,21 +1305,7 @@ namespace IST.OrderSynchronizationSystem
             }
             ExceptionOrdersLabel.Text = "Total No. of Orders: " + ossExceptionDataTable.Rows.Count;
         }
-
-        private void OssExceptionGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            if (!_autoSyncActive)
-            {
-                if (((DataGridView) sender).ColumnCount == 20)
-                {
-                    AddReloadButtonToGridView((DataGridView) sender);
-                    AddPostAgainButtonToGridView((DataGridView) sender);
-                    AddCancelButtonToGridView((DataGridView) sender);
-
-                }
-            }
-            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView) sender, OssOrdersGridTypes.Exception);
-        }
+        
         #endregion
         #region Processing Handlers
         private void InFlightRefresh()
@@ -1279,6 +1314,14 @@ namespace IST.OrderSynchronizationSystem
             if (ossInFlightDataTable.Rows.Count > 0)
             {
                 OssInFlightGridView.DataSource = ossInFlightDataTable;
+                if (!_autoSyncActive)
+                {
+                    if (OssInFlightGridView.ColumnCount == 20)
+                    {
+                        AddSyncButtonToGridView(OssInFlightGridView);
+                    }
+                }
+                SetOssOrderDataGridHeaderTextAndColumnVisibility(OssInFlightGridView, OssOrdersGridTypes.Processing);   
             }
             else
             {
@@ -1294,17 +1337,7 @@ namespace IST.OrderSynchronizationSystem
         {
             OssOrdersDataGridView_CellContentClick_1(sender, e);
         }
-        private void OssInFlightGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            if (!_autoSyncActive)
-            {
-                if (((DataGridView) sender).ColumnCount == 20)
-                {
-                    AddSyncButtonToGridView((DataGridView) sender);
-                }
-            }
-            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.Processing);            
-        }
+        
         #endregion
         #region Fulfilled Handlers
         private void CompleteRefresh()
@@ -1313,6 +1346,7 @@ namespace IST.OrderSynchronizationSystem
             if (ossCompletedDataTable.Rows.Count > 0)
             {
                 OssCompletedGridView.DataSource = ossCompletedDataTable;
+                SetOssOrderDataGridHeaderTextAndColumnVisibility(OssCompletedGridView, OssOrdersGridTypes.Completed);
             }
             else
             {
@@ -1325,10 +1359,7 @@ namespace IST.OrderSynchronizationSystem
             }
             CompletedOrdersLabel.Text = "Total No. of Orders: " + ossCompletedDataTable.Rows.Count;
         }
-        private void OssCompletedGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.Completed);
-        }
+        
         private void OssExceptionGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             OssOrdersDataGridView_CellContentClick_1(sender, e);
@@ -1341,6 +1372,7 @@ namespace IST.OrderSynchronizationSystem
             if (ossOnHoldDatasource.Rows.Count > 0)
             {
                 OSSOrderOnHoldGridView.DataSource = ossOnHoldDatasource;
+                SetOssOrderDataGridHeaderTextAndColumnVisibility(OSSOrderOnHoldGridView, OssOrdersGridTypes.OnHold);
             }
             else
             {
@@ -1353,23 +1385,17 @@ namespace IST.OrderSynchronizationSystem
             }
             OnHoldOrdersLabel.Text = "Total No. of Orders: " + ossOnHoldDatasource.Rows.Count;
         }
-        private void OSSOrderOnHoldGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.OnHold);
-        }
+        
         #endregion
         #region Cancel handlers
-        private void OssOrdersCanceledOrders_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            SetOssOrderDataGridHeaderTextAndColumnVisibility((DataGridView)sender, OssOrdersGridTypes.Cancelled);
-        }
-
+        
         private void CancelRefresh()
         {
             DataTable ossCanceledTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.Canceled);
             if (ossCanceledTable.Rows.Count > 0)
             {
                 OssOrdersCanceledOrders.DataSource = ossCanceledTable;
+                SetOssOrderDataGridHeaderTextAndColumnVisibility(OssOrdersCanceledOrders, OssOrdersGridTypes.Cancelled);
             }
             else
             {
@@ -1418,6 +1444,10 @@ namespace IST.OrderSynchronizationSystem
         
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            if (_autoSyncActive)
+            {
+                _autoSyncOrder.cancellationTokenSource.Cancel();
+            }
             Close();
         }
 
@@ -1485,7 +1515,7 @@ namespace IST.OrderSynchronizationSystem
             EmailTextbox.Enabled =
                 PhoneTextbox.Enabled =
                     SyncMoldingBoxIntervalTextbox.Enabled = SyncNewOrderTextbox.Enabled = enableOrDisable;
-            LoadOrdersFromTHubButton.Enabled = DisplayStagingOrderButton.Enabled = enableOrDisable;
+            
         }
 
         private void ToolStripButton_ButtonClick(object sender, EventArgs e)
@@ -1522,7 +1552,23 @@ namespace IST.OrderSynchronizationSystem
                         CancelRefresh();
                         break;
                     }
-            }            
+            }
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            StopThread();
+        }
+        public delegate void ReloadGridsDelegate();
+        public ReloadGridsDelegate reloadGridsDelegate;
+
+        
+        private void MainFormTabControl_Selecting(object sender, TabControlCancelEventArgs e)
+        {
+            if (_autoSyncActive)
+            {
+                this.MainFormTabControl.SelectedIndex = 0;
+            }
         }
     }
 }

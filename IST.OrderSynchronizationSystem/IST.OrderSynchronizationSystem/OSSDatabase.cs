@@ -227,7 +227,7 @@ namespace IST.OrderSynchronizationSystem
             }            
         }
 
-        public void UpdateOrderTrackingAndOssStatus(StatusResponse response, long OrderKey)
+        public void UpdateOrderTrackingAndOssStatus(StatusResponse response, long OrderKey, string OrderChannelRefNumber, string serviceType)
         {
             using (TransactionScope scope = new TransactionScope())
             {
@@ -239,10 +239,10 @@ namespace IST.OrderSynchronizationSystem
                             sourceConnection))
                     {
                         command.Parameters.AddWithValue("@OrderKey", OrderKey);
-                        command.Parameters.AddWithValue("@TrackingUrl", response.TrackingURL);
+                        command.Parameters.AddWithValue("@RefNumberWeb", OrderChannelRefNumber);
                         command.Parameters.AddWithValue("@TrackingNumber", response.TrackingNumber);
                         command.Parameters.AddWithValue("@ShipmentDate", DateTime.Now);
-                        
+                        command.Parameters.AddWithValue("@ServiceType", serviceType);
                         sourceConnection.Open();
                         var itemsInserted = command.ExecuteNonQuery();
                     }

@@ -283,12 +283,14 @@ namespace IST.OrderSynchronizationSystem {
         ///           ([ORDER_KEY]
         ///           ,[REF_NUMBER_WEB]
         ///           ,[LeadTrackingNumber]
-        ///           ,[ShipDate])
+        ///           ,[ShipDate]
+        ///           ,[ServiceType])
         ///     VALUES
         ///           (@OrderKey
-        ///           ,@TrackingUrl
+        ///           ,@RefNumberWeb
         ///           ,@TrackingNumber
-        ///           ,@ShipmentDate)
+        ///           ,@ShipmentDate
+        ///           ,@ServiceType)
         ///    .
         /// </summary>
         internal static string staging_sql_InsertShipmentTrackingDetails {

@@ -352,12 +352,14 @@ where THubOrderReferenceNo = @OssOrderId </value>
            ([ORDER_KEY]
            ,[REF_NUMBER_WEB]
            ,[LeadTrackingNumber]
-           ,[ShipDate])
+           ,[ShipDate]
+           ,[ServiceType])
      VALUES
            (@OrderKey
-           ,@TrackingUrl
+           ,@RefNumberWeb
            ,@TrackingNumber
-           ,@ShipmentDate)
+           ,@ShipmentDate
+           ,@ServiceType)
     </value>
   </data>
   <data name="staging_sql_CreateOssOrders" xml:space="preserve">

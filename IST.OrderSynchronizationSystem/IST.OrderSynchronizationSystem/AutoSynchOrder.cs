@@ -26,7 +26,15 @@ namespace IST.OrderSynchronizationSystem
             {
                 mainForm.ApplicationStatusUpdate("Auto Synchronization of new orders started.");
                 AutoSyncNewOrders(mainForm);
-                mainForm.ReloadAllGrid();
+                //try
+                //{
+                //    mainForm.Invoke(mainForm.reloadGridsDelegate); 
+                //}
+                //catch (Exception exp)
+                //{
+                    
+                //}
+                
                 Thread.Sleep(frequency * 60000);
             }            
         }
@@ -34,6 +42,7 @@ namespace IST.OrderSynchronizationSystem
         public void ProcessMb(Form mainWindow, int frequency)
         {
             MainWindow mainForm = (MainWindow)mainWindow;
+            apiKey = mainForm.apiKey;
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
                 mainForm.ApplicationStatusUpdate("Auto Synchronization Moldingbox started.");
@@ -150,6 +159,7 @@ namespace IST.OrderSynchronizationSystem
                 ossOrderRow["SentToMB"] = true;
                 ossOrderRow["OrderStatus"] = (int)OSSOrderStatus.InFlight;
                 ossOrderRow["MBShipmentId"] = response.MBShipmentID.ToString();
+                ossOrderRow["MBShipmentSubmitError"] = string.Empty;
             }
             ossOrderRow["SentToMBOn"] = shipmentRequestSentOn;
             ossOrderRow["MBPostShipmentMessage"] = JsonConvert.SerializeObject(new OssShipmentMessage(apiKey, shipments));
@@ -193,6 +203,8 @@ namespace IST.OrderSynchronizationSystem
         {
             string mbShipmentID = ossOrderRow["MBShipmentId"].ToString();
             string orderId = ossOrderRow["THubOrderId"].ToString();
+            string orderChannelRefNumber = ossOrderRow["THubOrderReferenceNo"].ToString();
+            string mbShipmentMethod = ossOrderRow["MBShipmentMethod"].ToString();
             if (client == null)
             {
                 client = MoldingBoxHelper.GetMoldingBoxClient();
@@ -202,7 +214,7 @@ namespace IST.OrderSynchronizationSystem
             {
                 if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Completed) // Handle in processing
                 {
-                    mainProgram._orderSyncronizationDatabase.UpdateOrderTrackingAndOssStatus(statusResponse[0], long.Parse(orderId));
+                    mainProgram._orderSyncronizationDatabase.UpdateOrderTrackingAndOssStatus(statusResponse[0], long.Parse(orderId), orderChannelRefNumber, mbShipmentMethod);
                 }
                 else if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.InFlight || statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Recieved)
                 {
