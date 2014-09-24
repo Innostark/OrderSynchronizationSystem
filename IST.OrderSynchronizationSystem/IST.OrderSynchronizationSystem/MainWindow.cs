@@ -247,7 +247,7 @@ namespace IST.OrderSynchronizationSystem
         private void StartThread()
         {
             Task.Factory.StartNew(() => _autoSyncOrder.Process(this, _autoSyncFrequency), TaskCreationOptions.AttachedToParent);
-            //Task.Factory.StartNew(() => _autoSyncOrder.ProcessMb(this, _autoSyncMbFrequency), TaskCreationOptions.AttachedToParent);
+            Task.Factory.StartNew(() => _autoSyncOrder.ProcessMb(this, _autoSyncMbFrequency), TaskCreationOptions.AttachedToParent);
         }
         private void StopThread(bool formClosing = false)
         {
