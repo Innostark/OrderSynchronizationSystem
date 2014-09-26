@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,10 +24,6 @@ namespace IST.OrderSynchronizationSystem
         delegate void SetTextCallback(string text);
 
         private delegate void RefreshNewOrderGrid();
-
-        
-
-
         private delegate void SetGridColumnsVisibility(DataGridView gridView, OssOrdersGridTypes gridType);
         public OssDatabase _orderSyncronizationDatabase;
         private OSSConnection _sourceConnectionVariables;
@@ -393,6 +387,14 @@ namespace IST.OrderSynchronizationSystem
                 }
 
                 ossShipments = _orderSyncronizationDatabase.LoadShipmentsFromThub();
+
+                _orderSyncronizationDatabase.InsertShipmentsToStaging(ossShipments);
+                OssShipment firstOrDefault = ossShipments.OrderByDescending(ossShipment => ossShipment.ThubOrderId).FirstOrDefault();
+                if (firstOrDefault != null)
+                {
+                    _orderSyncronizationDatabase.GetOrSetMaximumOrderIdFetched(firstOrDefault.ThubOrderId);
+                }
+                ApplicationStatusUpdate("Manual synchronization complete.");
             }
             catch (Exception ex)
             {
@@ -404,13 +406,6 @@ namespace IST.OrderSynchronizationSystem
                 }
             }
 
-            _orderSyncronizationDatabase.InsertShipmentsToStaging(ossShipments);
-            OssShipment firstOrDefault = ossShipments.OrderByDescending(ossShipment => ossShipment.ThubOrderId).FirstOrDefault();
-            if (firstOrDefault != null)
-            {
-                _orderSyncronizationDatabase.GetOrSetMaximumOrderIdFetched(firstOrDefault.ThubOrderId);
-            }            
-            ApplicationStatusUpdate("Manual synchronization complete.");
         }
 
         private void SaveSourceButon_Click(object sender, EventArgs e)
@@ -442,30 +437,49 @@ namespace IST.OrderSynchronizationSystem
             }
             else
             {
-                _ossOrders = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.New);
-                if (_ossOrders.Rows.Count > 0)
+                try
                 {
-                    OssOrdersDataGridView.DataSource = _ossOrders;
-                    SetOssOrderDataGridHeaderTextAndColumnVisibility(OssOrdersDataGridView, OssOrdersGridTypes.New);
-                    if (!_autoSyncActive)
+
+                    _ossOrders = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.New);
+                    if (_ossOrders.Rows.Count > 0)
                     {
-                        if (OssOrdersDataGridView.ColumnCount == 20)
+                        OssOrdersDataGridView.DataSource = _ossOrders;
+                        SetOssOrderDataGridHeaderTextAndColumnVisibility(OssOrdersDataGridView, OssOrdersGridTypes.New);
+                        if (!_autoSyncActive)
                         {
-                            AddSendButtonToGridView(OssOrdersDataGridView);
+                            if (OssOrdersDataGridView.ColumnCount == 20)
+                            {
+                                AddSendButtonToGridView(OssOrdersDataGridView);
+                            }
+                            EnableDisableSendToMoldingBoxButton(OssOrdersDataGridView);
                         }
-                        EnableDisableSendToMoldingBoxButton(OssOrdersDataGridView);
                     }
+                    else
+                    {
+                        int count = OssOrdersDataGridView.Rows.Count;
+                        for (int i = 0; i < count; i++)
+                        {
+                            OssOrdersDataGridView.Rows.RemoveAt(0);
+                        }
+                        OssOrdersDataGridView.DataBindings.Clear();
+                        if (!_autoSyncActive)
+                        {
+                            MessageBox.Show("No New Order available is T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    NoOfOrdersLabel.Text = "No. of Order: " + _ossOrders.Rows.Count;
                 }
-                else
+                catch (Exception exception)
                 {
-                    OssOrdersDataGridView.DataBindings.Clear();
                     if (!_autoSyncActive)
                     {
-                        MessageBox.Show("No New Order available is T-Hub.", "Message", MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
+                        MessageBox.Show("There is some problem while loading orders. If problem persists, please check your database.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        SetApplicationStatusText("There is some problem while loading orders. If problem persists, please check your database.");
                     }
                 }
-                NoOfOrdersLabel.Text = "No. of Order: " + _ossOrders.Rows.Count;
             }
         }
         
@@ -1048,30 +1062,79 @@ namespace IST.OrderSynchronizationSystem
                 }
                 
             }
-        }        
-        
+        }
+
 
         private void OssOrdersDataGridView_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridView senderGrid = (DataGridView)sender;
+            DataGridView senderGrid = (DataGridView) sender;
+            if (string.IsNullOrEmpty(MoldinboxKeyTextBox.Text))
+            {
+                MessageBox.Show("Please specify apikey on confiuration tab.", "Error!", MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+                return;
+            }
             apiKey = MoldinboxKeyTextBox.Text;
-            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0 && !String.IsNullOrWhiteSpace(apiKey))
-            {                
-                if (((DataGridView)sender).Name == OssOrdersDataGridView.Name)
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0 &&
+                !String.IsNullOrWhiteSpace(apiKey))
+            {
+                if (((DataGridView) sender).Name == OssOrdersDataGridView.Name)
                 {
-                    HandleSendToMoldingBox(e, senderGrid);
+                    try
+                    {
+                        HandleSendToMoldingBox(e, senderGrid);
+                    }
+                    catch (Exception exception)
+                    {
+                        long orderId =
+                            long.Parse(((DataTable) senderGrid.DataSource).Rows[e.RowIndex]["THubOrderId"].ToString());
+                        _orderSyncronizationDatabase.LogOrder(1, orderId,
+                            string.Format("There is some problem while sending order to molding box.{0}.",
+                                exception.Message));
+                        MessageBox.Show(
+                            "There is some problem while sending order to moldingbox. Error details has been logged. If problem persists, please check Database, apikey and internet connectivity.",
+                            "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+
                 }
                 else if (((DataGridView) sender).Name == OssExceptionGridView.Name)
                 {
-                    HandleExceptionGridActions(e, senderGrid);
+                    try
+                    {
+                        HandleExceptionGridActions(e, senderGrid);
+                    }
+                    catch (Exception exception)
+                    {
+                        long orderId =
+                            long.Parse(((DataTable)senderGrid.DataSource).Rows[e.RowIndex]["THubOrderId"].ToString());
+                        _orderSyncronizationDatabase.LogOrder(1, orderId,
+                            string.Format("There is some problem while loading exceptional orders.{0}.",
+                                exception.Message));
+                        MessageBox.Show(
+                            "There is some problem while Loading exceptional orders. Please check database and hit refresh.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        
+                    }
+                    
                 }
                 else if (((DataGridView) sender).Name == OssInFlightGridView.Name)
                 {
-                    SyncWithMoldingBox(((DataTable)senderGrid.DataSource).Rows[e.RowIndex]);
+                    try
+                    {
+                        SyncWithMoldingBox(((DataTable)senderGrid.DataSource).Rows[e.RowIndex]);
+                    }
+                    catch (Exception exception)
+                    {
+                        long orderId =
+                            long.Parse(((DataTable)senderGrid.DataSource).Rows[e.RowIndex]["THubOrderId"].ToString());
+                        _orderSyncronizationDatabase.LogOrder(1, orderId,
+                            string.Format("There is some problem while checking order status on molding box.{0}.",
+                                exception.Message));
+                        MessageBox.Show("There is some problem while checking order status on molding box. Error has been logged. If problem persists, please check your database, apikey and internet connectivity.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);                        
+                    }                    
                 }
             }
         }
-        
+
         private void HandleSendToMoldingBox(DataGridViewCellEventArgs e, DataGridView senderGrid)        
         {
             MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
@@ -1143,24 +1206,56 @@ namespace IST.OrderSynchronizationSystem
             DataGridViewDisableButtonCell sendToMbButtonCell = (DataGridViewDisableButtonCell)senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex];
             if (sendToMbButtonCell.FormattedValue == CancelString)
             {
-                CancelMessageForm cancelMessageForm = new CancelMessageForm();
-                DialogResult results = cancelMessageForm.ShowDialog(this);
-                if (cancelMessageForm.Result == DialogResult.OK)
+                try
                 {
-                    DataRow ossOrderRow = ((DataTable)senderGrid.DataSource).Rows[e.RowIndex];
-                    ossOrderRow["CancelMessage"] = cancelMessageForm.CancelMessageString;
-                    ossOrderRow["OrderStatus"] = (int)OSSOrderStatus.Canceled;
-                    _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);                    
+                    CancelMessageForm cancelMessageForm = new CancelMessageForm();
+                    DialogResult results = cancelMessageForm.ShowDialog(this);
+                    if (cancelMessageForm.Result == DialogResult.OK)
+                    {
+                        DataRow ossOrderRow = ((DataTable)senderGrid.DataSource).Rows[e.RowIndex];
+                        ossOrderRow["CancelMessage"] = cancelMessageForm.CancelMessageString;
+                        ossOrderRow["OrderStatus"] = (int)OSSOrderStatus.Canceled;
+                        _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
+                    }
                 }
+                catch (Exception exception)
+                {                    
+                    _orderSyncronizationDatabase.LogOrder(1, long.Parse(((DataTable) senderGrid.DataSource).Rows[e.RowIndex]["THubOrderId"].ToString()),
+                        string.Format("Error while canceling order. Error: {0}", exception.Message));
+                    MessageBox.Show(
+                            "There is some problem while canceling the order. Error details have been logged. If problem persists, please check database.","Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                
             }
             else if (sendToMbButtonCell.Value == ReloadString)
             {
-                DataRow ossOrderRow = ((DataTable)senderGrid.DataSource).Rows[e.RowIndex];
-                _orderSyncronizationDatabase.ReloadShipmentToStaging(long.Parse(ossOrderRow["THubOrderId"].ToString()));
+                try
+                {
+                    DataRow ossOrderRow = ((DataTable)senderGrid.DataSource).Rows[e.RowIndex];
+                    _orderSyncronizationDatabase.ReloadShipmentToStaging(long.Parse(ossOrderRow["THubOrderId"].ToString()));
+                }
+                catch (Exception exception)
+                {
+
+                    _orderSyncronizationDatabase.LogOrder(1, long.Parse(((DataTable)senderGrid.DataSource).Rows[e.RowIndex]["THubOrderId"].ToString()),
+                        string.Format("Error while Reloading order. Error: {0}", exception.Message));
+                    MessageBox.Show("There is some problem while reloading the order. Error details have been logged. If problem persists, please check database.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                
             }
             else if (sendToMbButtonCell.Value == RePostString)
             {
-                RepostShipmentToBoldingBox(((DataTable) senderGrid.DataSource).Rows[e.RowIndex]);
+                try
+                {
+                    RepostShipmentToBoldingBox(((DataTable)senderGrid.DataSource).Rows[e.RowIndex]);
+                }
+                catch (Exception exception)
+                {
+                    _orderSyncronizationDatabase.LogOrder(1, long.Parse(((DataTable)senderGrid.DataSource).Rows[e.RowIndex]["THubOrderId"].ToString()),
+                        string.Format("Error while Re-Posting order. Error: {0}", exception.Message));
+                    MessageBox.Show("There is some problem while Re-Posting the order. Error details have been logged. If problem persists, please check database.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                
             }            
             DataTable ossExceptionDataTable = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.Exception);
             senderGrid.DataBindings.Clear();
@@ -1297,6 +1392,11 @@ namespace IST.OrderSynchronizationSystem
             }
             else
             {
+                int count = OssExceptionGridView.Rows.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    OssExceptionGridView.Rows.RemoveAt(0);
+                }
                 OssExceptionGridView.DataBindings.Clear();
                 if (!_autoSyncActive)
                 {
@@ -1325,6 +1425,11 @@ namespace IST.OrderSynchronizationSystem
             }
             else
             {
+                int count = OssInFlightGridView.Rows.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    OssInFlightGridView.Rows.RemoveAt(0);
+                }
                 OssInFlightGridView.DataBindings.Clear();
                 if (!_autoSyncActive)
                 {
@@ -1350,6 +1455,11 @@ namespace IST.OrderSynchronizationSystem
             }
             else
             {
+                int count = OssCompletedGridView.Rows.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    OssCompletedGridView.Rows.RemoveAt(0);
+                }
                 OssCompletedGridView.DataBindings.Clear();
                 if (!_autoSyncActive)
                 {
@@ -1376,6 +1486,11 @@ namespace IST.OrderSynchronizationSystem
             }
             else
             {
+                int count = OSSOrderOnHoldGridView.Rows.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    OSSOrderOnHoldGridView.Rows.RemoveAt(0);
+                }
                 OSSOrderOnHoldGridView.DataBindings.Clear();
                 if (!_autoSyncActive)
                 {
@@ -1399,6 +1514,11 @@ namespace IST.OrderSynchronizationSystem
             }
             else
             {
+                int count = OssOrdersCanceledOrders.Rows.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    OssOrdersCanceledOrders.Rows.RemoveAt(0);
+                }
                 OssOrdersCanceledOrders.DataBindings.Clear();
                 if (!_autoSyncActive)
                 {
@@ -1451,17 +1571,25 @@ namespace IST.OrderSynchronizationSystem
             Close();
         }
 
-        
-
-        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         private void shipmentMappingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShipmentMappingForm shimepForm = new ShipmentMappingForm(_orderSyncronizationDatabase);
-            shimepForm.ShowDialog(this);
+            try
+            {
+                if (string.IsNullOrEmpty(MoldinboxKeyTextBox.Text))
+                {
+                    MessageBox.Show("Please specify apikey on the configuration tab.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;                    
+                }
+                MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
+                shipmentMethods = client.Retrieve_Merchant_Shipping_Methods(MoldinboxKeyTextBox.Text);
+                ShipmentMappingForm shimepForm = new ShipmentMappingForm(_orderSyncronizationDatabase, shipmentMethods);
+                shimepForm.ShowDialog(this);
+            }
+            catch (Exception exception)
+            {
+                _orderSyncronizationDatabase.LogOrder(1, -1, string.Format("Error loading mappings. Error: {0}", exception.Message));
+                MessageBox.Show("There is some problem while loading mappings. Error details has been logged. Please check database if the problem persists.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }            
         }
 
         private void hideWhenMinimizedToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -1484,12 +1612,48 @@ namespace IST.OrderSynchronizationSystem
 
         public void ClearAllGrids()
         {
+            
             OssOrdersDataGridView.DataBindings.Clear();
+            int count = OssOrdersDataGridView.Rows.Count;
+            for (int i = 0; i < count; i++)
+            {
+                OssOrdersDataGridView.Rows.RemoveAt(0);
+            }
+
             OssExceptionGridView.DataBindings.Clear();
+            count = OssExceptionGridView.Rows.Count;
+            for (int i = 0; i < count; i++)
+            {
+                OssExceptionGridView.Rows.RemoveAt(0);
+            }
+
             OssInFlightGridView.DataBindings.Clear();
+            count = OssInFlightGridView.Rows.Count;
+            for (int i = 0; i < count; i++)
+            {
+                OssInFlightGridView.Rows.RemoveAt(0);
+            }
+
             OssOrdersCanceledOrders.DataBindings.Clear();
+            count = OssOrdersCanceledOrders.Rows.Count;
+            for (int i = 0; i < count; i++)
+            {
+                OssOrdersCanceledOrders.Rows.RemoveAt(0);
+            }
+
             OssCompletedGridView.DataBindings.Clear();
+            count = OssCompletedGridView.Rows.Count;
+            for (int i = 0; i < count; i++)
+            {
+                OssCompletedGridView.Rows.RemoveAt(0);
+            }
+
             OSSOrderOnHoldGridView.DataBindings.Clear();
+            count = OSSOrderOnHoldGridView.Rows.Count;
+            for (int i = 0; i < count; i++)
+            {
+                OSSOrderOnHoldGridView.Rows.RemoveAt(0);
+            }
         }
 
         public void ReloadAllGrid()
@@ -1520,39 +1684,50 @@ namespace IST.OrderSynchronizationSystem
 
         private void ToolStripButton_ButtonClick(object sender, EventArgs e)
         {
-            switch (MainFormTabControl.SelectedTab.Name)
+            try
             {
-                case "NewOrderTabPage":
-                    {
-                        LoadOrderFromStagingButton_Click(null, null);
-                        break;
-                    }
-                case "InFight":
-                    {
-                        InFlightRefresh();
-                        break;
-                    }
-                case "Exception":
-                    {
-                        ExceptionRefresh();
-                        break;
-                    }
-                case "Completed":
-                    {
-                        CompleteRefresh();
-                        break;
-                    }
-                case "OnHold":
-                    {
-                        OnHoldRefresh();
-                        break;
-                    }
-                case "Canceled":
-                    {
-                        CancelRefresh();
-                        break;
-                    }
+                switch (MainFormTabControl.SelectedTab.Name)
+                {
+                    case "NewOrderTabPage":
+                        {
+                            LoadOrderFromStagingButton_Click(null, null);
+                            break;
+                        }
+                    case "InFight":
+                        {
+                            InFlightRefresh();
+                            break;
+                        }
+                    case "Exception":
+                        {
+                            ExceptionRefresh();
+                            break;
+                        }
+                    case "Completed":
+                        {
+                            CompleteRefresh();
+                            break;
+                        }
+                    case "OnHold":
+                        {
+                            OnHoldRefresh();
+                            break;
+                        }
+                    case "Canceled":
+                        {
+                            CancelRefresh();
+                            break;
+                        }
+                }
             }
+            catch (Exception exception)
+            {
+                _orderSyncronizationDatabase.LogOrder(1, -1, string.Format("Error while refreshing tab {0}. Error: {1}", MainFormTabControl.SelectedTab.Name, exception.Message));
+                MessageBox.Show("Error while loading data. Please check your database and hit refresh again.", "Error!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                throw;
+            }
+            
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)

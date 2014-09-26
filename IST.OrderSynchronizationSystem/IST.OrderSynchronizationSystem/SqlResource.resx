@@ -415,4 +415,11 @@ where THubOrderReferenceNo = @OssOrderId </value>
       insert into OssLastSyncOrderDetail ([LastSynchOrderId]) values (@LastValuesReturn)
     </value>
   </data>
+<data name="source_UpdateMappingSql" xml:space="preserve">
+    <value>UPDATE [dbo].[OSSShipmentMappings]
+        SET [SourceShipmentMethod] = @SourceMethod
+        ,[DestinationShipmentMethod] = @DestinationMethod      
+      WHERE [OSSShipmentMappingsId] = @MappingID
+    </value>
+  </data>
 </root>

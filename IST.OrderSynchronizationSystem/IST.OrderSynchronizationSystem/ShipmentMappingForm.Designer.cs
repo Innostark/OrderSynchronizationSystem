@@ -30,16 +30,18 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShipmentMappingForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.MappingLabel = new System.Windows.Forms.Label();
             this.RefreshButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
             this.shipmentMappingGridView = new System.Windows.Forms.DataGridView();
-            this.MappingLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.shipmentMappingGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.MappingLabel);
             this.groupBox1.Controls.Add(this.RefreshButton);
             this.groupBox1.Controls.Add(this.CloseButton);
@@ -52,9 +54,28 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Shipment Mappings";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(398, 396);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "Save";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // MappingLabel
+            // 
+            this.MappingLabel.AutoSize = true;
+            this.MappingLabel.Location = new System.Drawing.Point(13, 398);
+            this.MappingLabel.Name = "MappingLabel";
+            this.MappingLabel.Size = new System.Drawing.Size(118, 13);
+            this.MappingLabel.TabIndex = 3;
+            this.MappingLabel.Text = "Total No. of Mappings: ";
+            // 
             // RefreshButton
             // 
-            this.RefreshButton.Location = new System.Drawing.Point(315, 396);
+            this.RefreshButton.Location = new System.Drawing.Point(235, 396);
             this.RefreshButton.Name = "RefreshButton";
             this.RefreshButton.Size = new System.Drawing.Size(75, 23);
             this.RefreshButton.TabIndex = 2;
@@ -64,7 +85,7 @@
             // 
             // CloseButton
             // 
-            this.CloseButton.Location = new System.Drawing.Point(396, 396);
+            this.CloseButton.Location = new System.Drawing.Point(316, 396);
             this.CloseButton.Name = "CloseButton";
             this.CloseButton.Size = new System.Drawing.Size(75, 23);
             this.CloseButton.TabIndex = 1;
@@ -82,21 +103,12 @@
             this.shipmentMappingGridView.Location = new System.Drawing.Point(13, 20);
             this.shipmentMappingGridView.MultiSelect = false;
             this.shipmentMappingGridView.Name = "shipmentMappingGridView";
-            this.shipmentMappingGridView.ReadOnly = true;
             this.shipmentMappingGridView.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.shipmentMappingGridView.RowHeadersVisible = false;
             this.shipmentMappingGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.shipmentMappingGridView.Size = new System.Drawing.Size(459, 371);
             this.shipmentMappingGridView.TabIndex = 0;
-            // 
-            // MappingLabel
-            // 
-            this.MappingLabel.AutoSize = true;
-            this.MappingLabel.Location = new System.Drawing.Point(13, 398);
-            this.MappingLabel.Name = "MappingLabel";
-            this.MappingLabel.Size = new System.Drawing.Size(118, 13);
-            this.MappingLabel.TabIndex = 3;
-            this.MappingLabel.Text = "Total No. of Mappings: ";
+            this.shipmentMappingGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.shipmentMappingGridView_DataError);
             // 
             // ShipmentMappingForm
             // 
@@ -125,5 +137,6 @@
         private System.Windows.Forms.Button CloseButton;
         private System.Windows.Forms.DataGridView shipmentMappingGridView;
         private System.Windows.Forms.Label MappingLabel;
+        private System.Windows.Forms.Button button1;
     }
 }

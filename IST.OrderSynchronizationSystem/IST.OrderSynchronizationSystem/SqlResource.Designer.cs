@@ -260,6 +260,19 @@ namespace IST.OrderSynchronizationSystem {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to UPDATE [dbo].[OSSShipmentMappings]
+        ///        SET [SourceShipmentMethod] = @SourceMethod
+        ///        ,[DestinationShipmentMethod] = @DestinationMethod      
+        ///      WHERE [OSSShipmentMappingsId] = @MappingID
+        ///    .
+        /// </summary>
+        internal static string source_UpdateMappingSql {
+            get {
+                return ResourceManager.GetString("source_UpdateMappingSql", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select DestinationShipmentMethod from OSSShipmentMappings where SourceShipmentMethod = @SourceShipment and THubToMBMap = @THubToMbFlag.
         /// </summary>
         internal static string staging_get_Shipment_Mapping_ThubToMoldingBox {

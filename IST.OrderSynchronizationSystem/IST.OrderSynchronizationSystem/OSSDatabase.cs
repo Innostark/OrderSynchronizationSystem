@@ -689,5 +689,29 @@ namespace IST.OrderSynchronizationSystem
             }
             return -1;
         }
+
+        public void UpdateMappings(IList<MBShimentMethodMappings> mappings)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+                {
+                    stagingDbconnection.Open();
+
+                    foreach (MBShimentMethodMappings mbShimentMethodMapping in mappings)
+                    {
+                        using (SqlCommand command = new SqlCommand(SqlResource.source_UpdateMappingSql, stagingDbconnection))
+                        {
+                            command.Parameters.AddWithValue("@SourceMethod", mbShimentMethodMapping.SourceShipmentMethod);
+                            command.Parameters.AddWithValue("@DestinationMethod", mbShimentMethodMapping.DestinationShipmentMethod);
+                            command.Parameters.AddWithValue("@MappingID", mbShimentMethodMapping.DestinationShipmentMethodID);
+                            var objectToReturn = command.ExecuteNonQuery();
+                        }
+                    }   
+                    stagingDbconnection.Close();
+                }
+                scope.Complete();
+            }
+        }
     }
 }
