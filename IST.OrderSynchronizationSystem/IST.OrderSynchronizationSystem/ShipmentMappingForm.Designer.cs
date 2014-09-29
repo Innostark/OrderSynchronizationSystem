@@ -52,7 +52,7 @@
             this.groupBox1.Size = new System.Drawing.Size(484, 431);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Shipment Mappings";
+            this.groupBox1.Text = "Shipment Methods Mappings";
             // 
             // button1
             // 
@@ -122,7 +122,7 @@
             this.MinimizeBox = false;
             this.Name = "ShipmentMappingForm";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Shipment Method Mappings";
             this.Load += new System.EventHandler(this.ShipmentMappingForm_Load);
             this.groupBox1.ResumeLayout(false);

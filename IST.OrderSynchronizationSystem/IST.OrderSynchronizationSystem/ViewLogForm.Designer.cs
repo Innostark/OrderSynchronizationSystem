@@ -109,6 +109,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ViewLogForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Orders Synchronization Logs";
             this.Load += new System.EventHandler(this.ViewLogForm_Load);
             this.groupBox1.ResumeLayout(false);

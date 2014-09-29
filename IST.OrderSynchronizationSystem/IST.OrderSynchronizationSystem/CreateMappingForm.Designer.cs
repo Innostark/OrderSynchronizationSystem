@@ -104,7 +104,7 @@
             this.MinimizeBox = false;
             this.Name = "CreateMappingForm";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Create Mapping";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

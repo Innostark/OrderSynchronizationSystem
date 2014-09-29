@@ -38,7 +38,9 @@ namespace IST.OrderSynchronizationSystem
         private string _stagingPassword = String.Empty;
         public string _defaultEmail = String.Empty;
         public string _defaultPhone = String.Empty;
-        private DataTable _ossOrders = null;
+
+        public string _defaultMbApiKey = string.Empty;
+            private DataTable _ossOrders = null;
         private ShippingMethod[] shipmentMethods;
         private bool hideWhenMinimized;
         public string apiKey;
@@ -345,6 +347,7 @@ namespace IST.OrderSynchronizationSystem
                     applicationSettings.Settings[dbSettings + "Password"].Value = password;
                     applicationSettings.Settings["DefaultEmail"].Value = EmailTextbox.Text;
                     applicationSettings.Settings["DefaultPhone"].Value = PhoneTextbox.Text;
+                    applicationSettings.Settings["MoldingBoxAPIKey"].Value = MoldinboxKeyTextBox.Text;
                 }
 
                 // Save the changes in App.config file.
@@ -544,8 +547,11 @@ namespace IST.OrderSynchronizationSystem
                 _defaultEmail = applicationSettings.Settings["DefaultEmail"].Value;
                 EmailTextbox.Text = _defaultEmail;
 
-                _defaultPhone = applicationSettings.Settings["DefaultPhone"].Value;
+                _defaultPhone = applicationSettings.Settings["DefaultPhone"].Value;                
                 PhoneTextbox.Text = _defaultPhone;
+
+                _defaultMbApiKey = applicationSettings.Settings["MoldingBoxAPIKey"].Value;
+                MoldinboxKeyTextBox.Text = _defaultMbApiKey;
             }
         }
 
@@ -1337,7 +1343,7 @@ namespace IST.OrderSynchronizationSystem
             if (string.IsNullOrEmpty(destinationMapping))
             {
                 CreateMappingForm form = new CreateMappingForm(_orderSyncronizationDatabase, shipment.WebShipMethod, moldingBoxShippingMethods);
-                DialogResult result = form.ShowDialog();
+                DialogResult result = form.ShowDialog(this);
                 if (form.DialogResult == DialogResult.OK)
                 {
                     shipment.ShippingMethodID = form.MbShipMethodId;
@@ -1353,7 +1359,7 @@ namespace IST.OrderSynchronizationSystem
                     return mbShipMethod.Method;
                 }
                 CreateMappingForm form = new CreateMappingForm(_orderSyncronizationDatabase, shipment.WebShipMethod, moldingBoxShippingMethods, true);
-                DialogResult result = form.ShowDialog();
+                DialogResult result = form.ShowDialog(this);
                 if (form.DialogResult == DialogResult.OK)
                 {
                     shipment.ShippingMethodID = form.MbShipMethodId;
@@ -1553,7 +1559,14 @@ namespace IST.OrderSynchronizationSystem
         #endregion
         private void MainWindow_Resize(object sender, EventArgs e)
         {            
-            notifyIcon.BalloonTipText = "Running";
+            if(_autoSyncActive)
+            notifyIcon.BalloonTipText = "Auto Synchronization Running.";
+            else
+            {
+                notifyIcon.BalloonTipText = "Auto Synchronization Pasued.";
+            }
+
+
             notifyIcon.BalloonTipTitle = "Order Synchronization System.";
             if (hideWhenMinimized && this.WindowState == FormWindowState.Minimized)
             {
@@ -1563,7 +1576,7 @@ namespace IST.OrderSynchronizationSystem
             }
             else if (FormWindowState.Normal == WindowState)
             {
-                notifyIcon.Visible = false;
+                //notifyIcon.Visible = false;
                 Show();
                 ShowInTaskbar = true;
             }
@@ -1740,6 +1753,7 @@ namespace IST.OrderSynchronizationSystem
                             break;
                         }
                 }
+                ApplicationStatusUpdate("Ready!");
             }
             catch (Exception exception)
             {
@@ -1753,7 +1767,8 @@ namespace IST.OrderSynchronizationSystem
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            StopThread();
+            StopThread(true);
+            notifyIcon.Visible = false;
         }
         public delegate void ReloadGridsDelegate();
         public ReloadGridsDelegate reloadGridsDelegate;

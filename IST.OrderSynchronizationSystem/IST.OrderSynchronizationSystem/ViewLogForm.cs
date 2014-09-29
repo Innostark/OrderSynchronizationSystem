@@ -28,13 +28,16 @@ namespace IST.OrderSynchronizationSystem
         {
             try
             {
-                var results = MessageBox.Show("Are you sure you want to clear all logs? This operation is irreversible. Press ok to proceed.",
-                    "Clear all logs?", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                var results =
+                    MessageBox.Show(
+                        "Are you sure you want to clear all logs? This operation is irreversible. Press ok to proceed.",
+                        "Clear all logs?", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (results == DialogResult.OK)
                 {
                     synchronizationDatabase.ClearAllLogs();
                     LogsGridView.DataBindings.Clear();
-                    for (int i = 0; i < LogsGridView.Rows.Count; i++)
+                    int count = LogsGridView.Rows.Count;
+                    for (int i = 0; i < count; i++)
                     {
                         LogsGridView.Rows.RemoveAt(0);
                     }

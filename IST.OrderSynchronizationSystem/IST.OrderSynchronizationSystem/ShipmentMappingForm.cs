@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using IST.OrderSynchronizationSystem.MBAPI;
 
@@ -49,10 +43,12 @@ namespace IST.OrderSynchronizationSystem
                 {
                     shipmentMappingGridView.DataSource = shipmentMapping;
                     AddComboBoxColumn();
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].Visible = false;
+                    HideIdColumn();
                 }
-                shipmentMappingGridView.Columns["DestinationShipmentMethod"].Visible = false;
+                
                 MappingLabel.Text = "Total No. of Mappings: " + shipmentMapping.Rows.Count;
-                HideIdColumn();
+                
             }
             catch (Exception exception)
             {
@@ -78,9 +74,10 @@ namespace IST.OrderSynchronizationSystem
                     shipmentMappingGridView.Columns.Clear();
                     shipmentMappingGridView.DataSource = shipmentMapping;
                     AddComboBoxColumn();
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].Visible = false;
+                    HideIdColumn();
                 }
-                shipmentMappingGridView.Columns["DestinationShipmentMethod"].Visible = false;
-                HideIdColumn();
+                
                 MappingLabel.Text = "Total No. of Mappings: " + shipmentMapping.Rows.Count;
             }            
             catch (Exception exception)
@@ -128,6 +125,7 @@ namespace IST.OrderSynchronizationSystem
                     synchronizationDatabase.UpdateMappings(mappings);
                 }
                 button1.Enabled = false;
+                MessageBox.Show("Mappings saved.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception exception)
             {
@@ -142,19 +140,27 @@ namespace IST.OrderSynchronizationSystem
             for (int i = 0; i < shipmentMappingGridView.Rows.Count; i++)
             {
                 DataGridViewComboBoxCell cell = shipmentMappingGridView.Rows[i].Cells["MethodCombobox"] as DataGridViewComboBoxCell;
-                if (cell != null && cell.FormattedValue != null && string.IsNullOrEmpty(cell.FormattedValue.ToString()))
+                //if (cell != null && cell.FormattedValue != null && string.IsNullOrEmpty(cell.FormattedValue.ToString()))
+                //{
+                //    MessageBox.Show("Please enter all mappings.");
+                //    return null;
+                //}
+                if (cell != null && cell.FormattedValue != null && !string.IsNullOrEmpty(cell.FormattedValue.ToString()))
                 {
-                    MessageBox.Show("Please enter all mappings.");
-                    return null;
-                }
-                MBShimentMethodMappings mapping = new MBShimentMethodMappings()
-                {
-                    DestinationShipmentMethodID = shipmentMappingGridView.Rows[i].Cells["OSSShipmentMappingsId"].Value.ToString(),
-                    SourceShipmentMethod = shipmentMappingGridView.Rows[i].Cells["SourceShipmentMethod"].Value.ToString(),
-                    DestinationShipmentMethod = shipmentMappingGridView.Rows[i].Cells["MethodCombobox"].Value != null ?  shipmentMappingGridView.Rows[i].Cells["MethodCombobox"].Value.ToString() : string.Empty,
+                    MBShimentMethodMappings mapping = new MBShimentMethodMappings()
+                    {
+                        DestinationShipmentMethodID =
+                            shipmentMappingGridView.Rows[i].Cells["OSSShipmentMappingsId"].Value.ToString(),
+                        SourceShipmentMethod =
+                            shipmentMappingGridView.Rows[i].Cells["SourceShipmentMethod"].Value.ToString(),
+                        DestinationShipmentMethod =
+                            shipmentMappingGridView.Rows[i].Cells["MethodCombobox"].Value != null
+                                ? shipmentMappingGridView.Rows[i].Cells["MethodCombobox"].Value.ToString()
+                                : string.Empty,
 
-                };
-                mappingsToSave.Add(mapping); 
+                    };
+                    mappingsToSave.Add(mapping);
+                }
             }
             return mappingsToSave;
         }

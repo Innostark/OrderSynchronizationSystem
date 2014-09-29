@@ -183,6 +183,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DatabaseScripts\StagingDatabaseScript.sql" />
+    <Content Include="Resources\Application.ico" />
     <Content Include="Resources\loading1.png" />
     <Content Include="Resources\ModingBoxToTHubSynchronise.ico" />
     <Content Include="Resources\ModingBoxToTHubSynchronise.png" />
