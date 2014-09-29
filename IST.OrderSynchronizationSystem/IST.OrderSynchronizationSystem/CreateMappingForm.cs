@@ -12,7 +12,8 @@ namespace IST.OrderSynchronizationSystem
         public string MbShipMethod;
         private readonly OssDatabase database;
         public DialogResult Result;
-        public CreateMappingForm(OssDatabase database, string tHubWebShipMethod, ShippingMethod[] moldingBoxWebShipmentMethod)
+        private bool UpdateShipmentMapping;
+        public CreateMappingForm(OssDatabase database, string tHubWebShipMethod, ShippingMethod[] moldingBoxWebShipmentMethod, bool updateShipment = false)
         {
             this.moldingBoxWebShipmentMethod = moldingBoxWebShipmentMethod;
             this.database = database;
@@ -21,7 +22,7 @@ namespace IST.OrderSynchronizationSystem
             LoadShipmentDropdown();
             tHubShipMethod.Text = tHubWebShipMethod;
             tHubShipMethod.ReadOnly = true;
-            
+            UpdateShipmentMapping = updateShipment;
         }
 
         private void LoadShipmentDropdown()
@@ -43,10 +44,21 @@ namespace IST.OrderSynchronizationSystem
         {
             try
             {
-                if (database.SaveThubToMbMapping(tHubWebShipMethod, MbShipMethod, true))
+                if (!UpdateShipmentMapping)
                 {
-                    this.DialogResult = DialogResult.OK;
-                    Close();
+                    if (database.SaveThubToMbMapping(tHubWebShipMethod, MbShipMethod, true))
+                    {
+                        DialogResult = DialogResult.OK;
+                        Close();
+                    }
+                }
+                else
+                {
+                    if (database.UpdateThubToMbMapping(tHubWebShipMethod, MbShipMethod, true))
+                    {
+                        DialogResult = DialogResult.OK;
+                        Close();
+                    }
                 }
             }
             catch (Exception ex)

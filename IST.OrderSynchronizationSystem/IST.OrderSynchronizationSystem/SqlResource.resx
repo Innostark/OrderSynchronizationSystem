@@ -385,6 +385,12 @@ where THubOrderReferenceNo = @OssOrderId </value>
            @THubToMBMap)
     </value>
   </data>
+  <data name="staging_sql_UpdateTHubToMbMapping" xml:space="preserve">
+    <value>Update [OSSShipmentMappings]
+           set [DestinationShipmentMethod] = @DestinationShipMethod
+           where [SourceShipmentMethod] = @SourceShipMethod
+    </value>
+  </data>
   <data name="source_LoadShipmentMapping" xml:space="preserve">
     <value>SELECT [OSSShipmentMappingsId]
       ,[SourceShipmentMethod]

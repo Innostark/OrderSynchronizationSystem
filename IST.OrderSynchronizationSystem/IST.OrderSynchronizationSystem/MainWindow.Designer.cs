@@ -39,9 +39,6 @@
             this.shipmentMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewSystemLogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideWhenMinimizedToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.errorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainFormTabControl = new System.Windows.Forms.TabControl();
             this.ConfigurationTabPage = new System.Windows.Forms.TabPage();
             this.splitter1 = new System.Windows.Forms.Splitter();
@@ -152,8 +149,7 @@
             // 
             this.ApplicationMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.viewToolStripMenuItem,
-            this.toolsToolStripMenuItem});
+            this.viewToolStripMenuItem});
             this.ApplicationMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.ApplicationMenuStrip.Name = "ApplicationMenuStrip";
             this.ApplicationMenuStrip.Size = new System.Drawing.Size(1234, 24);
@@ -171,7 +167,7 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -205,27 +201,6 @@
             this.hideWhenMinimizedToolStripMenuItem1.Size = new System.Drawing.Size(192, 22);
             this.hideWhenMinimizedToolStripMenuItem1.Text = "Hide When &Minimized";
             this.hideWhenMinimizedToolStripMenuItem1.Click += new System.EventHandler(this.hideWhenMinimizedToolStripMenuItem1_Click);
-            // 
-            // toolsToolStripMenuItem
-            // 
-            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.errorsToolStripMenuItem,
-            this.logToolStripMenuItem});
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-            this.toolsToolStripMenuItem.Text = "Tools";
-            // 
-            // errorsToolStripMenuItem
-            // 
-            this.errorsToolStripMenuItem.Name = "errorsToolStripMenuItem";
-            this.errorsToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
-            this.errorsToolStripMenuItem.Text = "Errors";
-            // 
-            // logToolStripMenuItem
-            // 
-            this.logToolStripMenuItem.Name = "logToolStripMenuItem";
-            this.logToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
-            this.logToolStripMenuItem.Text = "Log";
             // 
             // MainFormTabControl
             // 
@@ -1053,6 +1028,7 @@
             this.Controls.Add(this.MainFormTabControl);
             this.Controls.Add(this.ApplicationStatusStrip);
             this.Controls.Add(this.ApplicationMenuStrip);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.ApplicationMenuStrip;
@@ -1116,9 +1092,6 @@
         private System.Windows.Forms.MenuStrip ApplicationMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem errorsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem logToolStripMenuItem;
         private System.Windows.Forms.TabControl MainFormTabControl;
         private System.Windows.Forms.TabPage ConfigurationTabPage;
         private System.Windows.Forms.GroupBox StagingDbGroupBox;

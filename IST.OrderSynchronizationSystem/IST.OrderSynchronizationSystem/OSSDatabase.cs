@@ -558,6 +558,19 @@ namespace IST.OrderSynchronizationSystem
                 }
             }
         }
+        public bool UpdateThubToMbMapping(string sourceShipMethod, string destinationShipMethod, bool THubToMbMap)
+        {
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(SqlResource.staging_sql_UpdateTHubToMbMapping, stagingDbconnection))
+                {
+                    command.Parameters.AddWithValue("@SourceShipMethod", sourceShipMethod);
+                    command.Parameters.AddWithValue("@DestinationShipMethod", destinationShipMethod);                    
+                    stagingDbconnection.Open();
+                    return command.ExecuteNonQuery() > 0;
+                }
+            }
+        }
 
         public DataTable LoadMappingsFromStagingDatabase()
         {

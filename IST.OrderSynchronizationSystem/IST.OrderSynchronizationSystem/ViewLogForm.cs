@@ -34,7 +34,11 @@ namespace IST.OrderSynchronizationSystem
                 {
                     synchronizationDatabase.ClearAllLogs();
                     LogsGridView.DataBindings.Clear();
-                    LogsLabel.Text = "Total No. of Logs: 0";
+                    for (int i = 0; i < LogsGridView.Rows.Count; i++)
+                    {
+                        LogsGridView.Rows.RemoveAt(0);
+                    }
+                    LogsLabel.Text = "Total No. of Logs: 0";                    
                 }
             }
             catch (Exception exception)

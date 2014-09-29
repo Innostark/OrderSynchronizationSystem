@@ -36,8 +36,8 @@ namespace IST.OrderSynchronizationSystem
         private string _stagingDatabase = String.Empty;
         private string _stagingUsername = String.Empty;
         private string _stagingPassword = String.Empty;
-        private string _defaultEmail = String.Empty;
-        private string _defaultPhone = String.Empty;
+        public string _defaultEmail = String.Empty;
+        public string _defaultPhone = String.Empty;
         private DataTable _ossOrders = null;
         private ShippingMethod[] shipmentMethods;
         private bool hideWhenMinimized;
@@ -221,7 +221,12 @@ namespace IST.OrderSynchronizationSystem
             {
                 FormErrorProvider.SetError(SyncMoldingBoxIntervalTextbox, Resources.MainWindow_Required_Field);
                 isValid = false;
-            }            
+            }
+            if (string.IsNullOrEmpty(MoldinboxKeyTextBox.Text))
+            {
+                FormErrorProvider.SetError(MoldinboxKeyTextBox, Resources.MainWindow_Required_Field);
+                isValid = false;
+            }
             if (!string.IsNullOrEmpty(SyncMoldingBoxIntervalTextbox.Text) && int.TryParse(SyncMoldingBoxIntervalTextbox.Text, out minutes))
             {
                 if (minutes > 999 || minutes < 2)
@@ -243,6 +248,10 @@ namespace IST.OrderSynchronizationSystem
             Task.Factory.StartNew(() => _autoSyncOrder.Process(this, _autoSyncFrequency), TaskCreationOptions.AttachedToParent);
             Task.Factory.StartNew(() => _autoSyncOrder.ProcessMb(this, _autoSyncMbFrequency), TaskCreationOptions.AttachedToParent);
         }
+        /// <summary>
+        /// Stops the ongoing thread.
+        /// </summary>
+        /// <param name="formClosing">Checks if form is not closing, then clear all grids.</param>
         private void StopThread(bool formClosing = false)
         {
             _autoSyncOrder.cancellationTokenSource.Cancel();
@@ -1289,6 +1298,11 @@ namespace IST.OrderSynchronizationSystem
                 {
                     _orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId), OSSOrderStatus.Canceled);
                 }
+                else
+                {
+                    _orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId), OSSOrderStatus.Exception);
+                    _orderSyncronizationDatabase.LogOrder(1, long.Parse(orderId), string.Format("Order status check returns an exceptional response. Response Message: '{0}'", statusResponse[0].ErrorMessage));
+                }
             }            
         }
         private void SetOrderStatus(DataRow ossOrderRow, DateTime shipmentRequestSentOn, string MBShipmentMethod, Response[] responses, OssShipment[] shipments)
@@ -1336,7 +1350,13 @@ namespace IST.OrderSynchronizationSystem
                     shipment.ShippingMethodID = mbShipMethod.ID;
                     return mbShipMethod.Method;
                 }
-                
+                CreateMappingForm form = new CreateMappingForm(_orderSyncronizationDatabase, shipment.WebShipMethod, moldingBoxShippingMethods, true);
+                DialogResult result = form.ShowDialog();
+                if (form.DialogResult == DialogResult.OK)
+                {
+                    shipment.ShippingMethodID = form.MbShipMethodId;
+                    return form.MbShipMethod;
+                }
             }
             return string.Empty;
         }
@@ -1357,13 +1377,13 @@ namespace IST.OrderSynchronizationSystem
                 Custom4 = source.Custom4,
                 Custom5 = source.Custom5,
                 Custom6 = source.Custom6,
-                Email = source.Email,                
+                Email = string.IsNullOrEmpty(source.Email)? EmailTextbox.Text : string.Empty,                
                 FirstName = source.FirstName,
                 Items = source.Items,
                 LastName = source.LastName,
                 OrderID = source.OrderID,
                 Orderdate = source.Orderdate,
-                Phone = source.Phone,
+                Phone = string.IsNullOrEmpty(source.Phone)? PhoneTextbox.Text :string.Empty,
                 ShippingMethodID = source.ShippingMethodID,
                 State = source.State,
                 Zip = source.Zip

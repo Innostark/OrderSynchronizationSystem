@@ -339,6 +339,18 @@ namespace IST.OrderSynchronizationSystem {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update [OSSShipmentMappings]
+        ///           set [DestinationShipmentMethod] = @DestinationShipMethod
+        ///           where [SourceShipmentMethod] = @SourceShipMethod
+        ///    .
+        /// </summary>
+        internal static string staging_sql_UpdateTHubToMbMapping {
+            get {
+                return ResourceManager.GetString("staging_sql_UpdateTHubToMbMapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select count(*) from OSSOrders With(NoLock).
         /// </summary>
         internal static string staging_sql_verify {

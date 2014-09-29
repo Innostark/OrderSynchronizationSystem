@@ -94,7 +94,8 @@ namespace IST.OrderSynchronizationSystem
             {
                 SetOrderStatusForMissingShipmentmethod(ossOrderRow, "Shipment method mapping does not exist. Please repost this order manually.");
                 mainProgram._orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
-                //TODO: Log it
+                mainProgram._orderSyncronizationDatabase.LogOrder(1, long.Parse(ossOrderRow["THubOrderId"].ToString()), "Mapping missing for order.");
+                mainProgram.ApplicationStatusUpdate("Shipment method Mapping missing for order.");
             }
             else 
             {
@@ -103,21 +104,25 @@ namespace IST.OrderSynchronizationSystem
                 {
                     SetOrderStatusForMissingShipmentmethod(ossOrderRow, "Shipment method mapping has been changed on molding box. Please repost this order manually.");
                     mainProgram._orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
+                    mainProgram._orderSyncronizationDatabase.LogOrder(1, long.Parse(ossOrderRow["THubOrderId"].ToString()), "Mapping missing for order.");
+                    mainProgram.ApplicationStatusUpdate("Shipment method Mapping missing for order.");
                 }
                 else
                 {
                     shipments[0].ShippingMethodID = mbShipMethod.ID;
                     Shipment[] shipmentsToPost = new Shipment[1];
-                    shipmentsToPost[0] = CreateFrom(shipments[0]);
+                    shipmentsToPost[0] = CreateFrom(shipments[0], mainProgram);
                     DateTime shipmentRequestSentOn = DateTime.Now;
                     Response[] responses = MoldingBoxHelper.PostShipment(client, apiKey, shipmentsToPost);
                     SetOrderStatus(ossOrderRow, shipmentRequestSentOn, mbShipMethod.Method, responses, shipments);
                     mainProgram._orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
+                    mainProgram._orderSyncronizationDatabase.LogOrder(1, long.Parse(ossOrderRow["THubOrderId"].ToString()), "Order Successfully posted on Molding Box.");
+                    mainProgram.ApplicationStatusUpdate("Order successfully shipped to Moldingbox.");
                 }
             }
 
         }
-        private Shipment CreateFrom(OssShipment source)
+        private Shipment CreateFrom(OssShipment source, MainWindow mainWindow)
         {
             return new Shipment
             {
@@ -133,13 +138,13 @@ namespace IST.OrderSynchronizationSystem
                 Custom4 = source.Custom4,
                 Custom5 = source.Custom5,
                 Custom6 = source.Custom6,
-                Email = source.Email,
+                Email = string.IsNullOrEmpty(source.Email) ? mainWindow._defaultEmail :string.Empty,
                 FirstName = source.FirstName,
                 Items = source.Items,
                 LastName = source.LastName,
                 OrderID = source.OrderID,
                 Orderdate = source.Orderdate,
-                Phone = source.Phone,
+                Phone = string.IsNullOrEmpty(source.Phone) ? mainWindow._defaultPhone : string.Empty,
                 ShippingMethodID = source.ShippingMethodID,
                 State = source.State,
                 Zip = source.Zip
@@ -228,6 +233,11 @@ namespace IST.OrderSynchronizationSystem
                 else if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Canceled)
                 {
                     mainProgram._orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId), OSSOrderStatus.Canceled);
+                }
+                else
+                {
+                    mainProgram._orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId), OSSOrderStatus.Exception);
+                    mainProgram._orderSyncronizationDatabase.LogOrder(1, long.Parse(orderId), string.Format("Order status check returns an exceptional response. Response Message: '{0}'", statusResponse[0].ErrorMessage));
                 }
             } 
         }
