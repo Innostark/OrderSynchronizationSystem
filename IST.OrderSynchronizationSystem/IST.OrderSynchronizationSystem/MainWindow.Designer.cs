@@ -52,17 +52,13 @@
             this.MoldingBoxApiKeyLabel = new System.Windows.Forms.Label();
             this.SynchronizeButton = new System.Windows.Forms.Button();
             this.AutomaticOrderSynchronizeSettingsGroupBox = new System.Windows.Forms.GroupBox();
-            this.SyncMoldingBoxIntervalTextbox = new System.Windows.Forms.MaskedTextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.SyncNewOrderTextbox = new System.Windows.Forms.MaskedTextBox();
             this.SynchronizeIntervalMinutesLabel = new System.Windows.Forms.Label();
             this.SynchronizeIntervalLabel = new System.Windows.Forms.Label();
             this.StagingDbGroupBox = new System.Windows.Forms.GroupBox();
-            this.CancelStagingButton = new System.Windows.Forms.Button();
             this.StagingServerTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.SaveStagingButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -70,7 +66,6 @@
             this.StagingPasswordTextBox = new System.Windows.Forms.TextBox();
             this.StagingUsernameTextBox = new System.Windows.Forms.TextBox();
             this.SourceGroupBox = new System.Windows.Forms.GroupBox();
-            this.CancelSourceButton = new System.Windows.Forms.Button();
             this.SaveSourceButon = new System.Windows.Forms.Button();
             this.SourcePasswordTextBox = new System.Windows.Forms.TextBox();
             this.SourceUsernameTextBox = new System.Windows.Forms.TextBox();
@@ -113,6 +108,10 @@
             this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.ToolStripButton = new System.Windows.Forms.ToolStripSplitButton();
             this.ApplicationStatusStrip = new System.Windows.Forms.StatusStrip();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.SyncNewOrderTextbox = new System.Windows.Forms.TextBox();
+            this.SyncMoldingBoxIntervalTextbox = new System.Windows.Forms.TextBox();
             this.ApplicationMenuStrip.SuspendLayout();
             this.MainFormTabControl.SuspendLayout();
             this.ConfigurationTabPage.SuspendLayout();
@@ -143,6 +142,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.ApplicationStatusStrip.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
             // ApplicationMenuStrip
@@ -167,7 +168,7 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -222,10 +223,11 @@
             // ConfigurationTabPage
             // 
             this.ConfigurationTabPage.BackColor = System.Drawing.Color.Transparent;
+            this.ConfigurationTabPage.Controls.Add(this.groupBox7);
+            this.ConfigurationTabPage.Controls.Add(this.groupBox6);
             this.ConfigurationTabPage.Controls.Add(this.splitter1);
             this.ConfigurationTabPage.Controls.Add(this.groupBox4);
             this.ConfigurationTabPage.Controls.Add(this.MoldingBoxApiKeyGroupBox);
-            this.ConfigurationTabPage.Controls.Add(this.SynchronizeButton);
             this.ConfigurationTabPage.Controls.Add(this.AutomaticOrderSynchronizeSettingsGroupBox);
             this.ConfigurationTabPage.Controls.Add(this.StagingDbGroupBox);
             this.ConfigurationTabPage.Controls.Add(this.SourceGroupBox);
@@ -252,24 +254,24 @@
             this.groupBox4.Controls.Add(this.EmailTextbox);
             this.groupBox4.Controls.Add(this.label5);
             this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.groupBox4.Location = new System.Drawing.Point(8, 252);
+            this.groupBox4.Location = new System.Drawing.Point(8, 156);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(494, 55);
+            this.groupBox4.Size = new System.Drawing.Size(458, 55);
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Default Phone/Email ";
             // 
             // PhoneTextbox
             // 
-            this.PhoneTextbox.Location = new System.Drawing.Point(302, 19);
+            this.PhoneTextbox.Location = new System.Drawing.Point(278, 19);
             this.PhoneTextbox.Name = "PhoneTextbox";
-            this.PhoneTextbox.Size = new System.Drawing.Size(180, 20);
+            this.PhoneTextbox.Size = new System.Drawing.Size(174, 20);
             this.PhoneTextbox.TabIndex = 18;
             // 
             // phoneLabel
             // 
             this.phoneLabel.AutoSize = true;
-            this.phoneLabel.Location = new System.Drawing.Point(245, 23);
+            this.phoneLabel.Location = new System.Drawing.Point(234, 22);
             this.phoneLabel.Name = "phoneLabel";
             this.phoneLabel.Size = new System.Drawing.Size(38, 13);
             this.phoneLabel.TabIndex = 17;
@@ -277,9 +279,9 @@
             // 
             // EmailTextbox
             // 
-            this.EmailTextbox.Location = new System.Drawing.Point(69, 20);
+            this.EmailTextbox.Location = new System.Drawing.Point(69, 19);
             this.EmailTextbox.Name = "EmailTextbox";
-            this.EmailTextbox.Size = new System.Drawing.Size(162, 20);
+            this.EmailTextbox.Size = new System.Drawing.Size(145, 20);
             this.EmailTextbox.TabIndex = 16;
             // 
             // label5
@@ -295,9 +297,9 @@
             // 
             this.MoldingBoxApiKeyGroupBox.Controls.Add(this.MoldinboxKeyTextBox);
             this.MoldingBoxApiKeyGroupBox.Controls.Add(this.MoldingBoxApiKeyLabel);
-            this.MoldingBoxApiKeyGroupBox.Location = new System.Drawing.Point(8, 178);
+            this.MoldingBoxApiKeyGroupBox.Location = new System.Drawing.Point(12, 217);
             this.MoldingBoxApiKeyGroupBox.Name = "MoldingBoxApiKeyGroupBox";
-            this.MoldingBoxApiKeyGroupBox.Size = new System.Drawing.Size(994, 68);
+            this.MoldingBoxApiKeyGroupBox.Size = new System.Drawing.Size(454, 68);
             this.MoldingBoxApiKeyGroupBox.TabIndex = 4;
             this.MoldingBoxApiKeyGroupBox.TabStop = false;
             this.MoldingBoxApiKeyGroupBox.Text = "Molding Box API Key";
@@ -308,16 +310,16 @@
             this.MoldinboxKeyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.MoldinboxKeyTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MoldinboxKeyTextBox.ForeColor = System.Drawing.Color.DarkRed;
-            this.MoldinboxKeyTextBox.Location = new System.Drawing.Point(69, 33);
+            this.MoldinboxKeyTextBox.Location = new System.Drawing.Point(65, 32);
             this.MoldinboxKeyTextBox.Name = "MoldinboxKeyTextBox";
-            this.MoldinboxKeyTextBox.Size = new System.Drawing.Size(862, 20);
+            this.MoldinboxKeyTextBox.Size = new System.Drawing.Size(379, 20);
             this.MoldinboxKeyTextBox.TabIndex = 15;
             this.MoldinboxKeyTextBox.Text = "MBLLTAtOr8wKNI2Z44oPj2s81Hea6F";
             // 
             // MoldingBoxApiKeyLabel
             // 
             this.MoldingBoxApiKeyLabel.AutoSize = true;
-            this.MoldingBoxApiKeyLabel.Location = new System.Drawing.Point(29, 33);
+            this.MoldingBoxApiKeyLabel.Location = new System.Drawing.Point(25, 33);
             this.MoldingBoxApiKeyLabel.Name = "MoldingBoxApiKeyLabel";
             this.MoldingBoxApiKeyLabel.Size = new System.Drawing.Size(30, 15);
             this.MoldingBoxApiKeyLabel.TabIndex = 16;
@@ -327,11 +329,11 @@
             // 
             this.SynchronizeButton.Image = global::IST.OrderSynchronizationSystem.Properties.Resources.PlayImage;
             this.SynchronizeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.SynchronizeButton.Location = new System.Drawing.Point(892, 313);
+            this.SynchronizeButton.Location = new System.Drawing.Point(6, 23);
             this.SynchronizeButton.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.SynchronizeButton.Name = "SynchronizeButton";
             this.SynchronizeButton.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
-            this.SynchronizeButton.Size = new System.Drawing.Size(110, 30);
+            this.SynchronizeButton.Size = new System.Drawing.Size(234, 30);
             this.SynchronizeButton.TabIndex = 14;
             this.SynchronizeButton.Text = "Start";
             this.SynchronizeButton.UseVisualStyleBackColor = true;
@@ -340,32 +342,24 @@
             // AutomaticOrderSynchronizeSettingsGroupBox
             // 
             this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SyncMoldingBoxIntervalTextbox);
+            this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SyncNewOrderTextbox);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.label7);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.label6);
-            this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SyncNewOrderTextbox);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SynchronizeIntervalMinutesLabel);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SynchronizeIntervalLabel);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AutomaticOrderSynchronizeSettingsGroupBox.Location = new System.Drawing.Point(508, 252);
+            this.AutomaticOrderSynchronizeSettingsGroupBox.Location = new System.Drawing.Point(472, 156);
             this.AutomaticOrderSynchronizeSettingsGroupBox.Name = "AutomaticOrderSynchronizeSettingsGroupBox";
-            this.AutomaticOrderSynchronizeSettingsGroupBox.Size = new System.Drawing.Size(494, 55);
+            this.AutomaticOrderSynchronizeSettingsGroupBox.Size = new System.Drawing.Size(473, 55);
             this.AutomaticOrderSynchronizeSettingsGroupBox.TabIndex = 3;
             this.AutomaticOrderSynchronizeSettingsGroupBox.TabStop = false;
             this.AutomaticOrderSynchronizeSettingsGroupBox.Text = "Automatic Order Synchronize Settings";
-            // 
-            // SyncMoldingBoxIntervalTextbox
-            // 
-            this.SyncMoldingBoxIntervalTextbox.Location = new System.Drawing.Point(420, 22);
-            this.SyncMoldingBoxIntervalTextbox.Mask = "000";
-            this.SyncMoldingBoxIntervalTextbox.Name = "SyncMoldingBoxIntervalTextbox";
-            this.SyncMoldingBoxIntervalTextbox.Size = new System.Drawing.Size(48, 20);
-            this.SyncMoldingBoxIntervalTextbox.TabIndex = 16;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.Color.DarkRed;
-            this.label7.Location = new System.Drawing.Point(384, 25);
+            this.label7.Location = new System.Drawing.Point(371, 25);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(34, 13);
             this.label7.TabIndex = 15;
@@ -374,25 +368,17 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(247, 25);
+            this.label6.Location = new System.Drawing.Point(235, 25);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(141, 13);
             this.label6.TabIndex = 14;
             this.label6.Text = "Sync to Moldingbox Interval:";
             // 
-            // SyncNewOrderTextbox
-            // 
-            this.SyncNewOrderTextbox.Location = new System.Drawing.Point(170, 22);
-            this.SyncNewOrderTextbox.Mask = "000";
-            this.SyncNewOrderTextbox.Name = "SyncNewOrderTextbox";
-            this.SyncNewOrderTextbox.Size = new System.Drawing.Size(48, 20);
-            this.SyncNewOrderTextbox.TabIndex = 13;
-            // 
             // SynchronizeIntervalMinutesLabel
             // 
             this.SynchronizeIntervalMinutesLabel.AutoSize = true;
             this.SynchronizeIntervalMinutesLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.SynchronizeIntervalMinutesLabel.Location = new System.Drawing.Point(133, 25);
+            this.SynchronizeIntervalMinutesLabel.Location = new System.Drawing.Point(132, 25);
             this.SynchronizeIntervalMinutesLabel.Name = "SynchronizeIntervalMinutesLabel";
             this.SynchronizeIntervalMinutesLabel.Size = new System.Drawing.Size(34, 13);
             this.SynchronizeIntervalMinutesLabel.TabIndex = 3;
@@ -409,10 +395,8 @@
             // 
             // StagingDbGroupBox
             // 
-            this.StagingDbGroupBox.Controls.Add(this.CancelStagingButton);
             this.StagingDbGroupBox.Controls.Add(this.StagingServerTextBox);
             this.StagingDbGroupBox.Controls.Add(this.label1);
-            this.StagingDbGroupBox.Controls.Add(this.SaveStagingButton);
             this.StagingDbGroupBox.Controls.Add(this.label2);
             this.StagingDbGroupBox.Controls.Add(this.label3);
             this.StagingDbGroupBox.Controls.Add(this.label4);
@@ -420,22 +404,12 @@
             this.StagingDbGroupBox.Controls.Add(this.StagingPasswordTextBox);
             this.StagingDbGroupBox.Controls.Add(this.StagingUsernameTextBox);
             this.StagingDbGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StagingDbGroupBox.Location = new System.Drawing.Point(529, 6);
+            this.StagingDbGroupBox.Location = new System.Drawing.Point(472, 6);
             this.StagingDbGroupBox.Name = "StagingDbGroupBox";
-            this.StagingDbGroupBox.Size = new System.Drawing.Size(473, 166);
+            this.StagingDbGroupBox.Size = new System.Drawing.Size(473, 140);
             this.StagingDbGroupBox.TabIndex = 2;
             this.StagingDbGroupBox.TabStop = false;
             this.StagingDbGroupBox.Text = "Staging Database";
-            // 
-            // CancelStagingButton
-            // 
-            this.CancelStagingButton.BackColor = System.Drawing.Color.DarkGray;
-            this.CancelStagingButton.Location = new System.Drawing.Point(369, 128);
-            this.CancelStagingButton.Name = "CancelStagingButton";
-            this.CancelStagingButton.Size = new System.Drawing.Size(98, 32);
-            this.CancelStagingButton.TabIndex = 12;
-            this.CancelStagingButton.Text = "Cancel";
-            this.CancelStagingButton.UseVisualStyleBackColor = false;
             // 
             // StagingServerTextBox
             // 
@@ -452,17 +426,6 @@
             this.label1.Size = new System.Drawing.Size(41, 13);
             this.label1.TabIndex = 11;
             this.label1.Text = "Server:";
-            // 
-            // SaveStagingButton
-            // 
-            this.SaveStagingButton.BackColor = System.Drawing.Color.OliveDrab;
-            this.SaveStagingButton.Location = new System.Drawing.Point(265, 128);
-            this.SaveStagingButton.Name = "SaveStagingButton";
-            this.SaveStagingButton.Size = new System.Drawing.Size(98, 32);
-            this.SaveStagingButton.TabIndex = 11;
-            this.SaveStagingButton.Text = "Save";
-            this.SaveStagingButton.UseVisualStyleBackColor = false;
-            this.SaveStagingButton.Click += new System.EventHandler(this.SaveStagingButton_Click);
             // 
             // label2
             // 
@@ -517,8 +480,6 @@
             // 
             // SourceGroupBox
             // 
-            this.SourceGroupBox.Controls.Add(this.CancelSourceButton);
-            this.SourceGroupBox.Controls.Add(this.SaveSourceButon);
             this.SourceGroupBox.Controls.Add(this.SourcePasswordTextBox);
             this.SourceGroupBox.Controls.Add(this.SourceUsernameTextBox);
             this.SourceGroupBox.Controls.Add(this.SourceDatabaseTextBox);
@@ -530,27 +491,17 @@
             this.SourceGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SourceGroupBox.Location = new System.Drawing.Point(8, 6);
             this.SourceGroupBox.Name = "SourceGroupBox";
-            this.SourceGroupBox.Size = new System.Drawing.Size(458, 166);
+            this.SourceGroupBox.Size = new System.Drawing.Size(458, 140);
             this.SourceGroupBox.TabIndex = 1;
             this.SourceGroupBox.TabStop = false;
             this.SourceGroupBox.Text = "Source Database (T-Hub)";
             // 
-            // CancelSourceButton
-            // 
-            this.CancelSourceButton.BackColor = System.Drawing.Color.DarkGray;
-            this.CancelSourceButton.Location = new System.Drawing.Point(354, 129);
-            this.CancelSourceButton.Name = "CancelSourceButton";
-            this.CancelSourceButton.Size = new System.Drawing.Size(98, 32);
-            this.CancelSourceButton.TabIndex = 6;
-            this.CancelSourceButton.Text = "Cancel";
-            this.CancelSourceButton.UseVisualStyleBackColor = false;
-            // 
             // SaveSourceButon
             // 
             this.SaveSourceButon.BackColor = System.Drawing.Color.OliveDrab;
-            this.SaveSourceButon.Location = new System.Drawing.Point(250, 129);
+            this.SaveSourceButon.Location = new System.Drawing.Point(6, 23);
             this.SaveSourceButon.Name = "SaveSourceButon";
-            this.SaveSourceButon.Size = new System.Drawing.Size(98, 32);
+            this.SaveSourceButon.Size = new System.Drawing.Size(208, 32);
             this.SaveSourceButon.TabIndex = 5;
             this.SaveSourceButon.Text = "Save";
             this.SaveSourceButon.UseVisualStyleBackColor = false;
@@ -1020,6 +971,42 @@
             this.ApplicationStatusStrip.TabIndex = 50;
             this.ApplicationStatusStrip.Text = "Application Status Strip";
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.SaveSourceButon);
+            this.groupBox6.Location = new System.Drawing.Point(473, 218);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(220, 67);
+            this.groupBox6.TabIndex = 15;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Save Configurations";
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.SynchronizeButton);
+            this.groupBox7.Location = new System.Drawing.Point(699, 218);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(246, 67);
+            this.groupBox7.TabIndex = 16;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Start Auto Synchronization";
+            // 
+            // SyncNewOrderTextbox
+            // 
+            this.SyncNewOrderTextbox.Location = new System.Drawing.Point(172, 20);
+            this.SyncNewOrderTextbox.Name = "SyncNewOrderTextbox";
+            this.SyncNewOrderTextbox.Size = new System.Drawing.Size(39, 20);
+            this.SyncNewOrderTextbox.TabIndex = 17;
+            this.SyncNewOrderTextbox.TextChanged += new System.EventHandler(this.SyncNewOrderTextbox_TextChanged);
+            // 
+            // SyncMoldingBoxIntervalTextbox
+            // 
+            this.SyncMoldingBoxIntervalTextbox.Location = new System.Drawing.Point(410, 20);
+            this.SyncMoldingBoxIntervalTextbox.Name = "SyncMoldingBoxIntervalTextbox";
+            this.SyncMoldingBoxIntervalTextbox.Size = new System.Drawing.Size(39, 20);
+            this.SyncMoldingBoxIntervalTextbox.TabIndex = 18;
+            this.SyncMoldingBoxIntervalTextbox.TextChanged += new System.EventHandler(this.SyncNewOrderTextbox_TextChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1082,6 +1069,8 @@
             this.menuStrip.ResumeLayout(false);
             this.ApplicationStatusStrip.ResumeLayout(false);
             this.ApplicationStatusStrip.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1112,18 +1101,14 @@
         private System.Windows.Forms.Button SynchronizeButton;
         private System.Windows.Forms.TextBox StagingServerTextBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button SaveStagingButton;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox StagingDatabaseTextBox;
         private System.Windows.Forms.TextBox StagingPasswordTextBox;
         private System.Windows.Forms.TextBox StagingUsernameTextBox;
-        private System.Windows.Forms.Button CancelStagingButton;
-        private System.Windows.Forms.Button CancelSourceButton;
         private System.Windows.Forms.TextBox SourceServerTextBox;
         private System.Windows.Forms.ErrorProvider FormErrorProvider;
-        private System.Windows.Forms.MaskedTextBox SyncNewOrderTextbox;
         private System.Windows.Forms.GroupBox SyncOrdersWithTHubGroupBox;
         private System.Windows.Forms.Button LoadOrdersFromTHubButton;
         private System.Windows.Forms.GroupBox OSSOrdersGroupBox;
@@ -1167,9 +1152,12 @@
         private System.Windows.Forms.ToolStripMenuItem shipmentMappingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hideWhenMinimizedToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem viewSystemLogsToolStripMenuItem;
-        private System.Windows.Forms.MaskedTextBox SyncMoldingBoxIntervalTextbox;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.TextBox SyncNewOrderTextbox;
+        private System.Windows.Forms.TextBox SyncMoldingBoxIntervalTextbox;
     }
 }
 

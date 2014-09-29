@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 using IST.OrderSynchronizationSystem.MBAPI;
 using IST.OrderSynchronizationSystem.MoldingBox;
@@ -60,6 +61,14 @@ namespace IST.OrderSynchronizationSystem
 
             //GetShipingMethods.Body = new Retrieve_Shipping_MethodsRequestBody();
             //var a123 = MoldingBoxSoapClient.Retrieve_Shipping_Methods();
+
+            bool aIsNewInstance = false, result = false;
+            Mutex myMutex = new Mutex(true, "IST.OrderSynchronizationSystem", out aIsNewInstance);
+            if (!aIsNewInstance)
+            {
+                MessageBox.Show("OSS is already running...", "OSS  (Order Synchronization System)", MessageBoxButtons.OK, MessageBoxIcon.Error);                
+                return;
+            }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

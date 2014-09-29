@@ -420,11 +420,13 @@ namespace IST.OrderSynchronizationSystem
         private void SaveSourceButon_Click(object sender, EventArgs e)
         {
             SetDatabaseSettings("Source");
+            SetDatabaseSettings("Staging");
+            ApplicationStatusUpdate("Configurations saved!");
         }
 
         private void SaveStagingButton_Click(object sender, EventArgs e)
         {
-            SetDatabaseSettings("Staging");
+            
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -476,7 +478,7 @@ namespace IST.OrderSynchronizationSystem
                             MessageBox.Show("No New Order available is T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
-                    NoOfOrdersLabel.Text = "No. of Order: " + _ossOrders.Rows.Count;
+                    NoOfOrdersLabel.Text = "Total No. of Orders: " + _ossOrders.Rows.Count;
                 }
                 catch (Exception exception)
                 {
@@ -1694,8 +1696,7 @@ namespace IST.OrderSynchronizationSystem
             StagingDatabaseTextBox.Enabled =
                 StagingPasswordTextBox.Enabled =
                     StagingUsernameTextBox.Enabled = StagingServerTextBox.Enabled = enableOrDisable;
-            SaveSourceButon.Enabled = CancelSourceButton.Enabled = enableOrDisable;
-            SaveStagingButton.Enabled = CancelStagingButton.Enabled = enableOrDisable;
+            SaveSourceButon.Enabled = enableOrDisable;            
             EmailTextbox.Enabled =
                 PhoneTextbox.Enabled =
                     SyncMoldingBoxIntervalTextbox.Enabled = SyncNewOrderTextbox.Enabled = enableOrDisable;
@@ -1765,5 +1766,15 @@ namespace IST.OrderSynchronizationSystem
                 this.MainFormTabControl.SelectedIndex = 0;
             }
         }
+
+        private void SyncNewOrderTextbox_TextChanged(object sender, EventArgs e)
+        {
+            int outValue;
+            if (!int.TryParse(((TextBox) sender).Text, out outValue))
+                ((TextBox) sender).Text = "";
+        }
+
+        
+
     }
 }

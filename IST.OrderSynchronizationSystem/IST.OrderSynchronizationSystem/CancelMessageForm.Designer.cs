@@ -79,6 +79,8 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "CancelMessageForm";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CancelMessageForm";
             this.CancelGroupBox.ResumeLayout(false);
             this.CancelGroupBox.PerformLayout();

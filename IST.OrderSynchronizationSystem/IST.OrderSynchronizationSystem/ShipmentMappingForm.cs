@@ -52,12 +52,18 @@ namespace IST.OrderSynchronizationSystem
                 }
                 shipmentMappingGridView.Columns["DestinationShipmentMethod"].Visible = false;
                 MappingLabel.Text = "Total No. of Mappings: " + shipmentMapping.Rows.Count;
+                HideIdColumn();
             }
             catch (Exception exception)
             {
                 synchronizationDatabase.LogOrder(1, -1, string.Format("Error loading mappings. Error: {0}", exception.Message));
                 MessageBox.Show("There is some problem while loading mappings. Error details has been logged. Please check database if the problem persists.", "Error!", MessageBoxButtons.OK ,MessageBoxIcon.Error);
             }
+        }
+
+        private void HideIdColumn()
+        {
+            shipmentMappingGridView.Columns[0].Visible = false;
         }
 
         
@@ -74,6 +80,7 @@ namespace IST.OrderSynchronizationSystem
                     AddComboBoxColumn();
                 }
                 shipmentMappingGridView.Columns["DestinationShipmentMethod"].Visible = false;
+                HideIdColumn();
                 MappingLabel.Text = "Total No. of Mappings: " + shipmentMapping.Rows.Count;
             }            
             catch (Exception exception)

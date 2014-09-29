@@ -121,6 +121,8 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ShipmentMappingForm";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Shipment Method Mappings";
             this.Load += new System.EventHandler(this.ShipmentMappingForm_Load);
             this.groupBox1.ResumeLayout(false);
