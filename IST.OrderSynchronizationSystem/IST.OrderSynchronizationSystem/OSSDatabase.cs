@@ -462,6 +462,7 @@ namespace IST.OrderSynchronizationSystem
             ossOrdersTable.Columns.Add("MBTrackingNumber", typeof(string));
             ossOrdersTable.Columns.Add("CancelMessage", typeof(string));
             ossOrdersTable.Columns.Add("MBShipmentMethod", typeof(string));
+
             return ossOrdersTable;
         }
 
@@ -485,6 +486,9 @@ namespace IST.OrderSynchronizationSystem
             stagingRow["OrderStatus"] = stagingOrder["OrderStatus"] != null ? ((OSSOrderStatus)(int.Parse(stagingOrder["OrderStatus"].ToString()))).ToString() : string.Empty;
             stagingRow["LastSyncWithMBOn"] = stagingOrder["LastSyncWithMBOn"];
             stagingRow["MBShipmentMethod"] = stagingOrder["MBShipmentMethod"];
+            stagingRow["MBTrackingNumber"] = stagingOrder["MBTrackingNumber"];
+            stagingRow["THubUpdatedOn"] = stagingOrder["THubUpdatedOn"];
+            
         }
 
         internal int UpdateOrderAfterMoldingBoxShipmentRequest(DataRow ossOrderRow)

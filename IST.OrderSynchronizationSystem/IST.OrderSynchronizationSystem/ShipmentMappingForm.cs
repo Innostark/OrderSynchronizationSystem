@@ -44,6 +44,7 @@ namespace IST.OrderSynchronizationSystem
                     shipmentMappingGridView.DataSource = shipmentMapping;
                     AddComboBoxColumn();
                     shipmentMappingGridView.Columns["DestinationShipmentMethod"].Visible = false;
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].HeaderText = "T-Hub Shipment Method";
                     HideIdColumn();
                 }
                 
@@ -106,6 +107,7 @@ namespace IST.OrderSynchronizationSystem
             cmb.DisplayMember = "Method";
             cmb.ValueMember = "Method";
             cmb.Name = "MethodCombobox";
+            cmb.HeaderText = "Moldingbox Shipment Method";
             cmb.DataPropertyName = "DestinationShipmentMethod";
             shipmentMappingGridView.Columns.Add(cmb);
             shipmentMappingGridView.EditMode = DataGridViewEditMode.EditOnEnter;

@@ -213,7 +213,7 @@ namespace IST.OrderSynchronizationSystem
             int minutes;
             if (!string.IsNullOrEmpty(SyncNewOrderTextbox.Text) && int.TryParse(SyncNewOrderTextbox.Text, out minutes))
             {
-                if (minutes > 999 || minutes < 2)
+                if (minutes > 999 || minutes < 1)
                 {
                     FormErrorProvider.SetError(SyncNewOrderTextbox, Resources.MainWindow_MinutesRange);
                     isValid = false;
@@ -231,7 +231,7 @@ namespace IST.OrderSynchronizationSystem
             }
             if (!string.IsNullOrEmpty(SyncMoldingBoxIntervalTextbox.Text) && int.TryParse(SyncMoldingBoxIntervalTextbox.Text, out minutes))
             {
-                if (minutes > 999 || minutes < 2)
+                if (minutes > 999 || minutes < 1)
                 {
                     FormErrorProvider.SetError(SyncMoldingBoxIntervalTextbox, Resources.MainWindow_MinutesRange);
                     isValid = false;
@@ -478,7 +478,7 @@ namespace IST.OrderSynchronizationSystem
                         OssOrdersDataGridView.DataBindings.Clear();
                         if (!_autoSyncActive)
                         {
-                            MessageBox.Show("No New Order available is T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("No New-Order available.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                     NoOfOrdersLabel.Text = "Total No. of Orders: " + _ossOrders.Rows.Count;
@@ -1428,7 +1428,7 @@ namespace IST.OrderSynchronizationSystem
                 OssExceptionGridView.DataBindings.Clear();
                 if (!_autoSyncActive)
                 {
-                    MessageBox.Show("No Exception Order available in T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("No Exception Order available.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             ExceptionOrdersLabel.Text = "Total No. of Orders: " + ossExceptionDataTable.Rows.Count;
@@ -1461,7 +1461,7 @@ namespace IST.OrderSynchronizationSystem
                 OssInFlightGridView.DataBindings.Clear();
                 if (!_autoSyncActive)
                 {
-                    MessageBox.Show("No In-Flight Order available in T-Hub.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("No In-Flight Order available.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             InFlightOrdersLabel.Text = "Total No. of Orders: " + ossInFlightDataTable.Rows.Count;
@@ -1491,7 +1491,7 @@ namespace IST.OrderSynchronizationSystem
                 OssCompletedGridView.DataBindings.Clear();
                 if (!_autoSyncActive)
                 {
-                    MessageBox.Show("No Completed Order available in T-Hub.", "Message", MessageBoxButtons.OK,
+                    MessageBox.Show("No Completed Order available.", "Message", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
                 }
             }
@@ -1522,7 +1522,7 @@ namespace IST.OrderSynchronizationSystem
                 OSSOrderOnHoldGridView.DataBindings.Clear();
                 if (!_autoSyncActive)
                 {
-                    MessageBox.Show("No On-Hold Order available in T-Hub.", "Message", MessageBoxButtons.OK,
+                    MessageBox.Show("No On-Hold Order available.", "Message", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
                 }
             }
@@ -1550,7 +1550,7 @@ namespace IST.OrderSynchronizationSystem
                 OssOrdersCanceledOrders.DataBindings.Clear();
                 if (!_autoSyncActive)
                 {
-                    MessageBox.Show("No Canceled Order available in T-Hub.", "Message", MessageBoxButtons.OK,
+                    MessageBox.Show("No Canceled Order available.", "Message", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
                 }
             }

@@ -19,6 +19,7 @@ namespace IST.OrderSynchronizationSystem
         private MBAPISoapClient client;
         public void Process(Form mainWindow, int frequency)
         {
+            MessageBox.Show("me here");
             MainWindow mainForm = (MainWindow)mainWindow;
             apiKey = mainForm.apiKey;
             client = MoldingBoxHelper.GetMoldingBoxClient();

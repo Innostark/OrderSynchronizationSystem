@@ -61,10 +61,11 @@
             this.LogsGridView.MultiSelect = false;
             this.LogsGridView.Name = "LogsGridView";
             this.LogsGridView.ReadOnly = true;
-            this.LogsGridView.RowHeadersVisible = false;
             this.LogsGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.LogsGridView.Size = new System.Drawing.Size(760, 440);
             this.LogsGridView.TabIndex = 0;
+            this.LogsGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.LogsGridView_CellClick);
+            this.LogsGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.LogsGridView_DataBindingComplete);
             // 
             // button1
             // 

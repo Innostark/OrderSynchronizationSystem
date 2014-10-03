@@ -59,6 +59,7 @@ namespace IST.OrderSynchronizationSystem
                 if (logsTable.Rows.Count > 0)
                 {
                     LogsGridView.DataSource = logsTable;
+                    
                 }
                 else
                 {
@@ -72,5 +73,22 @@ namespace IST.OrderSynchronizationSystem
                 MessageBox.Show("There is some problem while displaying logs. Error details has been logged. Please check database if the problem persists.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);   
             }
         }
+
+        private void LogsGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            LogsGridView.Columns[0].Width = 60;
+            LogsGridView.Columns[1].Width = 60;
+            LogsGridView.Columns[2].Width = 475;
+            
+        }
+
+        private void LogsGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.ColumnIndex == 2 )
+            MessageBox.Show(LogsGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].FormattedValue.ToString(), "Details",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        
     }
 }

@@ -41,6 +41,10 @@
             this.hideWhenMinimizedToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.MainFormTabControl = new System.Windows.Forms.TabControl();
             this.ConfigurationTabPage = new System.Windows.Forms.TabPage();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.SynchronizeButton = new System.Windows.Forms.Button();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.SaveSourceButon = new System.Windows.Forms.Button();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.PhoneTextbox = new System.Windows.Forms.TextBox();
@@ -50,8 +54,9 @@
             this.MoldingBoxApiKeyGroupBox = new System.Windows.Forms.GroupBox();
             this.MoldinboxKeyTextBox = new System.Windows.Forms.TextBox();
             this.MoldingBoxApiKeyLabel = new System.Windows.Forms.Label();
-            this.SynchronizeButton = new System.Windows.Forms.Button();
             this.AutomaticOrderSynchronizeSettingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.SyncMoldingBoxIntervalTextbox = new System.Windows.Forms.TextBox();
+            this.SyncNewOrderTextbox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.SynchronizeIntervalMinutesLabel = new System.Windows.Forms.Label();
@@ -66,7 +71,6 @@
             this.StagingPasswordTextBox = new System.Windows.Forms.TextBox();
             this.StagingUsernameTextBox = new System.Windows.Forms.TextBox();
             this.SourceGroupBox = new System.Windows.Forms.GroupBox();
-            this.SaveSourceButon = new System.Windows.Forms.Button();
             this.SourcePasswordTextBox = new System.Windows.Forms.TextBox();
             this.SourceUsernameTextBox = new System.Windows.Forms.TextBox();
             this.SourceDatabaseTextBox = new System.Windows.Forms.TextBox();
@@ -108,13 +112,11 @@
             this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.ToolStripButton = new System.Windows.Forms.ToolStripSplitButton();
             this.ApplicationStatusStrip = new System.Windows.Forms.StatusStrip();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.SyncNewOrderTextbox = new System.Windows.Forms.TextBox();
-            this.SyncMoldingBoxIntervalTextbox = new System.Windows.Forms.TextBox();
             this.ApplicationMenuStrip.SuspendLayout();
             this.MainFormTabControl.SuspendLayout();
             this.ConfigurationTabPage.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.MoldingBoxApiKeyGroupBox.SuspendLayout();
             this.AutomaticOrderSynchronizeSettingsGroupBox.SuspendLayout();
@@ -142,8 +144,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.FormErrorProvider)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.ApplicationStatusStrip.SuspendLayout();
-            this.groupBox6.SuspendLayout();
-            this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
             // ApplicationMenuStrip
@@ -239,6 +239,51 @@
             this.ConfigurationTabPage.TabIndex = 0;
             this.ConfigurationTabPage.Text = "Configuration";
             // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.SynchronizeButton);
+            this.groupBox7.Location = new System.Drawing.Point(472, 218);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(473, 67);
+            this.groupBox7.TabIndex = 16;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Start Auto Synchronization";
+            // 
+            // SynchronizeButton
+            // 
+            this.SynchronizeButton.Image = global::IST.OrderSynchronizationSystem.Properties.Resources.PlayImage;
+            this.SynchronizeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.SynchronizeButton.Location = new System.Drawing.Point(6, 23);
+            this.SynchronizeButton.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
+            this.SynchronizeButton.Name = "SynchronizeButton";
+            this.SynchronizeButton.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
+            this.SynchronizeButton.Size = new System.Drawing.Size(461, 30);
+            this.SynchronizeButton.TabIndex = 14;
+            this.SynchronizeButton.Text = "Start";
+            this.SynchronizeButton.UseVisualStyleBackColor = true;
+            this.SynchronizeButton.Click += new System.EventHandler(this.SynchronizeButton_Click);
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.SaveSourceButon);
+            this.groupBox6.Location = new System.Drawing.Point(14, 291);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(452, 67);
+            this.groupBox6.TabIndex = 15;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Save Configurations";
+            // 
+            // SaveSourceButon
+            // 
+            this.SaveSourceButon.BackColor = System.Drawing.Color.OliveDrab;
+            this.SaveSourceButon.Location = new System.Drawing.Point(6, 23);
+            this.SaveSourceButon.Name = "SaveSourceButon";
+            this.SaveSourceButon.Size = new System.Drawing.Size(436, 32);
+            this.SaveSourceButon.TabIndex = 5;
+            this.SaveSourceButon.Text = "Save";
+            this.SaveSourceButon.UseVisualStyleBackColor = false;
+            this.SaveSourceButon.Click += new System.EventHandler(this.SaveSourceButon_Click);
+            // 
             // splitter1
             // 
             this.splitter1.Location = new System.Drawing.Point(3, 3);
@@ -325,20 +370,6 @@
             this.MoldingBoxApiKeyLabel.TabIndex = 16;
             this.MoldingBoxApiKeyLabel.Text = "Key:";
             // 
-            // SynchronizeButton
-            // 
-            this.SynchronizeButton.Image = global::IST.OrderSynchronizationSystem.Properties.Resources.PlayImage;
-            this.SynchronizeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.SynchronizeButton.Location = new System.Drawing.Point(6, 23);
-            this.SynchronizeButton.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
-            this.SynchronizeButton.Name = "SynchronizeButton";
-            this.SynchronizeButton.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
-            this.SynchronizeButton.Size = new System.Drawing.Size(234, 30);
-            this.SynchronizeButton.TabIndex = 14;
-            this.SynchronizeButton.Text = "Start";
-            this.SynchronizeButton.UseVisualStyleBackColor = true;
-            this.SynchronizeButton.Click += new System.EventHandler(this.SynchronizeButton_Click);
-            // 
             // AutomaticOrderSynchronizeSettingsGroupBox
             // 
             this.AutomaticOrderSynchronizeSettingsGroupBox.Controls.Add(this.SyncMoldingBoxIntervalTextbox);
@@ -354,6 +385,22 @@
             this.AutomaticOrderSynchronizeSettingsGroupBox.TabIndex = 3;
             this.AutomaticOrderSynchronizeSettingsGroupBox.TabStop = false;
             this.AutomaticOrderSynchronizeSettingsGroupBox.Text = "Automatic Order Synchronize Settings";
+            // 
+            // SyncMoldingBoxIntervalTextbox
+            // 
+            this.SyncMoldingBoxIntervalTextbox.Location = new System.Drawing.Point(410, 20);
+            this.SyncMoldingBoxIntervalTextbox.Name = "SyncMoldingBoxIntervalTextbox";
+            this.SyncMoldingBoxIntervalTextbox.Size = new System.Drawing.Size(39, 20);
+            this.SyncMoldingBoxIntervalTextbox.TabIndex = 18;
+            this.SyncMoldingBoxIntervalTextbox.TextChanged += new System.EventHandler(this.SyncNewOrderTextbox_TextChanged);
+            // 
+            // SyncNewOrderTextbox
+            // 
+            this.SyncNewOrderTextbox.Location = new System.Drawing.Point(172, 20);
+            this.SyncNewOrderTextbox.Name = "SyncNewOrderTextbox";
+            this.SyncNewOrderTextbox.Size = new System.Drawing.Size(39, 20);
+            this.SyncNewOrderTextbox.TabIndex = 17;
+            this.SyncNewOrderTextbox.TextChanged += new System.EventHandler(this.SyncNewOrderTextbox_TextChanged);
             // 
             // label7
             // 
@@ -495,17 +542,6 @@
             this.SourceGroupBox.TabIndex = 1;
             this.SourceGroupBox.TabStop = false;
             this.SourceGroupBox.Text = "Source Database (T-Hub)";
-            // 
-            // SaveSourceButon
-            // 
-            this.SaveSourceButon.BackColor = System.Drawing.Color.OliveDrab;
-            this.SaveSourceButon.Location = new System.Drawing.Point(6, 23);
-            this.SaveSourceButon.Name = "SaveSourceButon";
-            this.SaveSourceButon.Size = new System.Drawing.Size(208, 32);
-            this.SaveSourceButon.TabIndex = 5;
-            this.SaveSourceButon.Text = "Save";
-            this.SaveSourceButon.UseVisualStyleBackColor = false;
-            this.SaveSourceButon.Click += new System.EventHandler(this.SaveSourceButon_Click);
             // 
             // SourcePasswordTextBox
             // 
@@ -971,42 +1007,6 @@
             this.ApplicationStatusStrip.TabIndex = 50;
             this.ApplicationStatusStrip.Text = "Application Status Strip";
             // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.SaveSourceButon);
-            this.groupBox6.Location = new System.Drawing.Point(473, 218);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(220, 67);
-            this.groupBox6.TabIndex = 15;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Save Configurations";
-            // 
-            // groupBox7
-            // 
-            this.groupBox7.Controls.Add(this.SynchronizeButton);
-            this.groupBox7.Location = new System.Drawing.Point(699, 218);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(246, 67);
-            this.groupBox7.TabIndex = 16;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Start Auto Synchronization";
-            // 
-            // SyncNewOrderTextbox
-            // 
-            this.SyncNewOrderTextbox.Location = new System.Drawing.Point(172, 20);
-            this.SyncNewOrderTextbox.Name = "SyncNewOrderTextbox";
-            this.SyncNewOrderTextbox.Size = new System.Drawing.Size(39, 20);
-            this.SyncNewOrderTextbox.TabIndex = 17;
-            this.SyncNewOrderTextbox.TextChanged += new System.EventHandler(this.SyncNewOrderTextbox_TextChanged);
-            // 
-            // SyncMoldingBoxIntervalTextbox
-            // 
-            this.SyncMoldingBoxIntervalTextbox.Location = new System.Drawing.Point(410, 20);
-            this.SyncMoldingBoxIntervalTextbox.Name = "SyncMoldingBoxIntervalTextbox";
-            this.SyncMoldingBoxIntervalTextbox.Size = new System.Drawing.Size(39, 20);
-            this.SyncMoldingBoxIntervalTextbox.TabIndex = 18;
-            this.SyncMoldingBoxIntervalTextbox.TextChanged += new System.EventHandler(this.SyncNewOrderTextbox_TextChanged);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1030,6 +1030,8 @@
             this.ApplicationMenuStrip.PerformLayout();
             this.MainFormTabControl.ResumeLayout(false);
             this.ConfigurationTabPage.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.MoldingBoxApiKeyGroupBox.ResumeLayout(false);
@@ -1069,8 +1071,6 @@
             this.menuStrip.ResumeLayout(false);
             this.ApplicationStatusStrip.ResumeLayout(false);
             this.ApplicationStatusStrip.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox7.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
