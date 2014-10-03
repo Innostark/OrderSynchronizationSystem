@@ -445,6 +445,7 @@ namespace IST.OrderSynchronizationSystem
             if (withTableId) ossOrdersTable.Columns.Add("OSSOrderId", typeof(long));
             ossOrdersTable.Columns.Add("THubOrderId", typeof(long));
             ossOrdersTable.Columns.Add("THubOrderReferenceNo", typeof(string));
+            ossOrdersTable.Columns.Add("CustomerName", typeof(string));
             ossOrdersTable.Columns.Add("OrderStatus", typeof(string));
             ossOrdersTable.Columns.Add("CreatedOn", typeof(DateTime));
             ossOrdersTable.Columns.Add("THubCompleteOrder", typeof(string));
@@ -462,7 +463,7 @@ namespace IST.OrderSynchronizationSystem
             ossOrdersTable.Columns.Add("MBTrackingNumber", typeof(string));
             ossOrdersTable.Columns.Add("CancelMessage", typeof(string));
             ossOrdersTable.Columns.Add("MBShipmentMethod", typeof(string));
-
+            
             return ossOrdersTable;
         }
 
@@ -488,7 +489,13 @@ namespace IST.OrderSynchronizationSystem
             stagingRow["MBShipmentMethod"] = stagingOrder["MBShipmentMethod"];
             stagingRow["MBTrackingNumber"] = stagingOrder["MBTrackingNumber"];
             stagingRow["THubUpdatedOn"] = stagingOrder["THubUpdatedOn"];
-            
+
+            OssShipment[] shipments = new OssShipment[1]
+                    {
+                        JsonConvert.DeserializeObject<OssShipment>(stagingOrder["THubCompleteOrder"].ToString())
+                    };
+            stagingRow["CustomerName"] = shipments[0].FirstName + " - " + shipments[0].LastName;
+            //TOCOME
         }
 
         internal int UpdateOrderAfterMoldingBoxShipmentRequest(DataRow ossOrderRow)

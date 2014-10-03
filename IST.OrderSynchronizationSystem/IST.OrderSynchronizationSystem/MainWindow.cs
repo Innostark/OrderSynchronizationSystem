@@ -427,11 +427,6 @@ namespace IST.OrderSynchronizationSystem
             ApplicationStatusUpdate("Configurations saved!");
         }
 
-        private void SaveStagingButton_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         private void MainWindow_Load(object sender, EventArgs e)
         {
             MainFormTabControl.SelectTab(NewOrderTabPage);
@@ -453,7 +448,6 @@ namespace IST.OrderSynchronizationSystem
             {
                 try
                 {
-
                     _ossOrders = _orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrders", OSSOrderStatus.New);
                     if (_ossOrders.Rows.Count > 0)
                     {
@@ -461,7 +455,7 @@ namespace IST.OrderSynchronizationSystem
                         SetOssOrderDataGridHeaderTextAndColumnVisibility(OssOrdersDataGridView, OssOrdersGridTypes.New);
                         if (!_autoSyncActive)
                         {
-                            if (OssOrdersDataGridView.ColumnCount == 20)
+                            if (OssOrdersDataGridView.ColumnCount == 21)
                             {
                                 AddSendButtonToGridView(OssOrdersDataGridView);
                             }
@@ -667,6 +661,12 @@ namespace IST.OrderSynchronizationSystem
                             gridView.Columns["THubOrderReferenceNo"].ReadOnly = true;
                             gridView.Columns["THubOrderReferenceNo"].Width = 100;
                         }
+                        if (gridView.Columns["CustomerName"] != null)
+                        {
+                            gridView.Columns["CustomerName"].HeaderText = "Customer Name";
+                            gridView.Columns["CustomerName"].ReadOnly = true;
+                            gridView.Columns["CustomerName"].Width = 100;
+                        }
                         if (gridView.Columns["CreatedOn"] != null)
                         {
                             gridView.Columns["CreatedOn"].HeaderText = "OSS Created On";
@@ -728,6 +728,12 @@ namespace IST.OrderSynchronizationSystem
                             gridView.Columns["CreatedOn"].ReadOnly = true;
                             gridView.Columns["CreatedOn"].MinimumWidth = 150;
                         }
+                        if (gridView.Columns["CustomerName"] != null)
+                        {
+                            gridView.Columns["CustomerName"].HeaderText = "Customer Name";
+                            gridView.Columns["CustomerName"].ReadOnly = true;
+                            gridView.Columns["CustomerName"].Width = 100;
+                        }
                         if (gridView.Columns["THubOrderReferenceNo"] != null)
                         {
                             gridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
@@ -742,7 +748,7 @@ namespace IST.OrderSynchronizationSystem
                         }
                         if (gridView.Columns["SentToMBOn"] != null)
                         {
-                            gridView.Columns["SentToMBOn"].HeaderText = "Posted On";
+                            gridView.Columns["SentToMBOn"].HeaderText = "Sent to MB on";
                             gridView.Columns["SentToMBOn"].ReadOnly = true;
                             gridView.Columns["SentToMBOn"].MinimumWidth = 150;
                         }
@@ -797,6 +803,12 @@ namespace IST.OrderSynchronizationSystem
                             gridView.Columns["CreatedOn"].ReadOnly = true;
                             gridView.Columns["CreatedOn"].MinimumWidth = 120;
                         }
+                        if (gridView.Columns["CustomerName"] != null)
+                        {
+                            gridView.Columns["CustomerName"].HeaderText = "Customer Name";
+                            gridView.Columns["CustomerName"].ReadOnly = true;
+                            gridView.Columns["CustomerName"].Width = 100;
+                        }
                         if (gridView.Columns["THubOrderReferenceNo"] != null)
                         {
                             gridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
@@ -811,7 +823,7 @@ namespace IST.OrderSynchronizationSystem
                         }
                         if (gridView.Columns["SentToMBOn"] != null)
                         {
-                            gridView.Columns["SentToMBOn"].HeaderText = "Posted On";
+                            gridView.Columns["SentToMBOn"].HeaderText = "Sent to MB on";
                             gridView.Columns["SentToMBOn"].ReadOnly = true;
                             gridView.Columns["SentToMBOn"].MinimumWidth = 100;
                         }
@@ -860,7 +872,13 @@ namespace IST.OrderSynchronizationSystem
                         {
                             gridView.Columns["CreatedOn"].HeaderText = "OSS Created On";
                             gridView.Columns["CreatedOn"].ReadOnly = true;
-                            //gridView.Columns["CreatedOn"].Width = 110;
+                            gridView.Columns["CreatedOn"].Width = 110;
+                        }
+                        if (gridView.Columns["CustomerName"] != null)
+                        {
+                            gridView.Columns["CustomerName"].HeaderText = "Customer Name";
+                            gridView.Columns["CustomerName"].ReadOnly = true;
+                            gridView.Columns["CustomerName"].Width = 100;
                         }
                         if (gridView.Columns["THubOrderReferenceNo"] != null)
                         {
@@ -871,7 +889,7 @@ namespace IST.OrderSynchronizationSystem
 
                         if (gridView.Columns["SentToMBOn"] != null)
                         {
-                            gridView.Columns["SentToMBOn"].HeaderText = "Posted On";
+                            gridView.Columns["SentToMBOn"].HeaderText = "Sent to MB on";
                             gridView.Columns["SentToMBOn"].ReadOnly = true;
                             //gridView.Columns["SentToMBOn"].Width = 100;
                         }
@@ -940,6 +958,12 @@ namespace IST.OrderSynchronizationSystem
                             gridView.Columns["CreatedOn"].ReadOnly = true;
                             gridView.Columns["CreatedOn"].Width = 150;
                         }
+                        if (gridView.Columns["CustomerName"] != null)
+                        {
+                            gridView.Columns["CustomerName"].HeaderText = "Customer Name";
+                            gridView.Columns["CustomerName"].ReadOnly = true;
+                            gridView.Columns["CustomerName"].Width = 100;
+                        }
                         if (gridView.Columns["THubOrderReferenceNo"] != null)
                         {
                             gridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
@@ -950,7 +974,7 @@ namespace IST.OrderSynchronizationSystem
                             gridView.Columns["MBShipmentSubmitError"].Visible = false;
                         if (gridView.Columns["SentToMBOn"] != null)
                         {
-                            gridView.Columns["SentToMBOn"].HeaderText = "Posted On";
+                            gridView.Columns["SentToMBOn"].HeaderText = "Sent to MB on";
                             gridView.Columns["SentToMBOn"].ReadOnly = true;
                             gridView.Columns["SentToMBOn"].Width = 150;
                         }
@@ -1009,6 +1033,12 @@ namespace IST.OrderSynchronizationSystem
                             gridView.Columns["CreatedOn"].ReadOnly = true;
                             gridView.Columns["CreatedOn"].MinimumWidth = 110;
                         }
+                        if (gridView.Columns["CustomerName"] != null)
+                        {
+                            gridView.Columns["CustomerName"].HeaderText = "Customer Name";
+                            gridView.Columns["CustomerName"].ReadOnly = true;
+                            gridView.Columns["CustomerName"].Width = 100;
+                        }
                         if (gridView.Columns["THubOrderReferenceNo"] != null)
                         {
                             gridView.Columns["THubOrderReferenceNo"].HeaderText = "Order Ref #";
@@ -1023,7 +1053,7 @@ namespace IST.OrderSynchronizationSystem
                         }
                         if (gridView.Columns["SentToMBOn"] != null)
                         {
-                            gridView.Columns["SentToMBOn"].HeaderText = "Posted On";
+                            gridView.Columns["SentToMBOn"].HeaderText = "Sent to MB on";
                             gridView.Columns["SentToMBOn"].ReadOnly = true;
                             gridView.Columns["SentToMBOn"].MinimumWidth = 110;
                         }
@@ -1408,7 +1438,7 @@ namespace IST.OrderSynchronizationSystem
                 OssExceptionGridView.DataSource = ossExceptionDataTable;
                 if (!_autoSyncActive)
                 {
-                    if (OssExceptionGridView.ColumnCount == 20)
+                    if (OssExceptionGridView.ColumnCount == 21)
                     {
                         AddReloadButtonToGridView(OssExceptionGridView);
                         AddPostAgainButtonToGridView(OssExceptionGridView);
@@ -1444,7 +1474,7 @@ namespace IST.OrderSynchronizationSystem
                 OssInFlightGridView.DataSource = ossInFlightDataTable;
                 if (!_autoSyncActive)
                 {
-                    if (OssInFlightGridView.ColumnCount == 20)
+                    if (OssInFlightGridView.ColumnCount == 21)
                     {
                         AddSyncButtonToGridView(OssInFlightGridView);
                     }
