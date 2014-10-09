@@ -1,0 +1,341 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateDbScript" xml:space="preserve">
+    <value>
+
+CREATE TABLE [dbo].[Logs](
+	[LogId] [bigint] IDENTITY(1,1) NOT NULL,
+	[LogTypeId] [int] NOT NULL,
+	[OrderId] [bigint] NULL,
+	[LogText] [nvarchar](max) NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+ CONSTRAINT [PK_Log] PRIMARY KEY CLUSTERED 
+(
+	[LogId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+
+CREATE TABLE [dbo].[LogTypes](
+	[LogTypeId] [int] IDENTITY(1,1) NOT NULL,
+	[LogType] [nvarchar](25) NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+ CONSTRAINT [PK_LogTypes] PRIMARY KEY CLUSTERED 
+(
+	[LogTypeId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+CREATE TABLE [dbo].[OSSConfigurations](
+	[ConfigId] [bigint] IDENTITY(1,1) NOT NULL,
+	[ConfigKey] [nvarchar](50) NOT NULL,
+	[ConfigValue] [nvarchar](100) NOT NULL
+) ON [PRIMARY]
+
+CREATE TABLE [dbo].[OssLastSyncOrderDetail](
+	[LastSynchOrderId] [bigint] NULL
+) ON [PRIMARY]
+
+CREATE TABLE [dbo].[OSSOrders](
+	[OSSOrderId] [bigint] IDENTITY(1,1) NOT NULL,
+	[THubOrderId] [bigint] NOT NULL,
+	[THubOrderReferenceNo] [nvarchar](100) NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[THubCompleteOrder] [nvarchar](max) NULL,
+	[SentToMB] [bit] NULL,
+	[SentToMBOn] [datetime] NULL,
+	[MBPostShipmentMessage] [nvarchar](max) NULL,
+	[MBPostShipmentResponseMessage] [nvarchar](max) NULL,
+	[MBSuccessfullyReceived] [bit] NULL,
+	[MBShipmentId] [nvarchar](15) NULL,
+	[MBShipmentSubmitError] [nvarchar](max) NULL,
+	[MBShipmentIdSubmitedToThub] [bit] NULL,
+	[MBShipmentIdSubmitedToThubOn] [datetime] NULL,
+	[MBShipmentMethod] [nvarchar](max) NULL,
+	[OrderStatus] [tinyint] NULL,
+	[LastSyncWithMBOn] [datetime] NULL,
+	[THubUpdatedOn] [datetime] NULL,
+	[MBTrackingNumber] [nvarchar](50) NULL,
+	[CancelMessage] [nvarchar](50) NULL,
+ CONSTRAINT [PK_OSSOrders] PRIMARY KEY CLUSTERED 
+(
+	[OSSOrderId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+CREATE TABLE [dbo].[OSSShipmentMappings](
+	[OSSShipmentMappingsId] [bigint] IDENTITY(1,1) NOT NULL,
+	[SourceShipmentMethod] [nvarchar](100) NOT NULL,
+	[DestinationShipmentMethod] [nvarchar](100) NOT NULL,
+	[THubToMBMap] [bit] NOT NULL,
+ CONSTRAINT [PK_OSSShipmentMappings] PRIMARY KEY CLUSTERED 
+(
+	[OSSShipmentMappingsId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[OSSOrders] ADD  CONSTRAINT [DF_OSSOrders_SentToMB]  DEFAULT ((0)) FOR [SentToMB]
+
+ALTER TABLE [dbo].[OSSOrders] ADD  CONSTRAINT [DF_OSSOrders_MBShipmentIdSubmitedToThub]  DEFAULT ((0)) FOR [MBShipmentIdSubmitedToThub]
+ALTER TABLE [dbo].[Logs]  WITH CHECK ADD  CONSTRAINT [FK_Logs_LogTypes] FOREIGN KEY([LogTypeId])
+REFERENCES [dbo].[LogTypes] ([LogTypeId])
+ALTER TABLE [dbo].[Logs] CHECK CONSTRAINT [FK_Logs_LogTypes]
+
+
+CREATE TYPE [dbo].[CreateOSSOrdersTableType] AS TABLE(
+	[THubOrderId] [bigint] NOT NULL,
+	[THubOrderReferenceNo] [nvarchar](100) NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[THubCompleteOrder] [nvarchar](max) NULL,
+	[OrderStatus] [tinyint] NOT NULL
+)
+
+/****** Object:  UserDefinedTableType [dbo].[OSSOrdersTableType]    Script Date: 10/9/2014 12:34:09 PM ******/
+CREATE TYPE [dbo].[OSSOrdersTableType] AS TABLE(
+	[THubOrderId] [bigint] NOT NULL,
+	[THubOrderReferenceNo] [nvarchar](100) NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[THubCompleteOrder] [nvarchar](max) NULL,
+	[SentToMB] [bit] NULL,
+	[SentToMBOn] [datetime] NULL,
+	[MBPostShipmentMessage] [varchar](max) NULL,
+	[MBPostShipmentResponseMessage] [varchar](max) NULL,
+	[MBSuccessfullyReceived] [bit] NULL,
+	[MBShipmentId] [nvarchar](15) NULL,
+	[MBShipmentSubmitError] [nvarchar](max) NULL
+)
+
+</value>
+  </data>
+
+  <data name="CreateOssOrders" xml:space="preserve">
+    <value>
+      create PROCEDURE [dbo].[USPCreateOSSOrders]
+      @createOssOrders dbo.CreateOSSOrdersTableType READONLY
+      As
+      Begin
+      -- SET NOCOUNT ON added to prevent extra result sets from
+      -- interfering with SELECT statements.
+      Set NoCount On;
+
+      Insert Into [OSSOrders]
+      ([THubOrderId]
+      ,[THubOrderReferenceNo]
+      ,[CreatedOn]
+      ,[THubCompleteOrder]
+      ,[OrderStatus])
+      SELECT [THubOrderId]
+      ,[THubOrderReferenceNo]
+      ,[CreatedOn]
+      ,[THubCompleteOrder]
+      ,[OrderStatus]
+      FROM  @createOssOrders
+
+      End
+      
+      
+      
+    </value>
+  </data>
+
+  <data name="CreateUSP_LoadOrdersFromStaging" xml:space="preserve">
+    <value>
+      CREATE PROCEDURE [dbo].[USPLoadOrdersFromStaging]
+      @OrderStatus int
+      AS
+      BEGIN
+      -- SET NOCOUNT ON added to prevent extra result sets from
+      -- interfering with SELECT statements.
+      SET NOCOUNT ON;
+
+      SELECT [OSSOrderId]
+      ,[THubOrderId]
+      ,[THubOrderReferenceNo]
+      ,[CreatedOn]
+      ,[THubCompleteOrder]
+      ,[SentToMB]
+      ,[SentToMBOn]
+      ,[MBPostShipmentMessage]
+      ,[MBPostShipmentResponseMessage]
+      ,[MBSuccessfullyReceived]
+      ,[MBShipmentId]
+      ,[MBShipmentSubmitError]
+      ,[MBShipmentIdSubmitedToThub]
+      ,[MBShipmentIdSubmitedToThubOn]
+      ,[OrderStatus]
+      ,[LastSyncWithMBOn]
+      ,[THubUpdatedOn]
+      ,[MBTrackingNumber]
+      ,[CancelMessage]
+      ,[MBShipmentMethod]
+      FROM [dbo].[OSSOrders]
+      where [OrderStatus] = @OrderStatus
+      END
+    </value>
+  </data>
+  <data name="CreateUSP_UpdateOrderAfterMoldingBoxShipmentRequest" xml:space="preserve">
+    <value>
+      CREATE PROCEDURE [dbo].[USPUpdateOrderAfterMoldingBoxShipmentRequest]
+      -- Add the parameters for the stored procedure here
+      @OSSOrderId bigint,
+      @SentToMB bit,
+      @SentToMBOn datetime,
+      @MBPostShipmentMessage nvarchar(MAX),
+      @MBPostShipmentResponseMessage nvarchar(MAX),
+      @MBSuccessfullyReceived bit,
+      @MBShipmentId nvarchar(15),
+      @MBShipmentSubmitError nvarchar(MAX),
+      @OrderStatus int,
+      @CancelMessage nvarchar(MAX),
+      @MBShipmentMethod nvarchar(MAX)
+
+      AS
+      BEGIN
+      -- SET NOCOUNT ON added to prevent extra result sets from
+      -- interfering with SELECT statements.
+      SET NOCOUNT ON;
+
+      UPDATE [dbo].[OSSOrders]
+      SET [SentToMB] = @SentToMB,
+      [SentToMBOn] = @SentToMBOn,
+      [MBPostShipmentMessage] = @MBPostShipmentMessage,
+      [MBPostShipmentResponseMessage] = @MBPostShipmentResponseMessage,
+      [MBSuccessfullyReceived] = @MBSuccessfullyReceived,
+      [MBShipmentId] = @MBShipmentId,
+      [MBShipmentSubmitError] = @MBShipmentSubmitError,
+      [OrderStatus] = @OrderStatus,
+      [CancelMessage] = @CancelMessage,
+      [MBShipmentMethod] = @MBShipmentMethod
+      WHERE [OSSOrderId] = @OSSOrderId;
+
+      END
+
+    </value>
+  </data>
+  <data name="InsertLogType" xml:space="preserve">
+  <value>
+    INSERT INTO [dbo].[LogTypes]
+           ([LogType]
+           ,[CreatedOn])
+     VALUES
+           ('Info', @CreatedOn)    
+  </value>
+  </data>
+</root>

@@ -737,5 +737,39 @@ namespace IST.OrderSynchronizationSystem
                 scope.Complete();
             }
         }
+        public void CreateDatabase()
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+                {
+                    stagingDbconnection.Open();
+                    using (SqlCommand command = new SqlCommand(CreateDBScript.CreateDbScript, stagingDbconnection))
+                    {                       
+                        command.ExecuteNonQuery();
+                    }
+                    using (SqlCommand command = new SqlCommand(CreateDBScript.CreateOssOrders, stagingDbconnection))
+                    {                        
+                        command.ExecuteNonQuery();
+                    }
+                    using (SqlCommand command = new SqlCommand(CreateDBScript.CreateUSP_LoadOrdersFromStaging, stagingDbconnection))
+                    {                        
+                        command.ExecuteNonQuery();
+                    }
+                    using (SqlCommand command = new SqlCommand(CreateDBScript.CreateUSP_UpdateOrderAfterMoldingBoxShipmentRequest, stagingDbconnection))
+                    {                        
+                        command.ExecuteNonQuery();
+                    }
+                    
+                    using (SqlCommand command = new SqlCommand(CreateDBScript.InsertLogType, stagingDbconnection))
+                    {
+                        command.Parameters.AddWithValue("@CreatedOn", DateTime.Now);
+                        command.ExecuteNonQuery();
+                    }
+                    stagingDbconnection.Close();
+                }
+                scope.Complete();
+            }
+        }
     }
 }

@@ -66,6 +66,11 @@
       <DependentUpon>Connection.cs</DependentUpon>
     </Compile>
     <Compile Include="ConnectionType.cs" />
+    <Compile Include="CreateDBScript.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CreateDBScript.resx</DependentUpon>
+    </Compile>
     <Compile Include="CreateMappingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,6 +129,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Connection.resx">
       <DependentUpon>Connection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateDBScript.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>CreateDBScript.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="CreateMappingForm.resx">
       <DependentUpon>CreateMappingForm.cs</DependentUpon>

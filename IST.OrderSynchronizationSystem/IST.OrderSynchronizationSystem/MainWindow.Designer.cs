@@ -112,6 +112,7 @@
             this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.ToolStripButton = new System.Windows.Forms.ToolStripSplitButton();
             this.ApplicationStatusStrip = new System.Windows.Forms.StatusStrip();
+            this.createDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ApplicationMenuStrip.SuspendLayout();
             this.MainFormTabControl.SuspendLayout();
             this.ConfigurationTabPage.SuspendLayout();
@@ -177,7 +178,8 @@
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.shipmentMappingsToolStripMenuItem,
             this.viewSystemLogsToolStripMenuItem,
-            this.hideWhenMinimizedToolStripMenuItem1});
+            this.hideWhenMinimizedToolStripMenuItem1,
+            this.createDatabaseToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "View";
@@ -1007,6 +1009,13 @@
             this.ApplicationStatusStrip.TabIndex = 50;
             this.ApplicationStatusStrip.Text = "Application Status Strip";
             // 
+            // createDatabaseToolStripMenuItem
+            // 
+            this.createDatabaseToolStripMenuItem.Name = "createDatabaseToolStripMenuItem";
+            this.createDatabaseToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.createDatabaseToolStripMenuItem.Text = "Create Database";
+            this.createDatabaseToolStripMenuItem.Click += new System.EventHandler(this.createDatabaseToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1158,6 +1167,7 @@
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.TextBox SyncNewOrderTextbox;
         private System.Windows.Forms.TextBox SyncMoldingBoxIntervalTextbox;
+        private System.Windows.Forms.ToolStripMenuItem createDatabaseToolStripMenuItem;
     }
 }
 

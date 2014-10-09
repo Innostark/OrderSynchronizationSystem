@@ -57,24 +57,24 @@ namespace IST.OrderSynchronizationSystem
             _autoSyncFrequency = 0;
             _autoSyncMbFrequency = 0;
             _autoSyncOrder = new AutoSynchOrder();
-            reloadGridsDelegate = new ReloadGridsDelegate(ReloadAllGrid);
+            //reloadGridsDelegate = new ReloadGridsDelegate(ReloadAllGrid);
         }
 
         private void InitializeDatabaseParameters()
         {
             _sourceConnectionVariables = new OSSConnection
             {
-                ServerName = _sourceServer,
-                DatabaseName = _sourceDatabsae ,
-                UserName = _sourceUsername,
-                Password = _sourcePassword
+                ServerName = SourceDatabaseTextBox.Text,
+                DatabaseName = SourceDatabaseTextBox.Text,
+                UserName = SourceUsernameTextBox.Text,
+                Password = SourcePasswordTextBox.Text
             };
             _stagingConnectionVariables = new OSSConnection
             {
-                ServerName = _stagingServer,
-                DatabaseName = _stagingDatabase,
-                UserName = _stagingUsername,
-                Password = _stagingPassword
+                ServerName = StagingServerTextBox.Text,
+                DatabaseName = StagingDatabaseTextBox.Text,
+                UserName = StagingUsernameTextBox.Text,
+                Password = StagingPasswordTextBox.Text
             };
             _orderSyncronizationDatabase = new OssDatabase(_sourceConnectionVariables, _stagingConnectionVariables);
         }
@@ -382,6 +382,7 @@ namespace IST.OrderSynchronizationSystem
 
         private void SynchronizeOrdersFromTHubButton_Click(object sender, EventArgs e)
         {
+            InitializeDatabaseParameters();
             List<OssShipment> ossShipments = new List<OssShipment>();
             try
             {
@@ -432,7 +433,7 @@ namespace IST.OrderSynchronizationSystem
             MainFormTabControl.SelectTab(NewOrderTabPage);
         }
 
-        private void LoadOrderFromStagingButton_Click(object sender, EventArgs e)
+        private void LoadOrderFromStagingButton_Click()
         {
             RefreshNewOrdersGrid();
         }
@@ -1114,6 +1115,7 @@ namespace IST.OrderSynchronizationSystem
 
         private void OssOrdersDataGridView_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
+            InitializeDatabaseParameters();
             DataGridView senderGrid = (DataGridView) sender;
             if (string.IsNullOrEmpty(MoldinboxKeyTextBox.Text))
             {
@@ -1640,6 +1642,7 @@ namespace IST.OrderSynchronizationSystem
         {
             try
             {
+                InitializeDatabaseParameters();
                 if (string.IsNullOrEmpty(MoldinboxKeyTextBox.Text))
                 {
                     MessageBox.Show("Please specify apikey on the configuration tab.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1671,6 +1674,7 @@ namespace IST.OrderSynchronizationSystem
 
         private void viewSystemLogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            InitializeDatabaseParameters();
             ViewLogForm logForm = new ViewLogForm(_orderSyncronizationDatabase);
             logForm.ShowDialog(this);
         }
@@ -1721,15 +1725,15 @@ namespace IST.OrderSynchronizationSystem
             }
         }
 
-        public void ReloadAllGrid()
-        {
-            LoadOrderFromStagingButton_Click(null, null);
-            InFlightRefresh();
-            ExceptionRefresh();
-            CompleteRefresh();
-            OnHoldRefresh();
-            CancelRefresh();
-        }
+        //public void ReloadAllGrid()
+        //{
+        //    //LoadOrderFromStagingButton_Click(null, null);
+        //    //InFlightRefresh();
+        //    //ExceptionRefresh();
+        //    //CompleteRefresh();
+        //    //OnHoldRefresh();
+        //    //CancelRefresh();
+        //}
         public void EnableDisableFieldsForAutoSync(bool enableOrDisable)
         {
             ToolStripButton.Enabled = enableOrDisable;
@@ -1748,13 +1752,14 @@ namespace IST.OrderSynchronizationSystem
 
         private void ToolStripButton_ButtonClick(object sender, EventArgs e)
         {
+            InitializeDatabaseParameters();
             try
             {
                 switch (MainFormTabControl.SelectedTab.Name)
                 {
                     case "NewOrderTabPage":
                         {
-                            LoadOrderFromStagingButton_Click(null, null);
+                            LoadOrderFromStagingButton_Click();
                             break;
                         }
                     case "InFight":
@@ -1808,7 +1813,7 @@ namespace IST.OrderSynchronizationSystem
         {
             if (_autoSyncActive)
             {
-                this.MainFormTabControl.SelectedIndex = 0;
+                MainFormTabControl.SelectedIndex = 0;
             }
         }
 
@@ -1819,7 +1824,28 @@ namespace IST.OrderSynchronizationSystem
                 ((TextBox) sender).Text = "";
         }
 
-        
+        private void createDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InitializeDatabaseParameters();
+            DialogResult results =
+                MessageBox.Show(
+                    "This operation will create all mandatory tables and scripts on the staging database. Are you sure you want to continue?",
+                    "Create Staging Database?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
+            if (results.Equals(DialogResult.OK))
+            {
+                try
+                {
+                    _orderSyncronizationDatabase.CreateDatabase();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show(
+                        "Staging database objects cannot be created on the specified database. Please make sure the database settings you provided on configurations tab exists and no script has been previously uploaded.",
+                        "Error creating database!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                
+            }
+        }
     }
 }
