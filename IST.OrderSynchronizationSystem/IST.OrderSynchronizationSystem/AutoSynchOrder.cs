@@ -68,8 +68,7 @@ namespace IST.OrderSynchronizationSystem
                 DataTable stagingNewOrders = mainProgram._orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrderTable", OSSOrderStatus.New);
                 foreach (DataRow row in stagingNewOrders.Rows)
                 {
-                    if ((long)row["THubOrderID"] != 2710)
-                        PostShipmentToMoldingBox(row, mainProgram, shipmentMethods);
+                    PostShipmentToMoldingBox(row, mainProgram, shipmentMethods);
                 }
 
             }

@@ -759,8 +759,7 @@ namespace IST.OrderSynchronizationSystem
                     using (SqlCommand command = new SqlCommand(CreateDBScript.CreateUSP_UpdateOrderAfterMoldingBoxShipmentRequest, stagingDbconnection))
                     {                        
                         command.ExecuteNonQuery();
-                    }
-                    
+                    }                    
                     using (SqlCommand command = new SqlCommand(CreateDBScript.InsertLogType, stagingDbconnection))
                     {
                         command.Parameters.AddWithValue("@CreatedOn", DateTime.Now);
