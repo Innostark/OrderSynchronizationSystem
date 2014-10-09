@@ -18,8 +18,7 @@ namespace IST.OrderSynchronizationSystem
         private string apiKey;
         private MBAPISoapClient client;
         public void Process(Form mainWindow, int frequency)
-        {
-            MessageBox.Show("me here");
+        {            
             MainWindow mainForm = (MainWindow)mainWindow;
             apiKey = mainForm.apiKey;
             client = MoldingBoxHelper.GetMoldingBoxClient();
@@ -75,8 +74,11 @@ namespace IST.OrderSynchronizationSystem
 
             }
             catch (Exception ex)
-            {
+            {                
+                
                 string errorText = "An error occured while importing order from T-Hub. The process will continue but if problem persists, make sure that database is available.";
+                MessageBox.Show(errorText, "Order Synchronization Error!", MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
                 mainProgram.ApplicationStatusUpdate(errorText);
                 mainProgram._orderSyncronizationDatabase.LogOrder(1, -1, string.Format("{0} Error Details: {1}", errorText, ex.Message));
             }
@@ -199,6 +201,7 @@ namespace IST.OrderSynchronizationSystem
             catch (Exception ex) 
             {
                 string errorText = "An error occured while Checking order status on MoldingBox. The process will continue but if problem persists, make sure that database is available. ";
+                MessageBox.Show(errorText, "Order Synchronization Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 mainProgram.ApplicationStatusUpdate(errorText);
                 mainProgram._orderSyncronizationDatabase.LogOrder(1, -1, string.Format("{0} Error details: {1}",errorText, ex.Message));                
             }

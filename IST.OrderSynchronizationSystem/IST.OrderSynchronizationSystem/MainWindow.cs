@@ -231,7 +231,7 @@ namespace IST.OrderSynchronizationSystem
             }
             if (!string.IsNullOrEmpty(SyncMoldingBoxIntervalTextbox.Text) && int.TryParse(SyncMoldingBoxIntervalTextbox.Text, out minutes))
             {
-                if (minutes > 999 || minutes < 1)
+                if (minutes > 999 || minutes < 5)
                 {
                     FormErrorProvider.SetError(SyncMoldingBoxIntervalTextbox, Resources.MainWindow_MinutesRange);
                     isValid = false;
@@ -271,7 +271,7 @@ namespace IST.OrderSynchronizationSystem
             if (ApplicationStatusStrip.InvokeRequired)
             {
                 SetTextCallback d = SetApplicationStatusText;
-                Invoke(d, new object[] {text});
+                Invoke(d, new object[] {text});                
             }
             else
             {
