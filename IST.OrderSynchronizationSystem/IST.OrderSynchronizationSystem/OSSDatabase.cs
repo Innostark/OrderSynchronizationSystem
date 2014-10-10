@@ -737,7 +737,7 @@ namespace IST.OrderSynchronizationSystem
                 scope.Complete();
             }
         }
-        public void CreateDatabase()
+        public void CreateDatabase(long LastedOrderId)
         {
             using (TransactionScope scope = new TransactionScope())
             {
@@ -765,6 +765,11 @@ namespace IST.OrderSynchronizationSystem
                         command.Parameters.AddWithValue("@CreatedOn", DateTime.Now);
                         command.ExecuteNonQuery();
                     }
+                    using (SqlCommand command = new SqlCommand(CreateDBScript.InsertLatestOrderId, stagingDbconnection))
+                    {
+                        command.Parameters.AddWithValue("@LatestOrderId", LastedOrderId);
+                        command.ExecuteNonQuery();
+                    }                    
                     stagingDbconnection.Close();
                 }
                 scope.Complete();

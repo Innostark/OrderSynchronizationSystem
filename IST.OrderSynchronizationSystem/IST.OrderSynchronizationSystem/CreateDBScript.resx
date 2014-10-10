@@ -338,4 +338,13 @@ CREATE TYPE [dbo].[OSSOrdersTableType] AS TABLE(
            ('Info', @CreatedOn)    
   </value>
   </data>
+  <data name="InsertLatestOrderId" xml:space="preserve">
+    <value>
+      INSERT INTO [OssLastSyncOrderDetail]
+           ([LastSynchOrderId])
+     VALUES
+           (@LatestOrderId)
+    </value>
+    
+  </data>
 </root>

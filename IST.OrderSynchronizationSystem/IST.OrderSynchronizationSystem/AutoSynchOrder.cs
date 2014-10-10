@@ -70,15 +70,14 @@ namespace IST.OrderSynchronizationSystem
                 {
                     PostShipmentToMoldingBox(row, mainProgram, shipmentMethods);
                 }
-
+                mainProgram.ApplicationStatusUpdate("Cycle for Pulling Orders from T-Hub and posting on MB completed.");
             }
             catch (Exception ex)
             {                
                 
                 string errorText = "An error occured while importing order from T-Hub. The process will continue but if problem persists, make sure that database is available.";
-                MessageBox.Show(errorText, "Order Synchronization Error!", MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
                 mainProgram.ApplicationStatusUpdate(errorText);
+                MessageBox.Show(errorText, "Order Synchronization Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);                
                 mainProgram._orderSyncronizationDatabase.LogOrder(1, -1, string.Format("{0} Error Details: {1}", errorText, ex.Message));
             }
         }
@@ -196,12 +195,13 @@ namespace IST.OrderSynchronizationSystem
                 {
                     CheckAndUpdateOssOrderRowStatus(mainProgram, ossOrderRow);
                 }
+                mainProgram.ApplicationStatusUpdate("Cycle for Auto-Synchronization with Molding-Box completed.");
             }
             catch (Exception ex) 
             {
-                string errorText = "An error occured while Checking order status on MoldingBox. The process will continue but if problem persists, make sure that database is available. ";
-                MessageBox.Show(errorText, "Order Synchronization Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                string errorText = "An error occured while Checking order status on MoldingBox. The process will continue but if problem persists, make sure that database is available. ";                
                 mainProgram.ApplicationStatusUpdate(errorText);
+                MessageBox.Show(errorText, "Order Synchronization Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 mainProgram._orderSyncronizationDatabase.LogOrder(1, -1, string.Format("{0} Error details: {1}",errorText, ex.Message));                
             }
             

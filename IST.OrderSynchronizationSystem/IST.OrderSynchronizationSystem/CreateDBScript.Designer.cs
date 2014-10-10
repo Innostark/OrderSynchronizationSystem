@@ -163,6 +163,20 @@ namespace IST.OrderSynchronizationSystem {
         
         /// <summary>
         ///   Looks up a localized string similar to 
+        ///      INSERT INTO [OssLastSyncOrderDetail]
+        ///           ([LastSynchOrderId])
+        ///     VALUES
+        ///           (@LatestOrderId)
+        ///    .
+        /// </summary>
+        internal static string InsertLatestOrderId {
+            get {
+                return ResourceManager.GetString("InsertLatestOrderId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
         ///    INSERT INTO [dbo].[LogTypes]
         ///           ([LogType]
         ///           ,[CreatedOn])

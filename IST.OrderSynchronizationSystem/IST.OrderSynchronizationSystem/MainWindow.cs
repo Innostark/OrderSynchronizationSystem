@@ -64,7 +64,7 @@ namespace IST.OrderSynchronizationSystem
         {
             _sourceConnectionVariables = new OSSConnection
             {
-                ServerName = SourceDatabaseTextBox.Text,
+                ServerName = SourceServerTextBox.Text,
                 DatabaseName = SourceDatabaseTextBox.Text,
                 UserName = SourceUsernameTextBox.Text,
                 Password = SourcePasswordTextBox.Text
@@ -213,7 +213,7 @@ namespace IST.OrderSynchronizationSystem
             int minutes;
             if (!string.IsNullOrEmpty(SyncNewOrderTextbox.Text) && int.TryParse(SyncNewOrderTextbox.Text, out minutes))
             {
-                if (minutes > 999 || minutes < 1)
+                if (minutes > 999 || minutes < 5)
                 {
                     FormErrorProvider.SetError(SyncNewOrderTextbox, Resources.MainWindow_MinutesRange);
                     isValid = false;
@@ -459,6 +459,7 @@ namespace IST.OrderSynchronizationSystem
                             if (OssOrdersDataGridView.ColumnCount == 21)
                             {
                                 AddSendButtonToGridView(OssOrdersDataGridView);
+                                AddCancelButtonToGridView(OssOrdersDataGridView, 16);
                             }
                             EnableDisableSendToMoldingBoxButton(OssOrdersDataGridView);
                         }
@@ -576,6 +577,7 @@ namespace IST.OrderSynchronizationSystem
             sendToMoldingBoxButtonColumn.ToolTipText = "Click to submit order to ModingBox for processing.";
             sendToMoldingBoxButtonColumn.DefaultCellStyle.Font = new Font("Arial", 8.5F, FontStyle.Bold);
             sendToMoldingBoxButtonColumn.UseColumnTextForButtonValue = true;
+            sendToMoldingBoxButtonColumn.Width = 70;
             sendToMoldingBoxButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
             gridView.Columns.Insert(15, sendToMoldingBoxButtonColumn);
@@ -610,7 +612,7 @@ namespace IST.OrderSynchronizationSystem
             gridView.Columns.Insert(20, sendToMoldingBoxButtonColumn);
         }
         
-        private void AddCancelButtonToGridView(DataGridView gridView)
+        private void AddCancelButtonToGridView(DataGridView gridView, int index = 21)
         {
             DataGridViewDisableButtonColumn sendToMoldingBoxButtonColumn = new DataGridViewDisableButtonColumn();
             sendToMoldingBoxButtonColumn.HeaderText = CancelString;
@@ -623,7 +625,7 @@ namespace IST.OrderSynchronizationSystem
             sendToMoldingBoxButtonColumn.UseColumnTextForButtonValue = true;
             sendToMoldingBoxButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            gridView.Columns.Insert(21, sendToMoldingBoxButtonColumn);
+            gridView.Columns.Insert(index, sendToMoldingBoxButtonColumn);
         }
         private void AddSyncButtonToGridView(DataGridView gridView)
         {
@@ -672,13 +674,13 @@ namespace IST.OrderSynchronizationSystem
                         {
                             gridView.Columns["CreatedOn"].HeaderText = "OSS Created On";
                             gridView.Columns["CreatedOn"].ReadOnly = true;
-                            gridView.Columns["CreatedOn"].Width = 150;
+                            gridView.Columns["CreatedOn"].Width = 120;
                         }
                         if (gridView.Columns["THubCompleteOrder"] != null)
                         {
                             gridView.Columns["THubCompleteOrder"].HeaderText = "Complete Order";
                             gridView.Columns["THubCompleteOrder"].ReadOnly = true;
-                            gridView.Columns["THubCompleteOrder"].MinimumWidth = 600;
+                            gridView.Columns["THubCompleteOrder"].MinimumWidth = 400;
                         }
                         if (gridView.Columns["OSSOrderId"] != null)
                             gridView.Columns["OSSOrderId"].Visible = false;
@@ -1131,7 +1133,7 @@ namespace IST.OrderSynchronizationSystem
                 {
                     try
                     {
-                        HandleSendToMoldingBox(e, senderGrid);
+                        HandleNewGridActions(e, senderGrid);
                     }
                     catch (Exception exception)
                     {
@@ -1169,7 +1171,37 @@ namespace IST.OrderSynchronizationSystem
                 {
                     try
                     {
-                        SyncWithMoldingBox(((DataTable)senderGrid.DataSource).Rows[e.RowIndex]);
+                        DataGridViewDisableButtonCell sendToMbButtonCell = (DataGridViewDisableButtonCell)senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                        if (sendToMbButtonCell.FormattedValue == CancelString)
+                        {
+                            try
+                            {
+                                CancelMessageForm cancelMessageForm = new CancelMessageForm();
+                                DialogResult results = cancelMessageForm.ShowDialog(this);
+                                if (cancelMessageForm.Result == DialogResult.OK)
+                                {
+                                    DataRow ossOrderRow = ((DataTable) senderGrid.DataSource).Rows[e.RowIndex];
+                                    ossOrderRow["CancelMessage"] = cancelMessageForm.CancelMessageString;
+                                    ossOrderRow["OrderStatus"] = (int) OSSOrderStatus.Canceled;
+                                    _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
+                                }
+                            }
+                            catch (Exception exception)
+                            {
+                                _orderSyncronizationDatabase.LogOrder(1,
+                                    long.Parse(
+                                        ((DataTable) senderGrid.DataSource).Rows[e.RowIndex]["THubOrderId"].ToString()),
+                                    string.Format("Error while canceling order. Error: {0}", exception.Message));
+                                MessageBox.Show(
+                                    "There is some problem while canceling the order. Error details have been logged. If problem persists, please check database.",
+                                    "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            }
+                            InFlightRefresh();
+                        }
+                        else
+                        {
+                            HandleInFlightOrdersActions(((DataTable)senderGrid.DataSource).Rows[e.RowIndex]);
+                        }
                     }
                     catch (Exception exception)
                     {
@@ -1184,11 +1216,35 @@ namespace IST.OrderSynchronizationSystem
             }
         }
 
-        private void HandleSendToMoldingBox(DataGridViewCellEventArgs e, DataGridView senderGrid)        
+        private void HandleNewGridActions(DataGridViewCellEventArgs e, DataGridView senderGrid)        
         {
+            //TO ADD
             MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
             DataGridViewDisableButtonCell sendToMbButtonCell = (DataGridViewDisableButtonCell)senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex];
-            if (sendToMbButtonCell.Enabled)
+            if (sendToMbButtonCell.FormattedValue == CancelString)
+            {
+                try
+                {
+                    CancelMessageForm cancelMessageForm = new CancelMessageForm();
+                    DialogResult results = cancelMessageForm.ShowDialog(this);
+                    if (cancelMessageForm.Result == DialogResult.OK)
+                    {
+                        DataRow ossOrderRow = ((DataTable)senderGrid.DataSource).Rows[e.RowIndex];
+                        ossOrderRow["CancelMessage"] = cancelMessageForm.CancelMessageString;
+                        ossOrderRow["OrderStatus"] = (int)OSSOrderStatus.Canceled;
+                        _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    _orderSyncronizationDatabase.LogOrder(1, long.Parse(((DataTable)senderGrid.DataSource).Rows[e.RowIndex]["THubOrderId"].ToString()),
+                        string.Format("Error while canceling order. Error: {0}", exception.Message));
+                    MessageBox.Show(
+                            "There is some problem while canceling the order. Error details have been logged. If problem persists, please check database.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                RefreshNewOrdersGrid();
+            }
+            else if (sendToMbButtonCell.Enabled)
             {
                 if (shipmentMethods == null || !shipmentMethods.Any())
                 {
@@ -1310,7 +1366,7 @@ namespace IST.OrderSynchronizationSystem
             senderGrid.DataBindings.Clear();
             senderGrid.DataSource = ossExceptionDataTable;
         }
-        private void SyncWithMoldingBox(DataRow ossOrderRow)
+        private void HandleInFlightOrdersActions(DataRow ossOrderRow)
         {
             string mbShipmentID = ossOrderRow["MBShipmentId"].ToString();
             string orderId = ossOrderRow["THubOrderId"].ToString();
@@ -1343,6 +1399,7 @@ namespace IST.OrderSynchronizationSystem
                     _orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId), OSSOrderStatus.Exception);
                     _orderSyncronizationDatabase.LogOrder(1, long.Parse(orderId), string.Format("Order status check returns an exceptional response. Response Message: '{0}'", statusResponse[0].ErrorMessage));
                 }
+                InFlightRefresh();
             }            
         }
         private void SetOrderStatus(DataRow ossOrderRow, DateTime shipmentRequestSentOn, string MBShipmentMethod, Response[] responses, OssShipment[] shipments)
@@ -1479,6 +1536,7 @@ namespace IST.OrderSynchronizationSystem
                     if (OssInFlightGridView.ColumnCount == 21)
                     {
                         AddSyncButtonToGridView(OssInFlightGridView);
+                        AddCancelButtonToGridView(OssInFlightGridView);
                     }
                 }
                 SetOssOrderDataGridHeaderTextAndColumnVisibility(OssInFlightGridView, OssOrdersGridTypes.Processing);   
@@ -1830,21 +1888,17 @@ namespace IST.OrderSynchronizationSystem
             DialogResult results =
                 MessageBox.Show(
                     "This operation will create all mandatory tables and scripts on the staging database. Are you sure you want to continue?",
-                    "Create Staging Database?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                    "Create Staging Database?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (results.Equals(DialogResult.OK))
+            if (results.Equals(DialogResult.Yes))
             {
-                try
+                    LatestOrder latestOrderDialog = new LatestOrder(_orderSyncronizationDatabase);
+                    latestOrderDialog.ShowDialog(this);
+                if (latestOrderDialog.results == DialogResult.OK)
                 {
-                    _orderSyncronizationDatabase.CreateDatabase();
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show(
-                        "Staging database objects cannot be created on the specified database. Please make sure the database settings you provided on configurations tab exists and no script has been previously uploaded.",
-                        "Error creating database!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                
+                    MessageBox.Show("Database has been created successfully.", "Success!", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }                
             }
         }
     }
