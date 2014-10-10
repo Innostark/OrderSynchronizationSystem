@@ -1,6 +1,6 @@
 ﻿namespace IST.OrderSynchronizationSystem.Models
 {
-    internal class OssShipmentMessage
+    public class OssShipmentMessage
     {
         public string ApiKey { get; set; }
 

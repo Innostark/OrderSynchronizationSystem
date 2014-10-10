@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Globalization;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Transactions;
 using IST.OrderSynchronizationSystem.GUI;
 using IST.OrderSynchronizationSystem.MBAPI;
@@ -15,12 +11,9 @@ using Newtonsoft.Json;
 namespace IST.OrderSynchronizationSystem
 {
     public class OssDatabase
-    {
-        
+    {        
         private readonly SqlConnectionStringBuilder _stagingSqlConnectionConnectionStringBuilder;
         private readonly SqlConnectionStringBuilder _sourceSqlConnectionConnectionStringBuilder;
-        
-        
         public OssDatabase(OSSConnection sourceDatabaseConnection, OSSConnection stagingDatabaseConnection)
         {
             _sourceSqlConnectionConnectionStringBuilder = new SqlConnectionStringBuilder
@@ -372,7 +365,7 @@ namespace IST.OrderSynchronizationSystem
         private static Item ConvertSourceOrderItemToStagingItem(IDataRecord orderItem)
         {
             //TODO: Replace the Hard Coded SKU with live
-            return new Item()
+            return new Item
             {
                 SKU = "SKU1",//SKU = orderItem["SKU"].ToString()
                 Description = orderItem["Description"].ToString(),
@@ -384,35 +377,6 @@ namespace IST.OrderSynchronizationSystem
                 Custom5 = orderItem["Custom5"].ToString(),
                 Custom6 = orderItem["Custom6"].ToString()
             };
-        }
-
-        private static Shipment ConvertStagingOrderToMoldingBoxShipment(OssShipment stagingShipment)
-        {
-            if (stagingShipment == null) throw new ArgumentNullException("stagingShipment");
-
-            Shipment shipment = new Shipment();
-            shipment.OrderID = stagingShipment.OrderID;
-            shipment.Orderdate = stagingShipment.Orderdate;
-            shipment.Company = stagingShipment.Company;
-            shipment.FirstName = stagingShipment.FirstName;
-            shipment.LastName = stagingShipment.LastName;
-            shipment.Address1 = stagingShipment.Address1;
-            shipment.Address2 = stagingShipment.Address2;
-            shipment.City = stagingShipment.City;
-            shipment.State = stagingShipment.State;
-            shipment.Zip = stagingShipment.Zip;
-            shipment.Country = stagingShipment.Country;
-            shipment.Email = stagingShipment.Email;
-            shipment.ShippingMethodID = stagingShipment.ShippingMethodID;
-            shipment.CODAmount = stagingShipment.CODAmount;
-            shipment.Custom1 = stagingShipment.Custom1;
-            shipment.Custom2 = stagingShipment.Custom2;
-            shipment.Custom3 = stagingShipment.Custom3;
-            shipment.Custom4 = stagingShipment.Custom4;
-            shipment.Custom5 = stagingShipment.Custom5;
-            shipment.Custom6 = stagingShipment.Custom6;
-            shipment.Items = stagingShipment.Items;
-            return shipment;
         }
 
         private static DataTable CreateStagingOrdersTable_THubLoad()
