@@ -38,6 +38,9 @@
     <AssemblyOriginatorKeyFile>IST.SignedKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Data.Enterprise">
+      <HintPath>..\..\..\..\..\MS\Microsoft.Data.Enterprise.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -84,8 +87,6 @@
       <DependentUpon>CreateMappingForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EncodeDecode.cs" />
-    <Compile Include="GUI\DataGridViewDisableButtonCell.cs" />
-    <Compile Include="GUI\DataGridViewDisableButtonColumn.cs" />
     <Compile Include="GUI\OssOrdersGridTypes.cs" />
     <Compile Include="GUI\OSSOrderStatus.cs" />
     <Compile Include="LatestOrder.cs">

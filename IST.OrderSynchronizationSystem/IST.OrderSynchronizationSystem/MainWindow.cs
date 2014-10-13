@@ -11,6 +11,7 @@ using IST.OrderSynchronizationSystem.Models;
 using IST.OrderSynchronizationSystem.MoldingBox;
 using IST.OrderSynchronizationSystem.Properties;
 using System.Configuration;
+using Microsoft.Data.Enterprise;
 using Newtonsoft.Json;
 
 namespace IST.OrderSynchronizationSystem
