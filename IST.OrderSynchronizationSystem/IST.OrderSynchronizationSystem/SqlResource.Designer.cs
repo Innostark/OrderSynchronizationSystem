@@ -216,14 +216,27 @@ namespace IST.OrderSynchronizationSystem {
         
         /// <summary>
         ///   Looks up a localized string similar to UPDATE [dbo].[OSSOrders]
-        ///      SET [LastSyncWithMBOn] = @DateTimeNow,
+        ///      SET [LastSyncWithMBOn] = @DateTimeNow, [MBTrackingNumber] = @TrackingNumber, [THubUpdatedOn] = @THubUpdatedOn,
         ///	    [OrderStatus] = @OrderStatus
         ///      WHERE [THubOrderId] = @THubOrderId
         ///  .
         /// </summary>
-        internal static string source_sql_UpdateOrderCompleted {
+        internal static string source_sql_UpdateOrderCompletedWithTracking {
             get {
-                return ResourceManager.GetString("source_sql_UpdateOrderCompleted", resourceCulture);
+                return ResourceManager.GetString("source_sql_UpdateOrderCompletedWithTracking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPDATE [dbo].[OSSOrders]
+        ///      SET [LastSyncWithMBOn] = @DateTimeNow, [CancelMessage] = @CancelMessage,
+        ///	    [OrderStatus] = @OrderStatus
+        ///      WHERE [THubOrderId] = @THubOrderId
+        ///  .
+        /// </summary>
+        internal static string source_sql_UpdateOrderStatusOnOss {
+            get {
+                return ResourceManager.GetString("source_sql_UpdateOrderStatusOnOss", resourceCulture);
             }
         }
         

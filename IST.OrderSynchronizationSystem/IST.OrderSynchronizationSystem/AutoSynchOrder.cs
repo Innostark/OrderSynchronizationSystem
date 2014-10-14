@@ -217,7 +217,20 @@ namespace IST.OrderSynchronizationSystem
             {
                 client = MoldingBoxHelper.GetMoldingBoxClient();
             }
-            StatusResponse[] statusResponse = client.Retrieve_Shipment_Status(apiKey, new ArrayOfInt() { int.Parse(mbShipmentID) });
+            StatusResponse[] statusResponse;
+            try
+            {
+                statusResponse = client.Retrieve_Shipment_Status(apiKey, new ArrayOfInt { int.Parse(mbShipmentID) });
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("Current status of order is unrecognized"))
+                {
+                    mainProgram._orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId), OSSOrderStatus.OnHold, "Current status of order is unrecognized on MoldingBox.");
+                }
+                return;
+            }            
+            
             if (statusResponse[0].ShipmentExists)
             {
                 if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Completed) // Handle in processing

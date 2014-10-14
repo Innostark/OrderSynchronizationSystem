@@ -338,9 +338,16 @@ where THubOrderReferenceNo = @OssOrderId </value>
       WHERE [THubOrderId] = @THubOrderId
   </value>
   </data>
-  <data name="source_sql_UpdateOrderCompleted" xml:space="preserve">
+  <data name="source_sql_UpdateOrderStatusOnOss" xml:space="preserve">
     <value>UPDATE [dbo].[OSSOrders]
-      SET [LastSyncWithMBOn] = @DateTimeNow,
+      SET [LastSyncWithMBOn] = @DateTimeNow, [CancelMessage] = @CancelMessage,
+	    [OrderStatus] = @OrderStatus
+      WHERE [THubOrderId] = @THubOrderId
+  </value>
+  </data>
+  <data name="source_sql_UpdateOrderCompletedWithTracking" xml:space="preserve">
+    <value>UPDATE [dbo].[OSSOrders]
+      SET [LastSyncWithMBOn] = @DateTimeNow, [MBTrackingNumber] = @TrackingNumber, [THubUpdatedOn] = @THubUpdatedOn,
 	    [OrderStatus] = @OrderStatus
       WHERE [THubOrderId] = @THubOrderId
   </value>

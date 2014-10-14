@@ -244,11 +244,13 @@ namespace IST.OrderSynchronizationSystem
                 using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
                 {
                     stagingDbconnection.Open();
-                    using (SqlCommand command = new SqlCommand(SqlResource.source_sql_UpdateOrderCompleted, stagingDbconnection))
+                    using (SqlCommand command = new SqlCommand(SqlResource.source_sql_UpdateOrderCompletedWithTracking, stagingDbconnection))
                     {                        
                         command.Parameters.AddWithValue("@DateTimeNow", DateTime.Now);
                         command.Parameters.AddWithValue("@OrderStatus", (short)OSSOrderStatus.Completed);
-                        command.Parameters.AddWithValue("@THubOrderId", OrderKey);                        
+                        command.Parameters.AddWithValue("@THubOrderId", OrderKey);
+                        command.Parameters.AddWithValue("@TrackingNumber", response.TrackingNumber);
+                        command.Parameters.AddWithValue("@THubUpdatedOn", DateTime.Now);
                         var rowsUpdate = command.ExecuteNonQuery();
                     }
                     stagingDbconnection.Close();
@@ -257,16 +259,17 @@ namespace IST.OrderSynchronizationSystem
             }
         }
 
-        public void UpdateOrderStatusCanceledOrOnHold(long OrderKey, OSSOrderStatus orderStatus)
+        public void UpdateOrderStatusCanceledOrOnHold(long OrderKey, OSSOrderStatus orderStatus, string StatusString = "")
         {
             using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
             {
                 stagingDbconnection.Open();
-                using (SqlCommand command = new SqlCommand(SqlResource.source_sql_UpdateOrderCompleted, stagingDbconnection))
+                using (SqlCommand command = new SqlCommand(SqlResource.source_sql_UpdateOrderStatusOnOss, stagingDbconnection))
                 {                    
                     command.Parameters.AddWithValue("@DateTimeNow", DateTime.Now);
                     command.Parameters.AddWithValue("@OrderStatus", (short)orderStatus);
                     command.Parameters.AddWithValue("@THubOrderId", OrderKey);
+                    command.Parameters.AddWithValue("@CancelMessage", StatusString);                    
                     var rowsUpdate = command.ExecuteNonQuery();
                 }
                 stagingDbconnection.Close();

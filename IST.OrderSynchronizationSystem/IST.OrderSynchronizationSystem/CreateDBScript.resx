@@ -173,7 +173,7 @@ CREATE TABLE [dbo].[OSSOrders](
 	[LastSyncWithMBOn] [datetime] NULL,
 	[THubUpdatedOn] [datetime] NULL,
 	[MBTrackingNumber] [nvarchar](50) NULL,
-	[CancelMessage] [nvarchar](50) NULL,
+	[CancelMessage] [nvarchar](500) NULL,
  CONSTRAINT [PK_OSSOrders] PRIMARY KEY CLUSTERED 
 (
 	[OSSOrderId] ASC
