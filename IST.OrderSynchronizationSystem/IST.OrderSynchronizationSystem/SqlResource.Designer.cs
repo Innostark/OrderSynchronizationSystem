@@ -71,6 +71,17 @@ namespace IST.OrderSynchronizationSystem {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to delete from  [dbo].[OSSShipmentMappings]        
+        ///      WHERE [OSSShipmentMappingsId] = @MappingID
+        ///    .
+        /// </summary>
+        internal static string source_DeleteMappingSql {
+            get {
+                return ResourceManager.GetString("source_DeleteMappingSql", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to select top 1 LastSynchOrderId
         ///        from OssLastSyncOrderDetail
         ///    .

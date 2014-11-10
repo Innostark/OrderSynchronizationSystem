@@ -502,93 +502,6 @@ namespace IST.OrderSynchronizationSystem
             return recordsUpdated;
         }
 
-        public string LoadShipmentMethodMapping(bool thubToMoldingBox, string sourceShipmentMethod)
-        {
-            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
-            {
-                using (SqlCommand command = new SqlCommand(SqlResource.staging_get_Shipment_Mapping_ThubToMoldingBox, stagingDbconnection))
-                {
-                    command.Parameters.AddWithValue("@SourceShipment", sourceShipmentMethod);
-                    command.Parameters.AddWithValue("@THubToMbFlag", thubToMoldingBox);
-
-                    stagingDbconnection.Open();
-
-                    object results = command.ExecuteScalar();
-                    stagingDbconnection.Close();
-                    if (results == null)
-                        return string.Empty;
-                    return (string) results;                    
-                }
-            }
-        }
-
-        public bool SaveThubToMbMapping(string sourceShipMethod, string destinationShipMethod, bool THubToMbMap)
-        {
-            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
-            {
-                using (SqlCommand command = new SqlCommand(SqlResource.staging_sql_InsertTHubToMbMapping, stagingDbconnection))
-                {
-                    command.Parameters.AddWithValue("@SourceShipMethod", sourceShipMethod);
-                    command.Parameters.AddWithValue("@DestinationShipMethod", destinationShipMethod);
-                    command.Parameters.AddWithValue("@THubToMBMap", THubToMbMap);
-                    stagingDbconnection.Open();
-                    return command.ExecuteNonQuery() > 0;                    
-                }
-            }
-        }
-        public bool UpdateThubToMbMapping(string sourceShipMethod, string destinationShipMethod, bool THubToMbMap)
-        {
-            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
-            {
-                using (SqlCommand command = new SqlCommand(SqlResource.staging_sql_UpdateTHubToMbMapping, stagingDbconnection))
-                {
-                    command.Parameters.AddWithValue("@SourceShipMethod", sourceShipMethod);
-                    command.Parameters.AddWithValue("@DestinationShipMethod", destinationShipMethod);                    
-                    stagingDbconnection.Open();
-                    return command.ExecuteNonQuery() > 0;
-                }
-            }
-        }
-
-        public DataTable LoadMappingsFromStagingDatabase()
-        {
-            DataTable shipmentMappingDatatable = CreateShipmentMappingTable();
-            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
-            {
-                stagingDbconnection.Open();
-                using (SqlCommand command = new SqlCommand(SqlResource.source_LoadShipmentMapping, stagingDbconnection))
-                {
-                    SqlDataReader shipmentMappingReader = command.ExecuteReader();
-                    if (shipmentMappingReader.HasRows)
-                    {
-                        while (shipmentMappingReader.Read())
-                        {
-                            DataRow mappingRow = shipmentMappingDatatable.NewRow();
-                            LoadShipmentMappingRow(shipmentMappingReader, mappingRow);
-                            shipmentMappingDatatable.Rows.Add(mappingRow);
-                        }
-                    }
-                }
-                stagingDbconnection.Close();
-            }
-            return shipmentMappingDatatable;
-
-        }
-        private static DataTable CreateShipmentMappingTable()
-        {
-            DataTable ossOrdersTable = new DataTable("ShipmentMappingTable");
-            ossOrdersTable.Columns.Add("OSSShipmentMappingsId", typeof(long));
-            ossOrdersTable.Columns.Add("SourceShipmentMethod", typeof(string));
-            ossOrdersTable.Columns.Add("DestinationShipmentMethod", typeof(string));
-            return ossOrdersTable;
-        }
-        private static void LoadShipmentMappingRow(IDataRecord shipemtnRecord, DataRow shipmentDataRow)
-        {
-            shipmentDataRow["OSSShipmentMappingsId"] = shipemtnRecord["OSSShipmentMappingsId"];
-            shipmentDataRow["SourceShipmentMethod"] = shipemtnRecord["SourceShipmentMethod"];
-            shipmentDataRow["DestinationShipmentMethod"] = shipemtnRecord["DestinationShipmentMethod"];
-        }
-
 
         public DataTable LoadLogsFromDatabase()
         {
@@ -681,29 +594,6 @@ namespace IST.OrderSynchronizationSystem
             return -1;
         }
 
-        public void UpdateMappings(IList<MBShimentMethodMappings> mappings)
-        {
-            using (TransactionScope scope = new TransactionScope())
-            {
-                using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
-                {
-                    stagingDbconnection.Open();
-
-                    foreach (MBShimentMethodMappings mbShimentMethodMapping in mappings)
-                    {
-                        using (SqlCommand command = new SqlCommand(SqlResource.source_UpdateMappingSql, stagingDbconnection))
-                        {
-                            command.Parameters.AddWithValue("@SourceMethod", mbShimentMethodMapping.SourceShipmentMethod);
-                            command.Parameters.AddWithValue("@DestinationMethod", mbShimentMethodMapping.DestinationShipmentMethod);
-                            command.Parameters.AddWithValue("@MappingID", mbShimentMethodMapping.DestinationShipmentMethodID);
-                            var objectToReturn = command.ExecuteNonQuery();
-                        }
-                    }   
-                    stagingDbconnection.Close();
-                }
-                scope.Complete();
-            }
-        }
         public void CreateDatabase(long LastedOrderId)
         {
             using (TransactionScope scope = new TransactionScope())
@@ -742,5 +632,143 @@ namespace IST.OrderSynchronizationSystem
                 scope.Complete();
             }
         }
+
+
+        //TODO: Mapping Usage 
+
+        /// <summary>
+        /// Update Mappings
+        /// </summary>
+        /// <param name="mappings"></param>
+        public void UpdateMappings(IList<MBShimentMethodMappings> mappings)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+                {
+                    stagingDbconnection.Open();
+
+                    foreach (MBShimentMethodMappings mbShimentMethodMapping in mappings)
+                    {
+                        using (SqlCommand command = new SqlCommand(SqlResource.source_UpdateMappingSql, stagingDbconnection))
+                        {
+                            command.Parameters.AddWithValue("@SourceMethod", mbShimentMethodMapping.SourceShipmentMethod);
+                            command.Parameters.AddWithValue("@DestinationMethod", mbShimentMethodMapping.DestinationShipmentMethod);
+                            command.Parameters.AddWithValue("@MappingID", mbShimentMethodMapping.DestinationShipmentMethodID);
+                            var objectToReturn = command.ExecuteNonQuery();
+                        }
+                    }
+                    stagingDbconnection.Close();
+                }
+                scope.Complete();
+            }
+        }
+
+        /// <summary>
+        /// Update Mappings
+        /// </summary>
+        public void DeleteMapping(long mappingId)
+        {
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                stagingDbconnection.Open();
+                using (SqlCommand command = new SqlCommand(SqlResource.source_DeleteMappingSql, stagingDbconnection))
+                {
+                    command.Parameters.AddWithValue("@MappingID", mappingId);
+                    var objectToReturn = command.ExecuteNonQuery();
+                }
+                stagingDbconnection.Close();
+            }
+            
+        }
+    
+        public DataTable LoadMappingsFromStagingDatabase()
+        {
+            DataTable shipmentMappingDatatable = CreateShipmentMappingTable();
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                stagingDbconnection.Open();
+                using (SqlCommand command = new SqlCommand(SqlResource.source_LoadShipmentMapping, stagingDbconnection))
+                {
+                    SqlDataReader shipmentMappingReader = command.ExecuteReader();
+                    if (shipmentMappingReader.HasRows)
+                    {
+                        while (shipmentMappingReader.Read())
+                        {
+                            DataRow mappingRow = shipmentMappingDatatable.NewRow();
+                            LoadShipmentMappingRow(shipmentMappingReader, mappingRow);
+                            shipmentMappingDatatable.Rows.Add(mappingRow);
+                        }
+                    }
+                }
+                stagingDbconnection.Close();
+            }
+            return shipmentMappingDatatable;
+
+        }
+
+        public int LoadShipmentMethodMapping(bool thubToMoldingBox, string sourceShipmentMethod)
+        {
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(SqlResource.staging_get_Shipment_Mapping_ThubToMoldingBox, stagingDbconnection))
+                {
+                    command.Parameters.AddWithValue("@SourceShipment", sourceShipmentMethod);
+                    command.Parameters.AddWithValue("@THubToMbFlag", thubToMoldingBox);
+
+                    stagingDbconnection.Open();
+
+                    object results = command.ExecuteScalar();
+                    stagingDbconnection.Close();
+                    if (results == null)
+                        return -1;
+                    return (int)results;
+                }
+            }
+        }
+
+        public bool SaveThubToMbMapping(string sourceShipMethod, long destinationShipMethod, bool THubToMbMap)
+        {
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(SqlResource.staging_sql_InsertTHubToMbMapping, stagingDbconnection))
+                {
+                    command.Parameters.AddWithValue("@SourceShipMethod", sourceShipMethod);
+                    command.Parameters.AddWithValue("@DestinationShipMethod", destinationShipMethod);
+                    command.Parameters.AddWithValue("@THubToMBMap", THubToMbMap);
+                    stagingDbconnection.Open();
+                    return command.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+        public bool UpdateThubToMbMapping(string sourceShipMethod, long destinationShipMethod, bool THubToMbMap)
+        {
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(SqlResource.staging_sql_UpdateTHubToMbMapping, stagingDbconnection))
+                {
+                    command.Parameters.AddWithValue("@SourceShipMethod", sourceShipMethod);
+                    command.Parameters.AddWithValue("@DestinationShipMethod", destinationShipMethod);
+                    stagingDbconnection.Open();
+                    return command.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+        private static DataTable CreateShipmentMappingTable()
+        {
+            DataTable ossOrdersTable = new DataTable("ShipmentMappingTable");
+            ossOrdersTable.Columns.Add("OSSShipmentMappingsId", typeof(long));
+            ossOrdersTable.Columns.Add("SourceShipmentMethod", typeof(string));
+            ossOrdersTable.Columns.Add("DestinationShipmentMethod", typeof(int));
+            return ossOrdersTable;
+        }
+        private static void LoadShipmentMappingRow(IDataRecord shipemtnRecord, DataRow shipmentDataRow)
+        {
+            shipmentDataRow["OSSShipmentMappingsId"] = shipemtnRecord["OSSShipmentMappingsId"];
+            shipmentDataRow["SourceShipmentMethod"] = shipemtnRecord["SourceShipmentMethod"];
+            shipmentDataRow["DestinationShipmentMethod"] = shipemtnRecord["DestinationShipmentMethod"];
+        }
+
     }
 }

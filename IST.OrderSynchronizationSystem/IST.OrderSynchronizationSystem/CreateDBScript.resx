@@ -182,8 +182,8 @@ CREATE TABLE [dbo].[OSSOrders](
 
 CREATE TABLE [dbo].[OSSShipmentMappings](
 	[OSSShipmentMappingsId] [bigint] IDENTITY(1,1) NOT NULL,
-	[SourceShipmentMethod] [nvarchar](100) NOT NULL,
-	[DestinationShipmentMethod] [nvarchar](100) NOT NULL,
+	[SourceShipmentMethod] [nvarchar](200) NOT NULL,
+	[DestinationShipmentMethod] [int] NOT NULL,
 	[THubToMBMap] [bit] NOT NULL,
  CONSTRAINT [PK_OSSShipmentMappings] PRIMARY KEY CLUSTERED 
 (

@@ -31,9 +31,9 @@
             this.tHubShipMethod = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.mbShipmentMethodDDL = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.mbShipment = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,14 +62,6 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Molding Box Shipment Method";
             // 
-            // mbShipmentMethodDDL
-            // 
-            this.mbShipmentMethodDDL.FormattingEnabled = true;
-            this.mbShipmentMethodDDL.Location = new System.Drawing.Point(6, 110);
-            this.mbShipmentMethodDDL.Name = "mbShipmentMethodDDL";
-            this.mbShipmentMethodDDL.Size = new System.Drawing.Size(260, 21);
-            this.mbShipmentMethodDDL.TabIndex = 3;
-            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(191, 153);
@@ -82,9 +74,9 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.mbShipment);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.tHubShipMethod);
-            this.groupBox1.Controls.Add(this.mbShipmentMethodDDL);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
@@ -93,6 +85,14 @@
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "T-Hub to Molding Box Mapping";
+            // 
+            // mbShipment
+            // 
+            this.mbShipment.Location = new System.Drawing.Point(6, 120);
+            this.mbShipment.Name = "mbShipment";
+            this.mbShipment.Size = new System.Drawing.Size(260, 20);
+            this.mbShipment.TabIndex = 5;
+            this.mbShipment.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.mbShipment_KeyPress);
             // 
             // CreateMappingForm
             // 
@@ -117,9 +117,9 @@
         private System.Windows.Forms.TextBox tHubShipMethod;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox mbShipmentMethodDDL;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox mbShipment;
 
     }
 }

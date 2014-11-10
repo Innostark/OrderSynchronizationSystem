@@ -35,6 +35,7 @@
             this.RefreshButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
             this.shipmentMappingGridView = new System.Windows.Forms.DataGridView();
+            this.DestinationShipmentMethod = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.shipmentMappingGridView)).BeginInit();
             this.SuspendLayout();
@@ -95,11 +96,12 @@
             // 
             // shipmentMappingGridView
             // 
-            this.shipmentMappingGridView.AllowUserToAddRows = false;
             this.shipmentMappingGridView.AllowUserToDeleteRows = false;
             this.shipmentMappingGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.shipmentMappingGridView.BackgroundColor = System.Drawing.SystemColors.ControlLight;
             this.shipmentMappingGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.shipmentMappingGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.DestinationShipmentMethod});
             this.shipmentMappingGridView.Location = new System.Drawing.Point(13, 20);
             this.shipmentMappingGridView.MultiSelect = false;
             this.shipmentMappingGridView.Name = "shipmentMappingGridView";
@@ -108,7 +110,15 @@
             this.shipmentMappingGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.shipmentMappingGridView.Size = new System.Drawing.Size(459, 371);
             this.shipmentMappingGridView.TabIndex = 0;
+            this.shipmentMappingGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.shipmentMappingGridView_CellContentClick);
+            this.shipmentMappingGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.shipmentMappingGridView_CellValueChanged);
             this.shipmentMappingGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.shipmentMappingGridView_DataError);
+            // 
+            // DestinationShipmentMethod
+            // 
+            this.DestinationShipmentMethod.DataPropertyName = "DestinationShipmentMethod";
+            this.DestinationShipmentMethod.HeaderText = "Molding Box Shipment Method Id";
+            this.DestinationShipmentMethod.Name = "DestinationShipmentMethod";
             // 
             // ShipmentMappingForm
             // 
@@ -140,5 +150,6 @@
         private System.Windows.Forms.DataGridView shipmentMappingGridView;
         private System.Windows.Forms.Label MappingLabel;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DestinationShipmentMethod;
     }
 }

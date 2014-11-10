@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
 using IST.OrderSynchronizationSystem.MBAPI;
+using Microsoft.Data.Enterprise;
 
 namespace IST.OrderSynchronizationSystem
 {
@@ -10,6 +12,7 @@ namespace IST.OrderSynchronizationSystem
     {
         private OssDatabase synchronizationDatabase;
         private ShippingMethod[] moldingBoxWebShipmentMethod;
+        private bool initialLoaded = false;
         public ShipmentMappingForm(OssDatabase database, ShippingMethod[] moldingBoxWebShipmentMethod)
         {
             
@@ -22,17 +25,17 @@ namespace IST.OrderSynchronizationSystem
 
         private void shipmentMappingGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-            ComboBox combo = e.Control as ComboBox;
-            if (combo != null)
-            {
-                combo.SelectedIndexChanged += ComboBox_SelectedIndexChanged;                
-            }
+            //ComboBox combo = e.Control as ComboBox;
+            //if (combo != null)
+            //{
+            //    combo.SelectedIndexChanged += ComboBox_SelectedIndexChanged;                
+            //}
         }
 
-        private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            button1.Enabled = true;
-        }
+        //private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    button1.Enabled = true;
+        //}
 
         private void ShipmentMappingForm_Load(object sender, EventArgs e)
         {
@@ -42,14 +45,19 @@ namespace IST.OrderSynchronizationSystem
                 if (shipmentMapping.Rows.Count > 0)
                 {
                     shipmentMappingGridView.DataSource = shipmentMapping;
-                    AddComboBoxColumn();
-                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].Visible = false;
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].DisplayIndex = 1;
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].DisplayIndex = 0;
+                    //AddComboBoxColumn();
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].HeaderText = "Molding Box Shipment Id";
                     shipmentMappingGridView.Columns["SourceShipmentMethod"].HeaderText = "T-Hub Shipment Method";
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].ReadOnly = false;
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].ReadOnly = false;
                     HideIdColumn();
+                    AddDeleteButtonToGridView(shipmentMappingGridView, 3);
                 }
                 
                 MappingLabel.Text = "Total No. of Mappings: " + shipmentMapping.Rows.Count;
-                
+                initialLoaded = true;
             }
             catch (Exception exception)
             {
@@ -57,10 +65,24 @@ namespace IST.OrderSynchronizationSystem
                 MessageBox.Show("There is some problem while loading mappings. Error details has been logged. Please check database if the problem persists.", "Error!", MessageBoxButtons.OK ,MessageBoxIcon.Error);
             }
         }
+        private void AddDeleteButtonToGridView(DataGridView gridView, int index = 21)
+        {
+            DataGridViewDisableButtonColumn deleteButtonColumn = new DataGridViewDisableButtonColumn();
+            deleteButtonColumn.HeaderText = "Delete";
+            deleteButtonColumn.Text = "Delete";
+            deleteButtonColumn.MinimumWidth = 100;
+            deleteButtonColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            deleteButtonColumn.Name = "btnDelete";
+            deleteButtonColumn.ToolTipText = "Click to delete Mapping.";
+            deleteButtonColumn.DefaultCellStyle.Font = new Font("Arial", 8.5F, FontStyle.Bold);
+            deleteButtonColumn.UseColumnTextForButtonValue = true;
+            deleteButtonColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
+            gridView.Columns.Insert(index, deleteButtonColumn);
+        }
         private void HideIdColumn()
         {
-            shipmentMappingGridView.Columns[0].Visible = false;
+            shipmentMappingGridView.Columns["OSSShipmentMappingsId"].Visible = false;
         }
 
         
@@ -71,12 +93,14 @@ namespace IST.OrderSynchronizationSystem
                 DataTable shipmentMapping = synchronizationDatabase.LoadMappingsFromStagingDatabase();
                 if (shipmentMapping.Rows.Count > 0)
                 {
-                    shipmentMappingGridView.DataBindings.Clear();
-                    shipmentMappingGridView.Columns.Clear();
                     shipmentMappingGridView.DataSource = shipmentMapping;
-                    AddComboBoxColumn();
-                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].Visible = false;
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].DisplayIndex = 1;
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].DisplayIndex = 0;
                     HideIdColumn();
+                    if (!shipmentMappingGridView.Columns.Contains("btnDelete"))
+                    {
+                        AddDeleteButtonToGridView(shipmentMappingGridView, 3);
+                    }
                 }
                 
                 MappingLabel.Text = "Total No. of Mappings: " + shipmentMapping.Rows.Count;
@@ -121,11 +145,14 @@ namespace IST.OrderSynchronizationSystem
         {
             try
             {
-                IList<MBShimentMethodMappings> mappings = validateMappings();
-                if (mappings != null)
+                if (!validateMappings())
                 {
-                    synchronizationDatabase.UpdateMappings(mappings);
+                    MessageBox.Show("Please correct mapping data and then try.", "Incorect Mappings detected.",
+                        MessageBoxButtons.OK);
+                    return;
                 }
+                
+                saveMappings();
                 button1.Enabled = false;
                 MessageBox.Show("Mappings saved.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -136,35 +163,106 @@ namespace IST.OrderSynchronizationSystem
             }            
         }
 
-        private IList<MBShimentMethodMappings> validateMappings()
+        private bool saveMappings()
         {
-            List<MBShimentMethodMappings> mappingsToSave = new List<MBShimentMethodMappings>();
-            for (int i = 0; i < shipmentMappingGridView.Rows.Count; i++)
+            IList<MBShimentMethodMappings> toBeSaved = new List<MBShimentMethodMappings>();
+            IList<MBShimentMethodMappings> toBeUpdate = new List<MBShimentMethodMappings>();
+            for (int i = 0; i < shipmentMappingGridView.Rows.Count - 1; i++)
             {
-                DataGridViewComboBoxCell cell = shipmentMappingGridView.Rows[i].Cells["MethodCombobox"] as DataGridViewComboBoxCell;
-                //if (cell != null && cell.FormattedValue != null && string.IsNullOrEmpty(cell.FormattedValue.ToString()))
-                //{
-                //    MessageBox.Show("Please enter all mappings.");
-                //    return null;
-                //}
-                if (cell != null && cell.FormattedValue != null && !string.IsNullOrEmpty(cell.FormattedValue.ToString()))
+                if(string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["OSSShipmentMappingsId"].Value.ToString()))
                 {
-                    MBShimentMethodMappings mapping = new MBShimentMethodMappings()
+                    toBeSaved.Add(new MBShimentMethodMappings
                     {
-                        DestinationShipmentMethodID =
-                            shipmentMappingGridView.Rows[i].Cells["OSSShipmentMappingsId"].Value.ToString(),
                         SourceShipmentMethod =
                             shipmentMappingGridView.Rows[i].Cells["SourceShipmentMethod"].Value.ToString(),
                         DestinationShipmentMethod =
-                            shipmentMappingGridView.Rows[i].Cells["MethodCombobox"].Value != null
-                                ? shipmentMappingGridView.Rows[i].Cells["MethodCombobox"].Value.ToString()
-                                : string.Empty,
-
-                    };
-                    mappingsToSave.Add(mapping);
+                            int.Parse(
+                                shipmentMappingGridView.Rows[i].Cells["DestinationShipmentMethod"].Value.ToString())
+                    });
+                }
+                else
+                {
+                    toBeUpdate.Add(new MBShimentMethodMappings
+                    {
+                        SourceShipmentMethod =
+                            shipmentMappingGridView.Rows[i].Cells["SourceShipmentMethod"].Value.ToString(),
+                        DestinationShipmentMethodID =
+                            long.Parse(
+                                shipmentMappingGridView.Rows[i].Cells["OSSShipmentMappingsId"].Value.ToString()),
+                        DestinationShipmentMethod = int.Parse(
+                                shipmentMappingGridView.Rows[i].Cells["DestinationShipmentMethod"].Value.ToString()),
+                    });
                 }
             }
-            return mappingsToSave;
+            synchronizationDatabase.UpdateMappings(toBeUpdate);
+
+            foreach (MBShimentMethodMappings mbShimentMethodMappingse in toBeSaved)
+            {
+                synchronizationDatabase.SaveThubToMbMapping(mbShimentMethodMappingse.SourceShipmentMethod,
+                    mbShimentMethodMappingse.DestinationShipmentMethod, true);
+            }
+            return true;
+        }
+        private bool validateMappings()
+        {
+            
+            for (int i = 0; i < shipmentMappingGridView.Rows.Count-1; i++)
+            {
+                if ((!string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["OSSShipmentMappingsId"].Value.ToString())
+                    &&
+                    ((!string.IsNullOrEmpty(
+                        shipmentMappingGridView.Rows[i].Cells["DestinationShipmentMethod"].Value.ToString()) &&
+                      string.IsNullOrEmpty(
+                          shipmentMappingGridView.Rows[i].Cells["SourceShipmentMethod"].Value.ToString()))
+                      ||
+                      (string.IsNullOrEmpty(
+                          shipmentMappingGridView.Rows[i].Cells["DestinationShipmentMethod"].Value.ToString()) &&
+                       !string.IsNullOrEmpty(
+                           shipmentMappingGridView.Rows[i].Cells["SourceShipmentMethod"].Value.ToString())
+                          ))) ||
+                  (string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["OSSShipmentMappingsId"].Value.ToString())  &&
+                          (string.IsNullOrEmpty(
+                        shipmentMappingGridView.Rows[i].Cells["DestinationShipmentMethod"].Value.ToString()) ||
+                      string.IsNullOrEmpty(
+                          shipmentMappingGridView.Rows[i].Cells["SourceShipmentMethod"].Value.ToString()))))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void shipmentMappingGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (initialLoaded)
+            {
+                button1.Enabled = true;
+            }
+            
+        }
+
+        private void shipmentMappingGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (shipmentMappingGridView.Columns[e.ColumnIndex].Name == "btnDelete")
+            {
+                if (
+                    string.IsNullOrEmpty(
+                        shipmentMappingGridView.Rows[e.RowIndex].Cells["OSSShipmentMappingsId"].Value.ToString()))
+                {
+                    shipmentMappingGridView.Rows.RemoveAt(e.RowIndex);
+                }
+                else
+                {
+                    DialogResult results = MessageBox.Show(
+                        "Are you sure you want to remove this mapping? This process is irreversible. Press Ok to continue.",
+                        "Confirm Delete?", MessageBoxButtons.OKCancel);
+                    if (results == DialogResult.OK)
+                    {
+                        synchronizationDatabase.DeleteMapping(int.Parse(shipmentMappingGridView.Rows[e.RowIndex].Cells["OSSShipmentMappingsId"].Value.ToString()));
+                        shipmentMappingGridView.Rows.RemoveAt(e.RowIndex);
+                    }
+                }
+            }
         }
         
     }

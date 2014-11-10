@@ -435,4 +435,9 @@ where THubOrderReferenceNo = @OssOrderId </value>
       WHERE [OSSShipmentMappingsId] = @MappingID
     </value>
   </data>
+  <data name="source_DeleteMappingSql" xml:space="preserve">
+    <value>delete from  [dbo].[OSSShipmentMappings]        
+      WHERE [OSSShipmentMappingsId] = @MappingID
+    </value>
+  </data>
 </root>

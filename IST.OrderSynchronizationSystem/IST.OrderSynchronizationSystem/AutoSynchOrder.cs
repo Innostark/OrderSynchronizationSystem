@@ -56,7 +56,6 @@ namespace IST.OrderSynchronizationSystem
         {
             try
             {
-                ShippingMethod[] shipmentMethods = client.Retrieve_Merchant_Shipping_Methods(apiKey);
                 List<OssShipment> ossShipments = mainProgram._orderSyncronizationDatabase.LoadShipmentsFromThub();
                 mainProgram._orderSyncronizationDatabase.InsertShipmentsToStaging(ossShipments);
                 OssShipment firstOrDefault = ossShipments.OrderByDescending(ossShipment => ossShipment.ThubOrderId).FirstOrDefault();
@@ -68,7 +67,7 @@ namespace IST.OrderSynchronizationSystem
                 DataTable stagingNewOrders = mainProgram._orderSyncronizationDatabase.LoadOrdersFromStaging("OssOrderTable", OSSOrderStatus.New);
                 foreach (DataRow row in stagingNewOrders.Rows)
                 {
-                    PostShipmentToMoldingBox(row, mainProgram, shipmentMethods);
+                    PostShipmentToMoldingBox(row, mainProgram);
                 }
                 mainProgram.ApplicationStatusUpdate("Cycle for Pulling Orders from T-Hub and posting on MB completed.");
             }
@@ -82,7 +81,7 @@ namespace IST.OrderSynchronizationSystem
             }
         }
 
-        private void PostShipmentToMoldingBox(DataRow ossOrderRow, MainWindow mainProgram, IEnumerable<ShippingMethod> ossShipmentMethods)
+        private void PostShipmentToMoldingBox(DataRow ossOrderRow, MainWindow mainProgram)
         {
 
             string orderJsonString = ossOrderRow["THubCompleteOrder"].ToString();
@@ -90,36 +89,29 @@ namespace IST.OrderSynchronizationSystem
                     {
                         JsonConvert.DeserializeObject<OssShipment>(orderJsonString)
                     };
-            string destinationMapping = mainProgram._orderSyncronizationDatabase.LoadShipmentMethodMapping(true, shipments[0].WebShipMethod);
-            if (string.IsNullOrEmpty(destinationMapping))
+            int destinationMapping = mainProgram._orderSyncronizationDatabase.LoadShipmentMethodMapping(true, shipments[0].WebShipMethod);
+            if (destinationMapping == -1)
             {
-                SetOrderStatusForMissingShipmentmethod(ossOrderRow, "Shipment method mapping does not exist. Please repost this order manually.");
+                SetOrderStatusForMissingShipmentmethod(ossOrderRow,
+                    "Shipment method mapping does not exist. Please repost this order manually.");
                 mainProgram._orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
-                mainProgram._orderSyncronizationDatabase.LogOrder(1, long.Parse(ossOrderRow["THubOrderId"].ToString()), "Mapping missing for order.");
+                mainProgram._orderSyncronizationDatabase.LogOrder(1, long.Parse(ossOrderRow["THubOrderId"].ToString()),
+                    "Mapping missing for order.");
                 mainProgram.ApplicationStatusUpdate("Shipment method Mapping missing for order.");
             }
-            else 
+            else
             {
-                ShippingMethod mbShipMethod = ossShipmentMethods.FirstOrDefault(mb => mb.Method == destinationMapping);
-                if (mbShipMethod == null || string.IsNullOrEmpty(mbShipMethod.Method)) // Old Mapging is changed and no Longer exist
-                {
-                    SetOrderStatusForMissingShipmentmethod(ossOrderRow, "Shipment method mapping has been changed on molding box. Please repost this order manually.");
-                    mainProgram._orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
-                    mainProgram._orderSyncronizationDatabase.LogOrder(1, long.Parse(ossOrderRow["THubOrderId"].ToString()), "Mapping missing for order.");
-                    mainProgram.ApplicationStatusUpdate("Shipment method Mapping missing for order.");
-                }
-                else
-                {
-                    shipments[0].ShippingMethodID = mbShipMethod.ID;
-                    Shipment[] shipmentsToPost = new Shipment[1];
-                    shipmentsToPost[0] = CreateFrom(shipments[0], mainProgram);
-                    DateTime shipmentRequestSentOn = DateTime.Now;
-                    Response[] responses = MoldingBoxHelper.PostShipment(client, apiKey, shipmentsToPost);
-                    SetOrderStatus(ossOrderRow, shipmentRequestSentOn, mbShipMethod.Method, responses, shipments);
-                    mainProgram._orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
-                    mainProgram._orderSyncronizationDatabase.LogOrder(1, long.Parse(ossOrderRow["THubOrderId"].ToString()), "Order Successfully posted on Molding Box.");
-                    mainProgram.ApplicationStatusUpdate("Order successfully shipped to Moldingbox.");
-                }
+                shipments[0].ShippingMethodID = destinationMapping;
+                Shipment[] shipmentsToPost = new Shipment[1];
+                shipmentsToPost[0] = CreateFrom(shipments[0], mainProgram);
+                DateTime shipmentRequestSentOn = DateTime.Now;
+                Response[] responses = MoldingBoxHelper.PostShipment(client, apiKey, shipmentsToPost);
+                SetOrderStatus(ossOrderRow, shipmentRequestSentOn, destinationMapping, responses, shipments);
+                mainProgram._orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
+                mainProgram._orderSyncronizationDatabase.LogOrder(1, long.Parse(ossOrderRow["THubOrderId"].ToString()),
+                    "Order Successfully posted on Molding Box.");
+                mainProgram.ApplicationStatusUpdate("Order successfully shipped to Moldingbox.");
+
             }
 
         }
@@ -139,19 +131,19 @@ namespace IST.OrderSynchronizationSystem
                 Custom4 = source.Custom4,
                 Custom5 = source.Custom5,
                 Custom6 = source.Custom6,
-                Email = string.IsNullOrEmpty(source.Email) ? mainWindow._defaultEmail :string.Empty,
+                Email = string.IsNullOrEmpty(source.Email) ? mainWindow._defaultEmail : source.Email,
                 FirstName = source.FirstName,
                 Items = source.Items,
                 LastName = source.LastName,
                 OrderID = source.OrderID,
                 Orderdate = source.Orderdate,
-                Phone = string.IsNullOrEmpty(source.Phone) ? mainWindow._defaultPhone : string.Empty,
+                Phone = string.IsNullOrEmpty(source.Phone) ? mainWindow._defaultPhone : source.Phone,
                 ShippingMethodID = source.ShippingMethodID,
                 State = source.State,
                 Zip = source.Zip
             };
         }
-        private void SetOrderStatus(DataRow ossOrderRow, DateTime shipmentRequestSentOn, string MBShipmentMethod, Response[] responses, OssShipment[] shipments)
+        private void SetOrderStatus(DataRow ossOrderRow, DateTime shipmentRequestSentOn, int MBShipmentMethod, Response[] responses, OssShipment[] shipments)
         {
             Response response = responses[0];
             if (response.MBShipmentID == 0)

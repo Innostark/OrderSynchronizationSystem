@@ -3,7 +3,8 @@
     public class MBShimentMethodMappings
     {
         public string SourceShipmentMethod { get; set; }
-        public string DestinationShipmentMethod { get; set; }
-        public string DestinationShipmentMethodID { get; set; }
+        
+        public  int DestinationShipmentMethod { get; set; }
+        public long DestinationShipmentMethodID { get; set; }
     }
 }

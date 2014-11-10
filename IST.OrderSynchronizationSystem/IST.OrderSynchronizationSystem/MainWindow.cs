@@ -1247,10 +1247,7 @@ namespace IST.OrderSynchronizationSystem
             }
             else if (sendToMbButtonCell.Enabled)
             {
-                if (shipmentMethods == null || !shipmentMethods.Any())
-                {
-                    shipmentMethods = client.Retrieve_Merchant_Shipping_Methods(apiKey);
-                }
+                
                 DataRow ossOrderRow = ((DataTable) senderGrid.DataSource).Rows[e.RowIndex];
 
                 string orderJsonString = ossOrderRow["THubCompleteOrder"].ToString();
@@ -1260,9 +1257,9 @@ namespace IST.OrderSynchronizationSystem
                     {
                         JsonConvert.DeserializeObject<OssShipment>(orderJsonString)
                     };
-
-                    string MBShipmentMethod = MapShipment(shipments[0], shipmentMethods);
-                    if (string.IsNullOrEmpty(MBShipmentMethod))
+                    // TODO : Repeat as long retursn number mapping is created mapp
+                    long MBShipmentMethodId  = MapShipment(shipments[0]);
+                    if (MBShipmentMethodId == -1)
                         return;
                     Shipment[] shipmentToPost = new Shipment[1];
                     foreach (OssShipment ossShipment in shipments.ToList())
@@ -1271,7 +1268,7 @@ namespace IST.OrderSynchronizationSystem
                     }
                     DateTime shipmentRequestSentOn = DateTime.Now;
                     Response[] responses = MoldingBoxHelper.PostShipment(client, apiKey, shipmentToPost);
-                    SetOrderStatus(ossOrderRow, shipmentRequestSentOn, MBShipmentMethod, responses, shipments);
+                    SetOrderStatus(ossOrderRow, shipmentRequestSentOn, MBShipmentMethodId, responses, shipments);
                     _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
                     senderGrid.DataBindings.Clear();
                     senderGrid.DataSource = _ossOrders;
@@ -1287,23 +1284,19 @@ namespace IST.OrderSynchronizationSystem
             string orderJsonString = ossOrderRow["THubCompleteOrder"].ToString();
             if (!string.IsNullOrWhiteSpace(orderJsonString))
             {
-                if (shipmentMethods == null || !shipmentMethods.Any())
-                {
-                    shipmentMethods = client.Retrieve_Merchant_Shipping_Methods(apiKey);
-                }
-
                 OssShipment[] shipments = new OssShipment[1]
                     {
                         JsonConvert.DeserializeObject<OssShipment>(orderJsonString)
                     };
-                string MBShipmentMethod = MapShipment(shipments[0], shipmentMethods);
-                if (string.IsNullOrEmpty(MBShipmentMethod))
+                //TODO: Repeat unless returns 1 and mapping is created
+                long MBShipmentMethodId = MapShipment(shipments[0]);
+                if (MBShipmentMethodId == -1)
                     return;
                 Shipment[] shipmentToPost = new Shipment[1];
                 shipmentToPost[0] = CreateFrom(shipments[0]);
                 DateTime shipmentRequestSentOn = DateTime.Now;
                 Response[] responses = MoldingBoxHelper.PostShipment(client, apiKey, shipmentToPost);
-                SetOrderStatus(ossOrderRow, shipmentRequestSentOn, MBShipmentMethod, responses, shipments);
+                SetOrderStatus(ossOrderRow, shipmentRequestSentOn, MBShipmentMethodId, responses, shipments);
                 _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);                
             }
         }
@@ -1403,7 +1396,7 @@ namespace IST.OrderSynchronizationSystem
                 InFlightRefresh();
             }            
         }
-        private void SetOrderStatus(DataRow ossOrderRow, DateTime shipmentRequestSentOn, string MBShipmentMethod, Response[] responses, OssShipment[] shipments)
+        private void SetOrderStatus(DataRow ossOrderRow, DateTime shipmentRequestSentOn, long MBShipmentMethodId, Response[] responses, OssShipment[] shipments)
         {            
             Response response = responses[0];
             if (response.MBShipmentID == 0)
@@ -1419,7 +1412,7 @@ namespace IST.OrderSynchronizationSystem
                 ossOrderRow["MBShipmentId"] = response.MBShipmentID.ToString();
                 ossOrderRow["MBShipmentSubmitError"] = string.Empty;
             }
-            ossOrderRow["MBShipmentMethod"] = MBShipmentMethod;
+            ossOrderRow["MBShipmentMethod"] = MBShipmentMethodId.ToString();
             ossOrderRow["SentToMBOn"] = shipmentRequestSentOn;
             ossOrderRow["MBPostShipmentMessage"] = JsonConvert.SerializeObject(new OssShipmentMessage(apiKey, shipments));
             ossOrderRow["MBPostShipmentResponseMessage"] = JsonConvert.SerializeObject(responses);
@@ -1427,36 +1420,25 @@ namespace IST.OrderSynchronizationSystem
             ossOrderRow["CancelMessage"] = string.Empty;
             
         }
-        private string MapShipment(OssShipment shipment, ShippingMethod[] moldingBoxShippingMethods)
+        private long MapShipment(OssShipment shipment)
         {
-            string destinationMapping = _orderSyncronizationDatabase.LoadShipmentMethodMapping(true, shipment.WebShipMethod);
-            if (string.IsNullOrEmpty(destinationMapping))
+            int destinationMapping = _orderSyncronizationDatabase.LoadShipmentMethodMapping(true, shipment.WebShipMethod);
+            if (destinationMapping == -1)
             {
-                CreateMappingForm form = new CreateMappingForm(_orderSyncronizationDatabase, shipment.WebShipMethod, moldingBoxShippingMethods);
+                CreateMappingForm form = new CreateMappingForm(_orderSyncronizationDatabase, shipment.WebShipMethod);
                 DialogResult result = form.ShowDialog(this);
                 if (form.DialogResult == DialogResult.OK)
                 {
                     shipment.ShippingMethodID = form.MbShipMethodId;
-                    return form.MbShipMethod;
+                    return form.MbShipMethodId;
                 }
             }
             else
             {
-                ShippingMethod mbShipMethod = moldingBoxShippingMethods.FirstOrDefault(mb => mb.Method == destinationMapping);
-                if (mbShipMethod != null)
-                {
-                    shipment.ShippingMethodID = mbShipMethod.ID;
-                    return mbShipMethod.Method;
-                }
-                CreateMappingForm form = new CreateMappingForm(_orderSyncronizationDatabase, shipment.WebShipMethod, moldingBoxShippingMethods, true);
-                DialogResult result = form.ShowDialog(this);
-                if (form.DialogResult == DialogResult.OK)
-                {
-                    shipment.ShippingMethodID = form.MbShipMethodId;
-                    return form.MbShipMethod;
-                }
+                shipment.ShippingMethodID = destinationMapping;
+                return destinationMapping;                
             }
-            return string.Empty;
+            return -1;
         }
 
         private Shipment CreateFrom(OssShipment source)
@@ -1475,13 +1457,13 @@ namespace IST.OrderSynchronizationSystem
                 Custom4 = source.Custom4,
                 Custom5 = source.Custom5,
                 Custom6 = source.Custom6,
-                Email = string.IsNullOrEmpty(source.Email)? EmailTextbox.Text : string.Empty,                
+                Email = string.IsNullOrEmpty(source.Email) ? EmailTextbox.Text : source.Email,                
                 FirstName = source.FirstName,
                 Items = source.Items,
                 LastName = source.LastName,
                 OrderID = source.OrderID,
                 Orderdate = source.Orderdate,
-                Phone = string.IsNullOrEmpty(source.Phone)? PhoneTextbox.Text :string.Empty,
+                Phone = string.IsNullOrEmpty(source.Phone) ? PhoneTextbox.Text : source.Phone,
                 ShippingMethodID = source.ShippingMethodID,
                 State = source.State,
                 Zip = source.Zip
