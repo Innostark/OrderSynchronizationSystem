@@ -209,7 +209,7 @@ namespace IST.OrderSynchronizationSystem
             {
                 client = MoldingBoxHelper.GetMoldingBoxClient();
             }
-            StatusResponse[] statusResponse;
+            StatusResponse[] statusResponse = new StatusResponse[1];
             try
             {
                 statusResponse = client.Retrieve_Shipment_Status(apiKey, new ArrayOfInt { int.Parse(mbShipmentID) });
@@ -218,7 +218,15 @@ namespace IST.OrderSynchronizationSystem
             {
                 if (ex.Message.Contains("Current status of order is unrecognized"))
                 {
-                    mainProgram._orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId), OSSOrderStatus.OnHold, "Current status of order is unrecognized on MoldingBox.");
+                    mainProgram._orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId),
+                        OSSOrderStatus.OnHold, "Current status of order is unrecognized on MoldingBox.");
+                    mainProgram._orderSyncronizationDatabase.LogOrder(1, long.Parse(orderId),
+                        string.Format("Order status check returns an exceptional response. Response Message: '{0}'",
+                            statusResponse[0].ErrorMessage));
+                }
+                else
+                {
+                    mainProgram._orderSyncronizationDatabase.LogOrder(1, long.Parse(orderId), string.Format("Order status check returns an exceptional response. Response Message: '{0}'", ex.Message));
                 }
                 return;
             }            
@@ -240,7 +248,7 @@ namespace IST.OrderSynchronizationSystem
                 }
                 else if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Canceled)
                 {
-                    mainProgram._orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId), OSSOrderStatus.Canceled);
+                    mainProgram._orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId), OSSOrderStatus.Canceled, "Order was cancelled by Molding Box.");
                 }
                 else
                 {

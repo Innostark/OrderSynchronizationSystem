@@ -55,6 +55,20 @@ namespace IST.OrderSynchronizationSystem
                     HideIdColumn();
                     AddDeleteButtonToGridView(shipmentMappingGridView, 3);
                 }
+                else
+                {
+                    shipmentMapping = CreateShipmentMappingTable();
+                    shipmentMappingGridView.DataSource = shipmentMapping;
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].DisplayIndex = 1;
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].DisplayIndex = 0;
+                    //AddComboBoxColumn();
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].HeaderText = "Molding Box Shipment Id";
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].HeaderText = "T-Hub Shipment Method";
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].ReadOnly = false;
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].ReadOnly = false;
+                    HideIdColumn();
+                    AddDeleteButtonToGridView(shipmentMappingGridView, 3);
+                }
                 
                 MappingLabel.Text = "Total No. of Mappings: " + shipmentMapping.Rows.Count;
                 initialLoaded = true;
@@ -64,6 +78,14 @@ namespace IST.OrderSynchronizationSystem
                 synchronizationDatabase.LogOrder(1, -1, string.Format("Error loading mappings. Error: {0}", exception.Message));
                 MessageBox.Show("There is some problem while loading mappings. Error details has been logged. Please check database if the problem persists.", "Error!", MessageBoxButtons.OK ,MessageBoxIcon.Error);
             }
+        }
+        private static DataTable CreateShipmentMappingTable()
+        {
+            DataTable ossOrdersTable = new DataTable("ShipmentMappingTable");
+            ossOrdersTable.Columns.Add("OSSShipmentMappingsId", typeof(long));
+            ossOrdersTable.Columns.Add("SourceShipmentMethod", typeof(string));
+            ossOrdersTable.Columns.Add("DestinationShipmentMethod", typeof(int));
+            return ossOrdersTable;
         }
         private void AddDeleteButtonToGridView(DataGridView gridView, int index = 21)
         {
@@ -243,18 +265,15 @@ namespace IST.OrderSynchronizationSystem
 
         private void shipmentMappingGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (shipmentMappingGridView.Columns[e.ColumnIndex].Name == "btnDelete")
+            if (shipmentMappingGridView.Columns[e.ColumnIndex].Name == "btnDelete" && shipmentMappingGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
             {
-                if (
-                    string.IsNullOrEmpty(
-                        shipmentMappingGridView.Rows[e.RowIndex].Cells["OSSShipmentMappingsId"].Value.ToString()))
+                if (string.IsNullOrEmpty(shipmentMappingGridView.Rows[e.RowIndex].Cells["OSSShipmentMappingsId"].Value.ToString()))
                 {
                     shipmentMappingGridView.Rows.RemoveAt(e.RowIndex);
                 }
                 else
                 {
-                    DialogResult results = MessageBox.Show(
-                        "Are you sure you want to remove this mapping? This process is irreversible. Press Ok to continue.",
+                    DialogResult results = MessageBox.Show("Are you sure you want to remove this mapping? This process is irreversible. Press Ok to continue.",
                         "Confirm Delete?", MessageBoxButtons.OKCancel);
                     if (results == DialogResult.OK)
                     {

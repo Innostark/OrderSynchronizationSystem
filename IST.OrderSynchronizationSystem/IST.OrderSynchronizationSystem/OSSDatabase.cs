@@ -235,7 +235,7 @@ namespace IST.OrderSynchronizationSystem
                         command.Parameters.AddWithValue("@RefNumberWeb", OrderChannelRefNumber);
                         command.Parameters.AddWithValue("@TrackingNumber", response.TrackingNumber);
                         command.Parameters.AddWithValue("@ShipmentDate", DateTime.Now);
-                        command.Parameters.AddWithValue("@ServiceType", serviceType);
+                        command.Parameters.AddWithValue("@ServiceType", serviceType);                        
                         sourceConnection.Open();
                         var itemsInserted = command.ExecuteNonQuery();
                     }
