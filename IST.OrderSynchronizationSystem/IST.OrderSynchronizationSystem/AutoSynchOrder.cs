@@ -14,7 +14,7 @@ namespace IST.OrderSynchronizationSystem
 {
     public class AutoSynchOrder
     {
-        public readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        public CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private string apiKey;
         private MBAPISoapClient client;
         public void Process(Form mainWindow, int frequency)

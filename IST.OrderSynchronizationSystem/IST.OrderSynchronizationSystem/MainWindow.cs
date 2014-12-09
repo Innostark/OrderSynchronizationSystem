@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using IST.OrderSynchronizationSystem.GUI;
@@ -248,6 +249,7 @@ namespace IST.OrderSynchronizationSystem
 
         private void StartThread()
         {
+            _autoSyncOrder.cancellationTokenSource = new CancellationTokenSource();
             Task.Factory.StartNew(() => _autoSyncOrder.Process(this, _autoSyncFrequency), TaskCreationOptions.AttachedToParent);
             Task.Factory.StartNew(() => _autoSyncOrder.ProcessMb(this, _autoSyncMbFrequency), TaskCreationOptions.AttachedToParent);
         }
