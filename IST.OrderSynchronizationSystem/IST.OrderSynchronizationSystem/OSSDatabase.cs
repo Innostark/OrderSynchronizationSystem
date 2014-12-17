@@ -220,7 +220,7 @@ namespace IST.OrderSynchronizationSystem
             }            
         }
 
-        public void UpdateOrderTrackingAndOssStatus(StatusResponse response, long OrderKey, string OrderChannelRefNumber, string serviceType)
+        public void UpdateOrderTrackingAndOssStatus(StatusResponse response, long OrderKey, string OrderChannelRefNumber, string shipVia, string shipMethod)
         {
             using (TransactionScope scope = new TransactionScope())
             {
@@ -235,7 +235,8 @@ namespace IST.OrderSynchronizationSystem
                         command.Parameters.AddWithValue("@RefNumberWeb", OrderChannelRefNumber);
                         command.Parameters.AddWithValue("@TrackingNumber", response.TrackingNumber);
                         command.Parameters.AddWithValue("@ShipmentDate", DateTime.Now);
-                        command.Parameters.AddWithValue("@ServiceType", serviceType);                        
+                        command.Parameters.AddWithValue("@ShippingProvider", shipVia);
+                        command.Parameters.AddWithValue("@ServiceType", shipMethod);                        
                         sourceConnection.Open();
                         var itemsInserted = command.ExecuteNonQuery();
                     }
@@ -655,6 +656,8 @@ namespace IST.OrderSynchronizationSystem
                             command.Parameters.AddWithValue("@SourceMethod", mbShimentMethodMapping.SourceShipmentMethod);
                             command.Parameters.AddWithValue("@DestinationMethod", mbShimentMethodMapping.DestinationShipmentMethod);
                             command.Parameters.AddWithValue("@MappingID", mbShimentMethodMapping.DestinationShipmentMethodID);
+                            command.Parameters.AddWithValue("@MBShipVia", mbShimentMethodMapping.MBShipVia);
+                            command.Parameters.AddWithValue("@MBShipMethod", mbShimentMethodMapping.MBShipMethod);
                             var objectToReturn = command.ExecuteNonQuery();
                         }
                     }
@@ -727,7 +730,7 @@ namespace IST.OrderSynchronizationSystem
             }
         }
 
-        public bool SaveThubToMbMapping(string sourceShipMethod, long destinationShipMethod, bool THubToMbMap)
+        public bool SaveThubToMbMapping(string sourceShipMethod, long destinationShipMethod, string mbShipVia, string mbShipMethod, bool THubToMbMap)
         {
             using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
             {
@@ -736,6 +739,8 @@ namespace IST.OrderSynchronizationSystem
                     command.Parameters.AddWithValue("@SourceShipMethod", sourceShipMethod);
                     command.Parameters.AddWithValue("@DestinationShipMethod", destinationShipMethod);
                     command.Parameters.AddWithValue("@THubToMBMap", THubToMbMap);
+                    command.Parameters.AddWithValue("@MBShipVia", mbShipVia);
+                    command.Parameters.AddWithValue("@MBShipMethod", mbShipMethod);
                     stagingDbconnection.Open();
                     return command.ExecuteNonQuery() > 0;
                 }
@@ -761,6 +766,8 @@ namespace IST.OrderSynchronizationSystem
             ossOrdersTable.Columns.Add("OSSShipmentMappingsId", typeof(long));
             ossOrdersTable.Columns.Add("SourceShipmentMethod", typeof(string));
             ossOrdersTable.Columns.Add("DestinationShipmentMethod", typeof(int));
+            ossOrdersTable.Columns.Add("MBShipVia", typeof(string));
+            ossOrdersTable.Columns.Add("MBShipMethod", typeof(string));
             return ossOrdersTable;
         }
         private static void LoadShipmentMappingRow(IDataRecord shipemtnRecord, DataRow shipmentDataRow)
@@ -768,7 +775,34 @@ namespace IST.OrderSynchronizationSystem
             shipmentDataRow["OSSShipmentMappingsId"] = shipemtnRecord["OSSShipmentMappingsId"];
             shipmentDataRow["SourceShipmentMethod"] = shipemtnRecord["SourceShipmentMethod"];
             shipmentDataRow["DestinationShipmentMethod"] = shipemtnRecord["DestinationShipmentMethod"];
+            shipmentDataRow["MBShipVia"] = shipemtnRecord["MBShipVia"];
+            shipmentDataRow["MBShipMethod"] = shipemtnRecord["MBShipMethod"];
         }
 
+        public DataTable GetShipMappingDetails(string webShipMethod)
+        {
+            DataTable shipmentMappingDatatable = CreateShipmentMappingTable();
+            using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                stagingDbconnection.Open();
+                using (SqlCommand command = new SqlCommand(SqlResource.source_LoadShipmentMappingDetail, stagingDbconnection))
+                {
+                    command.Parameters.AddWithValue("@SourceShipmentMethod", webShipMethod);
+                    SqlDataReader shipmentMappingReader = command.ExecuteReader();
+                    if (shipmentMappingReader.HasRows)
+                    {
+                        while (shipmentMappingReader.Read())
+                        {
+                            DataRow mappingRow = shipmentMappingDatatable.NewRow();
+                            LoadShipmentMappingRow(shipmentMappingReader, mappingRow);
+                            shipmentMappingDatatable.Rows.Add(mappingRow);
+                        }
+                    }
+                }
+                stagingDbconnection.Close();
+            }
+            return shipmentMappingDatatable;
+
+        }
     }
 }

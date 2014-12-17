@@ -39,6 +39,9 @@
             this.shipmentMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewSystemLogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideWhenMinimizedToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.createDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.MainFormTabControl = new System.Windows.Forms.TabControl();
             this.ConfigurationTabPage = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
@@ -112,7 +115,6 @@
             this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.ToolStripButton = new System.Windows.Forms.ToolStripSplitButton();
             this.ApplicationStatusStrip = new System.Windows.Forms.StatusStrip();
-            this.createDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ApplicationMenuStrip.SuspendLayout();
             this.MainFormTabControl.SuspendLayout();
             this.ConfigurationTabPage.SuspendLayout();
@@ -151,7 +153,8 @@
             // 
             this.ApplicationMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.viewToolStripMenuItem});
+            this.viewToolStripMenuItem,
+            this.aboutToolStripMenuItem});
             this.ApplicationMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.ApplicationMenuStrip.Name = "ApplicationMenuStrip";
             this.ApplicationMenuStrip.Size = new System.Drawing.Size(1234, 24);
@@ -204,6 +207,28 @@
             this.hideWhenMinimizedToolStripMenuItem1.Size = new System.Drawing.Size(192, 22);
             this.hideWhenMinimizedToolStripMenuItem1.Text = "Hide When &Minimized";
             this.hideWhenMinimizedToolStripMenuItem1.Click += new System.EventHandler(this.hideWhenMinimizedToolStripMenuItem1_Click);
+            // 
+            // createDatabaseToolStripMenuItem
+            // 
+            this.createDatabaseToolStripMenuItem.Name = "createDatabaseToolStripMenuItem";
+            this.createDatabaseToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.createDatabaseToolStripMenuItem.Text = "Create Database";
+            this.createDatabaseToolStripMenuItem.Click += new System.EventHandler(this.createDatabaseToolStripMenuItem_Click);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem1});
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            // 
+            // aboutToolStripMenuItem1
+            // 
+            this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
+            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem1.Text = "About";
+            this.aboutToolStripMenuItem1.Click += new System.EventHandler(this.aboutToolStripMenuItem1_Click);
             // 
             // MainFormTabControl
             // 
@@ -1009,13 +1034,6 @@
             this.ApplicationStatusStrip.TabIndex = 50;
             this.ApplicationStatusStrip.Text = "Application Status Strip";
             // 
-            // createDatabaseToolStripMenuItem
-            // 
-            this.createDatabaseToolStripMenuItem.Name = "createDatabaseToolStripMenuItem";
-            this.createDatabaseToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.createDatabaseToolStripMenuItem.Text = "Create Database";
-            this.createDatabaseToolStripMenuItem.Click += new System.EventHandler(this.createDatabaseToolStripMenuItem_Click);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1168,6 +1186,8 @@
         private System.Windows.Forms.TextBox SyncNewOrderTextbox;
         private System.Windows.Forms.TextBox SyncMoldingBoxIntervalTextbox;
         private System.Windows.Forms.ToolStripMenuItem createDatabaseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem1;
     }
 }
 

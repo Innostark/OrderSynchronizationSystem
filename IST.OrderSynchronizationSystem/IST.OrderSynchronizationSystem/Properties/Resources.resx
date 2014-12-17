@@ -121,17 +121,11 @@
   <data name="PlayIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\play.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SourceImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sourceimage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="MainWindow_StartPauseToggle_Start" xml:space="preserve">
+    <value>Start</value>
   </data>
   <data name="MainWindow_UnableToConnection_SourceDatabase" xml:space="preserve">
     <value>Unable to connect to source database. Please check server name, database name, username, password and retry.</value>
-  </data>
-  <data name="PauseImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pause.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="MainWindow_Required_Field" xml:space="preserve">
-    <value>This field is required.</value>
   </data>
   <data name="ConnectionImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\connectionimage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -139,11 +133,8 @@
   <data name="StagingIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\stagingicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="MainWindow_MinutesRange" xml:space="preserve">
-    <value>Please provide minutes between 5 to 999.</value>
-  </data>
-  <data name="MainWindow_StartPauseToggle_Start" xml:space="preserve">
-    <value>Start</value>
+  <data name="MainWindow_UnableToConnection_StagingDatabase" xml:space="preserve">
+    <value>Unable to connect to staging database. Please check server name, database name, username, password and retry.</value>
   </data>
   <data name="MainWindow_StartPauseToggle_Pause" xml:space="preserve">
     <value>Pause</value>
@@ -151,8 +142,14 @@
   <data name="ModingBoxToTHubSynchroniseImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\modingboxtothubsynchronise.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="THubToMoldingBoxSynchronizeIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\thubtomoldingboxsynchronize.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="SourceImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sourceimage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PauseIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\pause.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MainWindow_Required_Field" xml:space="preserve">
+    <value>This field is required.</value>
   </data>
   <data name="StopImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\stopimage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -160,14 +157,14 @@
   <data name="THubToMoldingBoxSynchronizeImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\thubtomoldingboxsynchronize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MainWindow_MinutesRange" xml:space="preserve">
+    <value>Please provide minutes between 5 to 999.</value>
+  </data>
+  <data name="PauseImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\pause.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ModingBoxToTHubSynchroniseIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\modingboxtothubsynchronise.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="PlayImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\play.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="StopIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\stopicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="MainWindow_VarifySourceDatabase_Checking_source_database" xml:space="preserve">
     <value>Checking source database.</value>
@@ -178,11 +175,14 @@
   <data name="SourceIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\sourceicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="MainWindow_UnableToConnection_StagingDatabase" xml:space="preserve">
-    <value>Unable to connect to staging database. Please check server name, database name, username, password and retry.</value>
+  <data name="StopIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stopicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PauseIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pause.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="loading1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\loading1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="THubToMoldingBoxSynchronizeIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\thubtomoldingboxsynchronize.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StagingImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\stagingimage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -190,7 +190,10 @@
   <data name="Synchronization" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\synchronization.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="loading1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\loading1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PlayImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\play.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Application" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Application.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

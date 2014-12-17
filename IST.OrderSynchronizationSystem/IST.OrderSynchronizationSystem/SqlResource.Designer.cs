@@ -110,13 +110,31 @@ namespace IST.OrderSynchronizationSystem {
         /// <summary>
         ///   Looks up a localized string similar to SELECT [OSSShipmentMappingsId]
         ///      ,[SourceShipmentMethod]
-        ///      ,[DestinationShipmentMethod]      
+        ///      ,[DestinationShipmentMethod]
+        ///      ,[MBShipVia]
+        ///      ,[MBShipMethod]
         ///  FROM [dbo].[OSSShipmentMappings]
         ///.
         /// </summary>
         internal static string source_LoadShipmentMapping {
             get {
                 return ResourceManager.GetString("source_LoadShipmentMapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT [OSSShipmentMappingsId]
+        ///      ,[SourceShipmentMethod]
+        ///      ,[DestinationShipmentMethod]
+        ///      ,[MBShipVia]
+        ///      ,[MBShipMethod]
+        ///  FROM [dbo].[OSSShipmentMappings]
+        ///  where [SourceShipmentMethod] = @SourceShipmentMethod
+        ///.
+        /// </summary>
+        internal static string source_LoadShipmentMappingDetail {
+            get {
+                return ResourceManager.GetString("source_LoadShipmentMappingDetail", resourceCulture);
             }
         }
         
@@ -286,7 +304,9 @@ namespace IST.OrderSynchronizationSystem {
         /// <summary>
         ///   Looks up a localized string similar to UPDATE [dbo].[OSSShipmentMappings]
         ///        SET [SourceShipmentMethod] = @SourceMethod
-        ///        ,[DestinationShipmentMethod] = @DestinationMethod      
+        ///        ,[DestinationShipmentMethod] = @DestinationMethod
+        ///        ,[MBShipVia] = @MBShipVia
+        ///        ,[MBShipMethod] = @MBShipMethod
         ///      WHERE [OSSShipmentMappingsId] = @MappingID
         ///    .
         /// </summary>
@@ -321,13 +341,15 @@ namespace IST.OrderSynchronizationSystem {
         ///           ,[REF_NUMBER_WEB]
         ///           ,[LeadTrackingNumber]
         ///           ,[ShipDate]
-        ///           ,[ServiceType])
+        ///           ,[ServiceType]
+        ///           ,[ShippingProvider])
         ///     VALUES
         ///           (@OrderKey
         ///           ,@RefNumberWeb
         ///           ,@TrackingNumber
         ///           ,@ShipmentDate
-        ///           ,@ServiceType)
+        ///           ,@ServiceType,
+        ///           @ShippingProvider)
         ///    .
         /// </summary>
         internal static string staging_sql_InsertShipmentTrackingDetails {
@@ -340,11 +362,15 @@ namespace IST.OrderSynchronizationSystem {
         ///   Looks up a localized string similar to INSERT INTO [OSSShipmentMappings]
         ///           ([SourceShipmentMethod]
         ///           ,[DestinationShipmentMethod]
-        ///           ,[THubToMBMap])
+        ///           ,[THubToMBMap]
+        ///           ,[MBShipVia]
+        ///           ,[MBShipMethod])
         ///     VALUES
         ///           (@SourceShipMethod,
         ///           @DestinationShipMethod,
-        ///           @THubToMBMap)
+        ///           @THubToMBMap,
+        ///           @MBShipVia,
+        ///           @MBShipMethod)
         ///    .
         /// </summary>
         internal static string staging_sql_InsertTHubToMbMapping {

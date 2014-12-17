@@ -360,13 +360,15 @@ where THubOrderReferenceNo = @OssOrderId </value>
            ,[REF_NUMBER_WEB]
            ,[LeadTrackingNumber]
            ,[ShipDate]
-           ,[ServiceType])
+           ,[ServiceType]
+           ,[ShippingProvider])
      VALUES
            (@OrderKey
            ,@RefNumberWeb
            ,@TrackingNumber
            ,@ShipmentDate
-           ,@ServiceType)
+           ,@ServiceType,
+           @ShippingProvider)
     </value>
   </data>
   <data name="staging_sql_CreateOssOrders" xml:space="preserve">
@@ -385,11 +387,15 @@ where THubOrderReferenceNo = @OssOrderId </value>
     <value>INSERT INTO [OSSShipmentMappings]
            ([SourceShipmentMethod]
            ,[DestinationShipmentMethod]
-           ,[THubToMBMap])
+           ,[THubToMBMap]
+           ,[MBShipVia]
+           ,[MBShipMethod])
      VALUES
            (@SourceShipMethod,
            @DestinationShipMethod,
-           @THubToMBMap)
+           @THubToMBMap,
+           @MBShipVia,
+           @MBShipMethod)
     </value>
   </data>
   <data name="staging_sql_UpdateTHubToMbMapping" xml:space="preserve">
@@ -401,8 +407,20 @@ where THubOrderReferenceNo = @OssOrderId </value>
   <data name="source_LoadShipmentMapping" xml:space="preserve">
     <value>SELECT [OSSShipmentMappingsId]
       ,[SourceShipmentMethod]
-      ,[DestinationShipmentMethod]      
+      ,[DestinationShipmentMethod]
+      ,[MBShipVia]
+      ,[MBShipMethod]
   FROM [dbo].[OSSShipmentMappings]
+</value>
+    </data>
+  <data name="source_LoadShipmentMappingDetail" xml:space="preserve">
+    <value>SELECT [OSSShipmentMappingsId]
+      ,[SourceShipmentMethod]
+      ,[DestinationShipmentMethod]
+      ,[MBShipVia]
+      ,[MBShipMethod]
+  FROM [dbo].[OSSShipmentMappings]
+  where [SourceShipmentMethod] = @SourceShipmentMethod
 </value>
     </data>
   <data name="source_LoadLogs" xml:space="preserve">
@@ -431,7 +449,9 @@ where THubOrderReferenceNo = @OssOrderId </value>
 <data name="source_UpdateMappingSql" xml:space="preserve">
     <value>UPDATE [dbo].[OSSShipmentMappings]
         SET [SourceShipmentMethod] = @SourceMethod
-        ,[DestinationShipmentMethod] = @DestinationMethod      
+        ,[DestinationShipmentMethod] = @DestinationMethod
+        ,[MBShipVia] = @MBShipVia
+        ,[MBShipMethod] = @MBShipMethod
       WHERE [OSSShipmentMappingsId] = @MappingID
     </value>
   </data>

@@ -1396,7 +1396,22 @@ namespace IST.OrderSynchronizationSystem
             {
                 if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Completed) // Handle in processing
                 {
-                    _orderSyncronizationDatabase.UpdateOrderTrackingAndOssStatus(statusResponse[0], long.Parse(orderId), orderChannelRefNumber, mbShipmentMethod);                    
+                    string shipVia, shipMethod;
+                    string orderJsonString = ossOrderRow["THubCompleteOrder"].ToString();
+                    OssShipment[] shipments = new OssShipment[1]
+                    {
+                        JsonConvert.DeserializeObject<OssShipment>(orderJsonString)
+                    };
+                    string webShipMethod = shipments[0].WebShipMethod;
+                    if (GetMBShipmentDetailsForCompletedOrder(webShipMethod, out shipVia, out shipMethod))
+                    {
+                        _orderSyncronizationDatabase.UpdateOrderTrackingAndOssStatus(statusResponse[0], long.Parse(orderId), orderChannelRefNumber, shipVia, shipMethod);
+                    }
+                    else
+                    {
+                        _orderSyncronizationDatabase.LogOrder(1, long.Parse(orderId), 
+                            string.Format("Shipment method mappings has been changes or removed against WebShipMethod: '{0}'. Please create or update the mappings against WebShipMethod: '{1}' so that completed orders are updated back in T-Hub.", webShipMethod, webShipMethod));
+                    }
                 }
                 else if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.InFlight || statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Recieved)
                 {
@@ -1418,6 +1433,19 @@ namespace IST.OrderSynchronizationSystem
                 }
                 InFlightRefresh();
             }            
+        }
+
+        private bool GetMBShipmentDetailsForCompletedOrder(string webShipMethod, out string ShipVia, out string ShipMethod)
+        {
+            ShipVia = ShipMethod = string.Empty;
+            DataTable table = _orderSyncronizationDatabase.GetShipMappingDetails(webShipMethod);
+            if (table.Rows.Count < 1)
+            {
+                return false;
+            }
+            ShipVia = table.Rows[0]["MBShipVia"].ToString();
+            ShipMethod = table.Rows[0]["MBShipMethod"].ToString();
+            return true;
         }
         private void SetOrderStatus(DataRow ossOrderRow, DateTime shipmentRequestSentOn, long MBShipmentMethodId, Response[] responses, OssShipment[] shipments)
         {            
@@ -1906,6 +1934,12 @@ namespace IST.OrderSynchronizationSystem
                         MessageBoxIcon.Information);
                 }                
             }
+        }
+
+        private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            About about = new About();
+            about.ShowDialog(this);
         }
     }
 }

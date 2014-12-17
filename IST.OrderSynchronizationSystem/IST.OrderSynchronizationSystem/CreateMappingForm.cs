@@ -10,8 +10,8 @@ namespace IST.OrderSynchronizationSystem
         //public string MbShipMethod;
         private readonly OssDatabase database;
         public DialogResult Result;
-        private bool UpdateShipmentMapping;
-        public CreateMappingForm(OssDatabase database, string tHubWebShipMethod, bool updateShipment = false)
+        
+        public CreateMappingForm(OssDatabase database, string tHubWebShipMethod)
         {
             this.database = database;
             this.tHubWebShipMethod = tHubWebShipMethod;
@@ -19,40 +19,53 @@ namespace IST.OrderSynchronizationSystem
             
             tHubShipMethod.Text = tHubWebShipMethod;
             tHubShipMethod.ReadOnly = true;
-            UpdateShipmentMapping = updateShipment;
         }
 
         private void button1_Click(object sender, System.EventArgs e)
-        {            
-            MbShipMethodId = int.Parse(mbShipment.Text);
-            SaveMapping();
+        {
+            if (IsValidInput())
+            {
+                MbShipMethodId = int.Parse(mbShipment.Text);
+                SaveMapping();
+            }
+            
+        }
+
+        private bool IsValidInput()
+        {
+            bool returnValue = true;
+            if (string.IsNullOrEmpty(mbShipment.Text))
+            {
+                mappingErrorProvider.SetError(mbShipment, "Please provide a valid Molding-Box Shipment Method Id.");
+                returnValue = false;
+            }
+            if (string.IsNullOrEmpty(mbShipVia.Text))
+            {
+                mappingErrorProvider.SetError(mbShipVia, "Please provide a valid Molding-Box Shipment Via.");
+                returnValue = false;
+            }
+            if (string.IsNullOrEmpty(mbShipMethod.Text))
+            {
+                mappingErrorProvider.SetError(mbShipMethod, "Please provide a valid Molding-Box Shipment Method.");
+                returnValue = false;
+            }
+            return returnValue;
         }
 
         private void SaveMapping()
         {
             try
             {
-                if (!UpdateShipmentMapping)
+                if (database.SaveThubToMbMapping(tHubWebShipMethod, MbShipMethodId, mbShipVia.Text, mbShipMethod.Text, true))
                 {
-                    if (database.SaveThubToMbMapping(tHubWebShipMethod, MbShipMethodId, true))
-                    {
-                        DialogResult = DialogResult.OK;
-                        Close();
-                    }
-                }
-                else
-                {
-                    if (database.UpdateThubToMbMapping(tHubWebShipMethod, MbShipMethodId, true))
-                    {
-                        DialogResult = DialogResult.OK;
-                        Close();
-                    }
+                    DialogResult = DialogResult.OK;
+                    Close();
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Cannot save mappings. Error: \n" + ex.Message);
-            }            
+            }
         }
 
         private void mbShipment_KeyPress(object sender, KeyPressEventArgs e)
