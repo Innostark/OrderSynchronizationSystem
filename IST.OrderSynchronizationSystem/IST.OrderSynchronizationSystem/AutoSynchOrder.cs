@@ -76,7 +76,7 @@ namespace IST.OrderSynchronizationSystem
                 
                 string errorText = "An error occured while importing order from T-Hub. The process will continue but if problem persists, make sure that database is available.";
                 mainProgram.ApplicationStatusUpdate(errorText);
-                MessageBox.Show(errorText, "Order Synchronization Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);                
+                //MessageBox.Show(errorText, "Order Synchronization Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);                
                 mainProgram._orderSyncronizationDatabase.LogOrder(1, -1, string.Format("{0} Error Details: {1}", errorText, ex.Message));
             }
         }
@@ -193,8 +193,8 @@ namespace IST.OrderSynchronizationSystem
             {
                 string errorText = "An error occured while Checking order status on MoldingBox. The process will continue but if problem persists, make sure that database is available. ";                
                 mainProgram.ApplicationStatusUpdate(errorText);
-                MessageBox.Show(errorText, "Order Synchronization Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                mainProgram._orderSyncronizationDatabase.LogOrder(1, -1, string.Format("{0} Error details: {1}",errorText, ex.Message));                
+                //MessageBox.Show(errorText, "Order Synchronization Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                mainProgram._orderSyncronizationDatabase.LogOrder(1, -1, string.Format("{0} Error details: {1} Stack-Trace: {2}", errorText, ex.Message, ex.StackTrace));                
             }
             
         }
@@ -249,7 +249,7 @@ namespace IST.OrderSynchronizationSystem
                     else
                     {
                         mainProgram._orderSyncronizationDatabase.LogOrder(1, long.Parse(orderId),
-                            string.Format("Shipment method mappings has been changes or removed against WebShipMethod: '{0}'. Please create or update the mappings against WebShipMethod: '{1}' so that completed orders are updated back in T-Hub.", webShipMethod, webShipMethod));
+                            string.Format("Shipment method mappings has been changed or removed against WebShipMethod: '{0}'. Please create or update the mappings against WebShipMethod: '{1}' so that completed orders are updated back in T-Hub.", webShipMethod, webShipMethod));
                     }
                 }
                 else if (statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.InFlight || statusResponse[0].ShipmentStatusID == (int)OSSOrderStatus.Recieved)

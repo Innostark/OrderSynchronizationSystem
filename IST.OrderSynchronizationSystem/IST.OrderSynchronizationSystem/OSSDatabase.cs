@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Security.Policy;
 using System.Transactions;
 using IST.OrderSynchronizationSystem.GUI;
 using IST.OrderSynchronizationSystem.MBAPI;
@@ -232,11 +233,11 @@ namespace IST.OrderSynchronizationSystem
                             sourceConnection))
                     {
                         command.Parameters.AddWithValue("@OrderKey", OrderKey);
-                        command.Parameters.AddWithValue("@RefNumberWeb", OrderChannelRefNumber);
-                        command.Parameters.AddWithValue("@TrackingNumber", response.TrackingNumber);
+                        command.Parameters.AddWithValue("@RefNumberWeb", !string.IsNullOrEmpty(OrderChannelRefNumber)? OrderChannelRefNumber : string.Empty);
+                        command.Parameters.AddWithValue("@TrackingNumber", !string.IsNullOrEmpty(response.TrackingNumber) ? response.TrackingNumber : string.Empty);
                         command.Parameters.AddWithValue("@ShipmentDate", DateTime.Now);
-                        command.Parameters.AddWithValue("@ShippingProvider", shipVia);
-                        command.Parameters.AddWithValue("@ServiceType", shipMethod);                        
+                        command.Parameters.AddWithValue("@ShippingProvider", !string.IsNullOrEmpty(shipVia) ? shipVia : string.Empty);
+                        command.Parameters.AddWithValue("@ServiceType", !string.IsNullOrEmpty(shipMethod) ? shipMethod : string.Empty);                        
                         sourceConnection.Open();
                         var itemsInserted = command.ExecuteNonQuery();
                     }
@@ -250,7 +251,7 @@ namespace IST.OrderSynchronizationSystem
                         command.Parameters.AddWithValue("@DateTimeNow", DateTime.Now);
                         command.Parameters.AddWithValue("@OrderStatus", (short)OSSOrderStatus.Completed);
                         command.Parameters.AddWithValue("@THubOrderId", OrderKey);
-                        command.Parameters.AddWithValue("@TrackingNumber", response.TrackingNumber);
+                        command.Parameters.AddWithValue("@TrackingNumber", !string.IsNullOrEmpty(response.TrackingNumber) ? response.TrackingNumber : string.Empty);
                         command.Parameters.AddWithValue("@THubUpdatedOn", DateTime.Now);
                         var rowsUpdate = command.ExecuteNonQuery();
                     }
