@@ -45,15 +45,18 @@ namespace IST.OrderSynchronizationSystem
                 if (shipmentMapping.Rows.Count > 0)
                 {
                     shipmentMappingGridView.DataSource = shipmentMapping;
-                    shipmentMappingGridView.Columns["MBShipVia"].DisplayIndex = 2;
-                    shipmentMappingGridView.Columns["MBShipMethod"].DisplayIndex = 3;
-                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].DisplayIndex = 1;
+                    shipmentMappingGridView.Columns["MBShipVia"].DisplayIndex = 1;
+                    shipmentMappingGridView.Columns["MBShipMethod"].DisplayIndex = 2;
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].DisplayIndex = 3;
                     shipmentMappingGridView.Columns["SourceShipmentMethod"].DisplayIndex = 0;
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].MinimumWidth = 250;
+                    shipmentMappingGridView.Columns["MBShipMethod"].MinimumWidth = 150;
+                    shipmentMappingGridView.Columns["MBShipVia"].MinimumWidth = 150;
                     //AddComboBoxColumn();
-                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].HeaderText = "Molding Box: Shipment Method Id";
-                    shipmentMappingGridView.Columns["SourceShipmentMethod"].HeaderText = "T-Hub Shipment Method";
-                    shipmentMappingGridView.Columns["MBShipVia"].HeaderText = "Molding-Box: Ship Via";
-                    shipmentMappingGridView.Columns["MBShipMethod"].HeaderText = "Molding-Box: Ship Method";
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].HeaderText = "MB: Shipment Method ID";
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].HeaderText = "T-Hub: Web Ship Method";
+                    shipmentMappingGridView.Columns["MBShipVia"].HeaderText = "T-Hub: Ship Via";
+                    shipmentMappingGridView.Columns["MBShipMethod"].HeaderText = "T-Hub: Ship Method";
                     shipmentMappingGridView.Columns["DestinationShipmentMethod"].ReadOnly = false;
                     shipmentMappingGridView.Columns["SourceShipmentMethod"].ReadOnly = false;
                     shipmentMappingGridView.Columns["MBShipVia"].ReadOnly = false;
@@ -66,15 +69,19 @@ namespace IST.OrderSynchronizationSystem
                 {
                     shipmentMapping = CreateShipmentMappingTable();
                     shipmentMappingGridView.DataSource = shipmentMapping;
-                    shipmentMappingGridView.Columns["MBShipVia"].DisplayIndex = 2;
-                    shipmentMappingGridView.Columns["MBShipMethod"].DisplayIndex = 3;
-                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].DisplayIndex = 1;
+                    shipmentMappingGridView.Columns["MBShipVia"].DisplayIndex = 1;
+                    shipmentMappingGridView.Columns["MBShipMethod"].DisplayIndex = 2;
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].DisplayIndex = 3;
                     shipmentMappingGridView.Columns["SourceShipmentMethod"].DisplayIndex = 0;
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].MinimumWidth = 250;
+                    shipmentMappingGridView.Columns["MBShipMethod"].MinimumWidth = 150;
+                    shipmentMappingGridView.Columns["MBShipVia"].MinimumWidth = 150;
+
                     //AddComboBoxColumn();
-                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].HeaderText = "Molding Box: Shipment Method Id";
-                    shipmentMappingGridView.Columns["SourceShipmentMethod"].HeaderText = "T-Hub Shipment Method";
-                    shipmentMappingGridView.Columns["MBShipVia"].HeaderText = "Molding-Box: Ship Via";
-                    shipmentMappingGridView.Columns["MBShipMethod"].HeaderText = "Molding-Box: Ship Method";
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].HeaderText = "MB: Shipment Method ID";
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].HeaderText = "T-Hub: Web Ship Method";
+                    shipmentMappingGridView.Columns["MBShipVia"].HeaderText = "T-Hub: Ship Via";
+                    shipmentMappingGridView.Columns["MBShipMethod"].HeaderText = "T-Hub: Ship Method";
                     shipmentMappingGridView.Columns["DestinationShipmentMethod"].ReadOnly = false;
                     shipmentMappingGridView.Columns["SourceShipmentMethod"].ReadOnly = false;
                     shipmentMappingGridView.Columns["MBShipVia"].ReadOnly = false;
@@ -108,6 +115,7 @@ namespace IST.OrderSynchronizationSystem
             deleteButtonColumn.HeaderText = "Delete";
             deleteButtonColumn.Text = "Delete";
             deleteButtonColumn.MinimumWidth = 100;
+            deleteButtonColumn.Width = 100;
             deleteButtonColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             deleteButtonColumn.Name = "btnDelete";
             deleteButtonColumn.ToolTipText = "Click to delete Mapping.";
@@ -133,18 +141,21 @@ namespace IST.OrderSynchronizationSystem
                     shipmentMappingGridView.DataSource = null;
                     shipmentMappingGridView.DataSource = shipmentMapping;
 
-                    shipmentMappingGridView.Columns["MBShipVia"].DisplayIndex = 2;
-                    shipmentMappingGridView.Columns["MBShipMethod"].DisplayIndex = 3;
-                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].DisplayIndex = 1;
+                    shipmentMappingGridView.Columns["MBShipVia"].DisplayIndex = 1;
+                    shipmentMappingGridView.Columns["MBShipMethod"].DisplayIndex = 2;
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].DisplayIndex = 3;
                     shipmentMappingGridView.Columns["SourceShipmentMethod"].DisplayIndex = 0;
                     shipmentMappingGridView.Columns["DestinationShipmentMethod"].ReadOnly = false;
                     shipmentMappingGridView.Columns["SourceShipmentMethod"].ReadOnly = false;
                     shipmentMappingGridView.Columns["MBShipVia"].ReadOnly = false;
                     shipmentMappingGridView.Columns["MBShipMethod"].ReadOnly = false;
-                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].HeaderText = "Molding Box: Shipment Method Id";
-                    shipmentMappingGridView.Columns["SourceShipmentMethod"].HeaderText = "T-Hub Shipment Method";
-                    shipmentMappingGridView.Columns["MBShipVia"].HeaderText = "Molding-Box: Ship Via";
-                    shipmentMappingGridView.Columns["MBShipMethod"].HeaderText = "Molding-Box: Ship Method";
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].HeaderText = "MB: Shipment Method ID";
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].HeaderText = "T-Hub: Web Ship Method";
+                    shipmentMappingGridView.Columns["MBShipVia"].HeaderText = "T-Hub: Ship Via";
+                    shipmentMappingGridView.Columns["MBShipMethod"].HeaderText = "T-Hub: Ship Method";
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].MinimumWidth = 250;
+                    shipmentMappingGridView.Columns["MBShipMethod"].MinimumWidth = 150;
+                    shipmentMappingGridView.Columns["MBShipVia"].MinimumWidth = 150;
                     
                     HideIdColumn();
                     if (!shipmentMappingGridView.Columns.Contains("btnDelete"))

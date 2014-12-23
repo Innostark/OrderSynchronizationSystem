@@ -50,14 +50,14 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(649, 427);
+            this.groupBox1.Size = new System.Drawing.Size(814, 427);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Shipment Methods Mappings";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(562, 397);
+            this.button1.Location = new System.Drawing.Point(727, 397);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 4;
@@ -76,7 +76,7 @@
             // 
             // RefreshButton
             // 
-            this.RefreshButton.Location = new System.Drawing.Point(399, 397);
+            this.RefreshButton.Location = new System.Drawing.Point(564, 397);
             this.RefreshButton.Name = "RefreshButton";
             this.RefreshButton.Size = new System.Drawing.Size(75, 23);
             this.RefreshButton.TabIndex = 2;
@@ -86,7 +86,7 @@
             // 
             // CloseButton
             // 
-            this.CloseButton.Location = new System.Drawing.Point(480, 397);
+            this.CloseButton.Location = new System.Drawing.Point(645, 397);
             this.CloseButton.Name = "CloseButton";
             this.CloseButton.Size = new System.Drawing.Size(75, 23);
             this.CloseButton.TabIndex = 1;
@@ -108,7 +108,7 @@
             this.shipmentMappingGridView.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.shipmentMappingGridView.RowHeadersVisible = false;
             this.shipmentMappingGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.shipmentMappingGridView.Size = new System.Drawing.Size(624, 371);
+            this.shipmentMappingGridView.Size = new System.Drawing.Size(789, 371);
             this.shipmentMappingGridView.TabIndex = 0;
             this.shipmentMappingGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.shipmentMappingGridView_CellContentClick);
             this.shipmentMappingGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.shipmentMappingGridView_CellValueChanged);
@@ -124,7 +124,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(649, 427);
+            this.ClientSize = new System.Drawing.Size(814, 427);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
