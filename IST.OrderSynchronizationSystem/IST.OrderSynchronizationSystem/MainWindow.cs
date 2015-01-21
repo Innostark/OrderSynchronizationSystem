@@ -1134,6 +1134,7 @@ namespace IST.OrderSynchronizationSystem
             {
                 if (((DataGridView) sender).Name == OssOrdersDataGridView.Name)
                 {
+                    #region New Order Handler
                     try
                     {
                         HandleNewGridActions(e, senderGrid);
@@ -1149,10 +1150,12 @@ namespace IST.OrderSynchronizationSystem
                             "There is some problem while sending order to moldingbox. Error details has been logged. If problem persists, please check Database, apikey and internet connectivity.",
                             "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
+                    #endregion
 
                 }
                 else if (((DataGridView) sender).Name == OssExceptionGridView.Name)
                 {
+                    #region Exception Handler
                     try
                     {
                         HandleExceptionGridActions(e, senderGrid);
@@ -1166,12 +1169,14 @@ namespace IST.OrderSynchronizationSystem
                                 exception.Message));
                         MessageBox.Show(
                             "There is some problem while Loading exceptional orders. Please check database and hit refresh.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        
+
                     }
-                    
+                    #endregion
+
                 }
                 else if (((DataGridView) sender).Name == OssInFlightGridView.Name)
                 {
+                    #region Infligh Handler
                     try
                     {
                         DataGridViewDisableButtonCell sendToMbButtonCell = (DataGridViewDisableButtonCell)senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex];
@@ -1213,8 +1218,57 @@ namespace IST.OrderSynchronizationSystem
                         _orderSyncronizationDatabase.LogOrder(1, orderId,
                             string.Format("There is some problem while checking order status on molding box.{0}.",
                                 exception.Message));
-                        MessageBox.Show("There is some problem while checking order status on molding box. Error has been logged. If problem persists, please check your database, apikey and internet connectivity.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);                        
-                    }                    
+                        MessageBox.Show("There is some problem while checking order status on molding box. Error has been logged. If problem persists, please check your database, apikey and internet connectivity.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                    #endregion
+                }
+                else if (((DataGridView) sender).Name == OSSOrderOnHoldGridView.Name)
+                {
+                    #region On Hold Handler
+                    try
+                    {
+                        DataGridViewDisableButtonCell sendToMbButtonCell = (DataGridViewDisableButtonCell)senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                        if (sendToMbButtonCell.FormattedValue == CancelString)
+                        {
+                            try
+                            {
+                                CancelMessageForm cancelMessageForm = new CancelMessageForm();
+                                DialogResult results = cancelMessageForm.ShowDialog(this);
+                                if (cancelMessageForm.Result == DialogResult.OK)
+                                {
+                                    DataRow ossOrderRow = ((DataTable)senderGrid.DataSource).Rows[e.RowIndex];
+                                    ossOrderRow["CancelMessage"] = cancelMessageForm.CancelMessageString;
+                                    ossOrderRow["OrderStatus"] = (int)OSSOrderStatus.Canceled;
+                                    _orderSyncronizationDatabase.UpdateOrderAfterMoldingBoxShipmentRequest(ossOrderRow);
+                                }
+                            }
+                            catch (Exception exception)
+                            {
+                                _orderSyncronizationDatabase.LogOrder(1,
+                                    long.Parse(
+                                        ((DataTable)senderGrid.DataSource).Rows[e.RowIndex]["THubOrderId"].ToString()),
+                                    string.Format("Error while canceling order. Error: {0}", exception.Message));
+                                MessageBox.Show(
+                                    "There is some problem while canceling the order. Error details have been logged. If problem persists, please check database.",
+                                    "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            }
+                            OnHoldRefresh();
+                        }
+                        else
+                        {
+                            HandleInFlightOrdersActions(((DataTable)senderGrid.DataSource).Rows[e.RowIndex], false);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        long orderId =
+                            long.Parse(((DataTable)senderGrid.DataSource).Rows[e.RowIndex]["THubOrderId"].ToString());
+                        _orderSyncronizationDatabase.LogOrder(1, orderId,
+                            string.Format("There is some problem while checking order status on molding box.{0}.",
+                                exception.Message));
+                        MessageBox.Show("There is some problem while checking order status on molding box. Error has been logged. If problem persists, please check your database, apikey and internet connectivity.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                    #endregion
                 }
             }
         }
@@ -1362,12 +1416,17 @@ namespace IST.OrderSynchronizationSystem
             senderGrid.DataBindings.Clear();
             senderGrid.DataSource = ossExceptionDataTable;
         }
-        private void HandleInFlightOrdersActions(DataRow ossOrderRow)
+
+        /// <summary>
+        /// This is primarily written for checking statuses of in-flight orders 
+        /// </summary>
+        /// <param name="ossOrderRow"></param>
+        private void HandleInFlightOrdersActions(DataRow ossOrderRow, bool inflightProcessing = true)
         {
             string mbShipmentID = ossOrderRow["MBShipmentId"].ToString();
             string orderId = ossOrderRow["THubOrderId"].ToString();
             string orderChannelRefNumber = ossOrderRow["THubOrderReferenceNo"].ToString();
-            string mbShipmentMethod = ossOrderRow["MBShipmentMethod"].ToString();
+            string mbShipmentMetho = ossOrderRow["MBShipmentMethod"].ToString();
             apiKey = MoldinboxKeyTextBox.Text;
             MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
             StatusResponse[] statusResponse = new StatusResponse[1];
@@ -1431,7 +1490,14 @@ namespace IST.OrderSynchronizationSystem
                     _orderSyncronizationDatabase.UpdateOrderStatusCanceledOrOnHold(long.Parse(orderId), OSSOrderStatus.Exception);
                     _orderSyncronizationDatabase.LogOrder(1, long.Parse(orderId), string.Format("Order status check returns an exceptional response. Response Message: '{0}'", statusResponse[0].ErrorMessage));
                 }
-                InFlightRefresh();
+                if (inflightProcessing)
+                {
+                    InFlightRefresh();
+                }
+                else
+                {
+                    OnHoldRefresh();
+                }
             }            
         }
 
@@ -1634,6 +1700,14 @@ namespace IST.OrderSynchronizationSystem
             if (ossOnHoldDatasource.Rows.Count > 0)
             {
                 OSSOrderOnHoldGridView.DataSource = ossOnHoldDatasource;
+                if (!_autoSyncActive)
+                {
+                    if (OSSOrderOnHoldGridView.ColumnCount == 21)
+                    {
+                        AddSyncButtonToGridView(OSSOrderOnHoldGridView);
+                        AddCancelButtonToGridView(OSSOrderOnHoldGridView);
+                    }
+                }
                 SetOssOrderDataGridHeaderTextAndColumnVisibility(OSSOrderOnHoldGridView, OssOrdersGridTypes.OnHold);
             }
             else
@@ -1652,7 +1726,10 @@ namespace IST.OrderSynchronizationSystem
             }
             OnHoldOrdersLabel.Text = "Total No. of Orders: " + ossOnHoldDatasource.Rows.Count;
         }
-        
+        private void OSSOrderOnHoldGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            OssOrdersDataGridView_CellContentClick_1(sender, e);
+        }
         #endregion
         #region Cancel handlers
         
@@ -1941,5 +2018,7 @@ namespace IST.OrderSynchronizationSystem
             About about = new About();
             about.ShowDialog(this);
         }
+
+        
     }
 }

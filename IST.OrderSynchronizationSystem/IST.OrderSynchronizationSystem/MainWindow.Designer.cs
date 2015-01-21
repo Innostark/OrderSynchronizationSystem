@@ -930,6 +930,7 @@
             this.OSSOrderOnHoldGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.OSSOrderOnHoldGridView.Size = new System.Drawing.Size(1199, 565);
             this.OSSOrderOnHoldGridView.TabIndex = 0;
+            this.OSSOrderOnHoldGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OSSOrderOnHoldGridView_CellContentClick);
             // 
             // Canceled
             // 
