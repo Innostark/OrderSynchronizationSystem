@@ -35,12 +35,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -108,41 +108,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Order Synchronization System";
             // 
-            // label5
+            // linkLabel1
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(171, 60);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(22, 13);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "1.0";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(171, 81);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(40, 13);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "2.0.0.1";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(171, 104);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(65, 13);
-            this.label7.TabIndex = 7;
-            this.label7.Text = "10/12/2014";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 140);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(133, 13);
-            this.label8.TabIndex = 8;
-            this.label8.Text = "Designed && Developed by:";
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(216, 153);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(100, 13);
+            this.linkLabel1.TabIndex = 11;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "www.innostark.com";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // label10
             // 
@@ -155,16 +130,41 @@
             this.label10.TabIndex = 10;
             this.label10.Text = "InnoSTARK Technologies Pvt. Ltd.";
             // 
-            // linkLabel1
+            // label8
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(216, 153);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(100, 13);
-            this.linkLabel1.TabIndex = 11;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "www.innostark.com";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 140);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(133, 13);
+            this.label8.TabIndex = 8;
+            this.label8.Text = "Designed && Developed by:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(171, 104);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(71, 13);
+            this.label7.TabIndex = 7;
+            this.label7.Text = "27/01/20158";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(171, 81);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(40, 13);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "2.0.1.2";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(171, 60);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(22, 13);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "1.0";
             // 
             // About
             // 

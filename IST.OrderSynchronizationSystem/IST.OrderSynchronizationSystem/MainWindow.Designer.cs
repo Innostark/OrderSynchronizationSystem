@@ -246,6 +246,7 @@
             this.MainFormTabControl.Size = new System.Drawing.Size(1234, 636);
             this.MainFormTabControl.TabIndex = 5;
             this.MainFormTabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.MainFormTabControl_Selecting);
+            this.MainFormTabControl.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainFormTabControl_KeyUp);
             // 
             // ConfigurationTabPage
             // 

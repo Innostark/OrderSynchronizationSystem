@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Windows.Forms;
 
 namespace IST.OrderSynchronizationSystem
@@ -36,17 +37,17 @@ namespace IST.OrderSynchronizationSystem
             bool returnValue = true;
             if (string.IsNullOrEmpty(mbShipment.Text))
             {
-                mappingErrorProvider.SetError(mbShipment, "Please provide a valid Molding-Box Shipment Method Id.");
+                mappingErrorProvider.SetError(mbShipment, "Please provide a valid MB: Shipment Method Id.");
                 returnValue = false;
             }
-            if (string.IsNullOrEmpty(mbShipVia.Text))
+            if (shipViaCombobox.SelectedItem.ToString() == "...")
             {
-                mappingErrorProvider.SetError(mbShipVia, "Please provide a valid Molding-Box Shipment Via.");
+                mappingErrorProvider.SetError(shipViaCombobox, "Please provide a valid T-Hub: Shipment Via.");
                 returnValue = false;
             }
             if (string.IsNullOrEmpty(mbShipMethod.Text))
             {
-                mappingErrorProvider.SetError(mbShipMethod, "Please provide a valid Molding-Box Shipment Method.");
+                mappingErrorProvider.SetError(mbShipMethod, "Please provide a valid T-Hub: Shipment Method.");
                 returnValue = false;
             }
             return returnValue;
@@ -56,7 +57,7 @@ namespace IST.OrderSynchronizationSystem
         {
             try
             {
-                if (database.SaveThubToMbMapping(tHubWebShipMethod, MbShipMethodId, mbShipVia.Text, mbShipMethod.Text, true))
+                if (database.SaveThubToMbMapping(tHubWebShipMethod, MbShipMethodId, shipViaCombobox.SelectedItem.ToString(), mbShipMethod.Text, true))
                 {
                     DialogResult = DialogResult.OK;
                     Close();
@@ -74,6 +75,21 @@ namespace IST.OrderSynchronizationSystem
             {
                 e.Handled = true;
             }
+        }
+
+        private void CreateMappingForm_Load(object sender, EventArgs e)
+        {
+            InitializeShipViaCombobox();
+        }
+
+        private void InitializeShipViaCombobox()
+        {
+
+            shipViaCombobox.Items.Add("...");
+            shipViaCombobox.Items.Add("FedEx");
+            shipViaCombobox.Items.Add("UPS");
+            shipViaCombobox.Items.Add("USPS");
+            shipViaCombobox.SelectedIndex = 0;
         }
     }
 }

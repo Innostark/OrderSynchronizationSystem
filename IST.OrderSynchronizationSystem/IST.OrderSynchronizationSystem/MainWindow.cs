@@ -1818,8 +1818,8 @@ namespace IST.OrderSynchronizationSystem
                     return;                    
                 }
                 MBAPISoapClient client = MoldingBoxHelper.GetMoldingBoxClient();
-                shipmentMethods = client.Retrieve_Merchant_Shipping_Methods(MoldinboxKeyTextBox.Text);
-                ShipmentMappingForm shimepForm = new ShipmentMappingForm(_orderSyncronizationDatabase, shipmentMethods);
+                //shipmentMethods = client.Retrieve_Merchant_Shipping_Methods(MoldinboxKeyTextBox.Text);
+                ShipmentMappingForm shimepForm = new ShipmentMappingForm(_orderSyncronizationDatabase, null);
                 shimepForm.ShowDialog(this);
             }
             catch (Exception exception)
@@ -2019,6 +2019,45 @@ namespace IST.OrderSynchronizationSystem
             about.ShowDialog(this);
         }
 
-        
+        private void MainFormTabControl_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F5)
+            {
+                switch (MainFormTabControl.SelectedTab.Name)
+                {
+                    case "NewOrderTabPage":
+                        {
+                            RefreshNewOrdersGrid();
+                            break;
+                        }
+                    case "InFight":
+                        {
+                            InFlightRefresh();
+                            break;
+                        }
+                    case "Exception":
+                        {
+                            ExceptionRefresh();
+                            break;
+                        }
+                    case "Completed":
+                        {
+                            CompleteRefresh();
+                            break;
+                        }
+                    case "OnHold":
+                        {
+                            OnHoldRefresh();
+                            break;
+                        }
+                    case "Canceled":
+                        {
+                            CancelRefresh();
+                            break;
+                        }
+                }
+            }
+        }
+                
     }
 }

@@ -359,6 +359,63 @@ namespace IST.OrderSynchronizationSystem {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///      INSERT INTO [dbo].[ShipmentTracking]
+        ///           ([ORDER_KEY]
+        ///		       ,[ORDER_KEY_Fedex]
+        ///           ,[REF_NUMBER_WEB]
+        ///           ,[LeadTrackingNumber]
+        ///           ,[ShipDate]
+        ///           ,[ServiceType]           
+        ///           ,[ShippingProvider]
+        ///           )
+        ///     VALUES
+        ///           (  @OrderKey
+        ///	           ,@OrderKeyFedEx
+        ///             ,@RefNumberWeb
+        ///             ,@TrackingNumber
+        ///             ,@ShipmentDate
+        ///             ,@ServiceType
+        ///             ,@ShippingProvider
+        ///           )
+        ///    .
+        /// </summary>
+        internal static string staging_sql_InsertShipmentTrackingDetailsFedEx {
+            get {
+                return ResourceManager.GetString("staging_sql_InsertShipmentTrackingDetailsFedEx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///      INSERT INTO [dbo].[ShipmentTracking]
+        ///           (
+        ///           [ORDER_KEY]
+        ///		       ,[USPSTracking]
+        ///           ,[REF_NUMBER_WEB]
+        ///		       ,[LeadTrackingNumber]
+        ///           ,[ShipDate]
+        ///           ,[ServiceType]           
+        ///           ,[ShippingProvider]
+        ///           )
+        ///     VALUES
+        ///           (  @OrderKey
+        ///	           ,@USPSTracking
+        ///             ,@RefNumberWeb
+        ///             ,@TrackingNumber
+        ///             ,@ShipmentDate
+        ///             ,@ServiceType
+        ///             ,@ShippingProvider
+        ///             )
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string staging_sql_InsertShipmentTrackingDetailsUSPS {
+            get {
+                return ResourceManager.GetString("staging_sql_InsertShipmentTrackingDetailsUSPS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to INSERT INTO [OSSShipmentMappings]
         ///           ([SourceShipmentMethod]
         ///           ,[DestinationShipmentMethod]

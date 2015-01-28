@@ -225,24 +225,23 @@ namespace IST.OrderSynchronizationSystem
         {
             using (TransactionScope scope = new TransactionScope())
             {
-                using (SqlConnection sourceConnection =
-                    new SqlConnection(_sourceSqlConnectionConnectionStringBuilder.ConnectionString))
+                if (shipVia == "UPS")
                 {
-                    using (
-                        SqlCommand command = new SqlCommand(SqlResource.staging_sql_InsertShipmentTrackingDetails,
-                            sourceConnection))
-                    {
-                        command.Parameters.AddWithValue("@OrderKey", OrderKey);
-                        command.Parameters.AddWithValue("@RefNumberWeb", !string.IsNullOrEmpty(OrderChannelRefNumber)? OrderChannelRefNumber : string.Empty);
-                        command.Parameters.AddWithValue("@TrackingNumber", !string.IsNullOrEmpty(response.TrackingNumber) ? response.TrackingNumber : string.Empty);
-                        command.Parameters.AddWithValue("@ShipmentDate", DateTime.Now);
-                        command.Parameters.AddWithValue("@ShippingProvider", !string.IsNullOrEmpty(shipVia) ? shipVia : string.Empty);
-                        command.Parameters.AddWithValue("@ServiceType", !string.IsNullOrEmpty(shipMethod) ? shipMethod : string.Empty);                        
-                        sourceConnection.Open();
-                        var itemsInserted = command.ExecuteNonQuery();
-                    }
-
+                    InsertTrackingForUPS(OrderKey, OrderChannelRefNumber, response.TrackingNumber, shipMethod, shipVia);
                 }
+                else if (shipVia == "FedEx")
+                {
+                    InsertTrackingForFedEx(OrderKey, OrderChannelRefNumber, response.TrackingNumber, shipMethod, shipVia);
+                }
+                else if (shipVia == "USPS")
+                {
+                    InsertTrackingForUSPS(OrderKey, OrderChannelRefNumber, response.TrackingNumber, shipMethod, shipVia);
+                }
+                else
+                {
+                    InsertTrackingForUPS(OrderKey, OrderChannelRefNumber, response.TrackingNumber, shipMethod, shipVia);
+                }
+
                 using (SqlConnection stagingDbconnection = new SqlConnection(_stagingSqlConnectionConnectionStringBuilder.ConnectionString))
                 {
                     stagingDbconnection.Open();
@@ -258,6 +257,59 @@ namespace IST.OrderSynchronizationSystem
                     stagingDbconnection.Close();
                 }
                 scope.Complete();
+            }
+        }
+        private void InsertTrackingForUPS(long OrderKey, string OrderChannelRefNumber, string LeadTrackingNumber, string serviceType, string shippingProvider)
+        {
+            using (SqlConnection sourceConnection = new SqlConnection(_sourceSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(SqlResource.staging_sql_InsertShipmentTrackingDetails, sourceConnection))
+                {
+                    command.Parameters.AddWithValue("@OrderKey", OrderKey);
+                    command.Parameters.AddWithValue("@RefNumberWeb", !string.IsNullOrEmpty(OrderChannelRefNumber) ? OrderChannelRefNumber : string.Empty);
+                    command.Parameters.AddWithValue("@TrackingNumber", !string.IsNullOrEmpty(LeadTrackingNumber) ? LeadTrackingNumber : string.Empty);
+                    command.Parameters.AddWithValue("@ShipmentDate", DateTime.Now);
+                    command.Parameters.AddWithValue("@ShippingProvider", !string.IsNullOrEmpty(shippingProvider) ? shippingProvider : string.Empty);
+                    command.Parameters.AddWithValue("@ServiceType", !string.IsNullOrEmpty(serviceType) ? serviceType : string.Empty);
+                    sourceConnection.Open();
+                    var itemsInserted = command.ExecuteNonQuery();
+                }
+            }
+        }
+        private void InsertTrackingForFedEx(long OrderKey, string OrderChannelRefNumber, string LeadTrackingNumber, string serviceType, string shippingProvider)
+        {
+            using (SqlConnection sourceConnection = new SqlConnection(_sourceSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(SqlResource.staging_sql_InsertShipmentTrackingDetailsFedEx, sourceConnection))
+                {
+                    command.Parameters.AddWithValue("@OrderKey", OrderKey);
+                    command.Parameters.AddWithValue("@OrderKeyFedEx", OrderKey);
+                    command.Parameters.AddWithValue("@RefNumberWeb", !string.IsNullOrEmpty(OrderChannelRefNumber) ? OrderChannelRefNumber : string.Empty);
+                    command.Parameters.AddWithValue("@TrackingNumber", !string.IsNullOrEmpty(LeadTrackingNumber) ? LeadTrackingNumber : string.Empty);
+                    command.Parameters.AddWithValue("@ShipmentDate", DateTime.Now);
+                    command.Parameters.AddWithValue("@ShippingProvider", !string.IsNullOrEmpty(shippingProvider) ? shippingProvider : string.Empty);
+                    command.Parameters.AddWithValue("@ServiceType", !string.IsNullOrEmpty(serviceType) ? serviceType : string.Empty);
+                    sourceConnection.Open();
+                    var itemsInserted = command.ExecuteNonQuery();
+                }
+            }
+        }
+        private void InsertTrackingForUSPS(long OrderKey, string OrderChannelRefNumber, string LeadTrackingNumber, string serviceType, string shippingProvider)
+        {
+            using (SqlConnection sourceConnection = new SqlConnection(_sourceSqlConnectionConnectionStringBuilder.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(SqlResource.staging_sql_InsertShipmentTrackingDetailsUSPS, sourceConnection))
+                {
+                    command.Parameters.AddWithValue("@OrderKey", OrderKey);
+                    command.Parameters.AddWithValue("@USPSTracking", !string.IsNullOrEmpty(LeadTrackingNumber) ? LeadTrackingNumber : string.Empty);
+                    command.Parameters.AddWithValue("@RefNumberWeb", !string.IsNullOrEmpty(OrderChannelRefNumber) ? OrderChannelRefNumber : string.Empty);
+                    command.Parameters.AddWithValue("@TrackingNumber", !string.IsNullOrEmpty(LeadTrackingNumber) ? LeadTrackingNumber : string.Empty);
+                    command.Parameters.AddWithValue("@ShipmentDate", DateTime.Now);
+                    command.Parameters.AddWithValue("@ShippingProvider", !string.IsNullOrEmpty(shippingProvider) ? shippingProvider : string.Empty);
+                    command.Parameters.AddWithValue("@ServiceType", !string.IsNullOrEmpty(serviceType) ? serviceType : string.Empty);
+                    sourceConnection.Open();
+                    var itemsInserted = command.ExecuteNonQuery();
+                }
             }
         }
 
@@ -372,7 +424,8 @@ namespace IST.OrderSynchronizationSystem
             //TODO: Replace the Hard Coded SKU with live
             return new Item
             {
-                SKU = "SKU1",//SKU = orderItem["SKU"].ToString()
+                //SKU = "SKU1",
+                SKU = orderItem["SKU"].ToString(),
                 Description = orderItem["Description"].ToString(),
                 Quantity = (int)orderItem["Quantity"],
                 Custom1 = orderItem["Custom1"].ToString(),

@@ -371,6 +371,51 @@ where THubOrderReferenceNo = @OssOrderId </value>
            @ShippingProvider)
     </value>
   </data>
+  <data name="staging_sql_InsertShipmentTrackingDetailsFedEx" xml:space="preserve">
+    <value>
+      INSERT INTO [dbo].[ShipmentTracking]
+           ([ORDER_KEY]
+		       ,[ORDER_KEY_Fedex]
+           ,[REF_NUMBER_WEB]
+           ,[LeadTrackingNumber]
+           ,[ShipDate]
+           ,[ServiceType]           
+           ,[ShippingProvider]
+           )
+     VALUES
+           (  @OrderKey
+	           ,@OrderKeyFedEx
+             ,@RefNumberWeb
+             ,@TrackingNumber
+             ,@ShipmentDate
+             ,@ServiceType
+             ,@ShippingProvider
+           )
+    </value>
+  </data>
+  <data name="staging_sql_InsertShipmentTrackingDetailsUSPS" xml:space="preserve">
+    <value>
+      INSERT INTO [dbo].[ShipmentTracking]
+           (
+           [ORDER_KEY]
+		       ,[USPSTracking]
+           ,[REF_NUMBER_WEB]
+		       ,[LeadTrackingNumber]
+           ,[ShipDate]
+           ,[ServiceType]           
+           ,[ShippingProvider]
+           )
+     VALUES
+           (  @OrderKey
+	           ,@USPSTracking
+             ,@RefNumberWeb
+             ,@TrackingNumber
+             ,@ShipmentDate
+             ,@ServiceType
+             ,@ShippingProvider
+             )
+    </value>
+  </data>
   <data name="staging_sql_CreateOssOrders" xml:space="preserve">
     <value>USPCreateOSSOrders</value>
   </data>

@@ -45,13 +45,17 @@ namespace IST.OrderSynchronizationSystem
                 if (shipmentMapping.Rows.Count > 0)
                 {
                     shipmentMappingGridView.DataSource = shipmentMapping;
-                    shipmentMappingGridView.Columns["MBShipVia"].DisplayIndex = 1;
+                    AddComboBoxColum();
+                    AddDeleteButtonToGridView(shipmentMappingGridView, 4);
+                    HideIdColumn();
+
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].DisplayIndex = 0;
+                    shipmentMappingGridView.Columns["MBShipViaCombobox"].DisplayIndex = 1;
                     shipmentMappingGridView.Columns["MBShipMethod"].DisplayIndex = 2;
                     shipmentMappingGridView.Columns["DestinationShipmentMethod"].DisplayIndex = 3;
-                    shipmentMappingGridView.Columns["SourceShipmentMethod"].DisplayIndex = 0;
-                    shipmentMappingGridView.Columns["SourceShipmentMethod"].MinimumWidth = 250;
-                    shipmentMappingGridView.Columns["MBShipMethod"].MinimumWidth = 150;
-                    shipmentMappingGridView.Columns["MBShipVia"].MinimumWidth = 150;
+                    shipmentMappingGridView.Columns["btnDelete"].DisplayIndex = 4;
+
+                    
                     //AddComboBoxColumn();
                     shipmentMappingGridView.Columns["DestinationShipmentMethod"].HeaderText = "MB: Shipment Method ID";
                     shipmentMappingGridView.Columns["SourceShipmentMethod"].HeaderText = "T-Hub: Web Ship Method";
@@ -61,21 +65,25 @@ namespace IST.OrderSynchronizationSystem
                     shipmentMappingGridView.Columns["SourceShipmentMethod"].ReadOnly = false;
                     shipmentMappingGridView.Columns["MBShipVia"].ReadOnly = false;
                     shipmentMappingGridView.Columns["MBShipMethod"].ReadOnly = false;
-                    
-                    HideIdColumn();
-                    AddDeleteButtonToGridView(shipmentMappingGridView, 5);
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].Width = 250;
+                    shipmentMappingGridView.Columns["MBShipMethod"].Width = 250;
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].Width = 150;
+                    shipmentMappingGridView.Columns["btnDelete"].Width = 100;
+                    shipmentMappingGridView.Columns["MBShipViaCombobox"].Width = 100;
                 }
                 else
                 {
-                    shipmentMapping = CreateShipmentMappingTable();
+                    shipmentMapping = CreateShipmentMappingTable();                    
                     shipmentMappingGridView.DataSource = shipmentMapping;
-                    shipmentMappingGridView.Columns["MBShipVia"].DisplayIndex = 1;
+                    AddComboBoxColum();
+                    AddDeleteButtonToGridView(shipmentMappingGridView, 4);
+                    HideIdColumn();
+
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].DisplayIndex = 0;
+                    shipmentMappingGridView.Columns["MBShipViaCombobox"].DisplayIndex = 1;
                     shipmentMappingGridView.Columns["MBShipMethod"].DisplayIndex = 2;
                     shipmentMappingGridView.Columns["DestinationShipmentMethod"].DisplayIndex = 3;
-                    shipmentMappingGridView.Columns["SourceShipmentMethod"].DisplayIndex = 0;
-                    shipmentMappingGridView.Columns["SourceShipmentMethod"].MinimumWidth = 250;
-                    shipmentMappingGridView.Columns["MBShipMethod"].MinimumWidth = 150;
-                    shipmentMappingGridView.Columns["MBShipVia"].MinimumWidth = 150;
+                    shipmentMappingGridView.Columns["btnDelete"].DisplayIndex = 4;
 
                     //AddComboBoxColumn();
                     shipmentMappingGridView.Columns["DestinationShipmentMethod"].HeaderText = "MB: Shipment Method ID";
@@ -86,8 +94,12 @@ namespace IST.OrderSynchronizationSystem
                     shipmentMappingGridView.Columns["SourceShipmentMethod"].ReadOnly = false;
                     shipmentMappingGridView.Columns["MBShipVia"].ReadOnly = false;
                     shipmentMappingGridView.Columns["MBShipMethod"].ReadOnly = false;
-                    HideIdColumn();
-                    AddDeleteButtonToGridView(shipmentMappingGridView, 5);
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].Width = 250;
+                    shipmentMappingGridView.Columns["MBShipMethod"].Width = 250;
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].Width = 150;
+                    shipmentMappingGridView.Columns["btnDelete"].Width = 100;
+                    shipmentMappingGridView.Columns["MBShipViaCombobox"].Width = 100;
+                    
                 }
                 
                 MappingLabel.Text = "Total No. of Mappings: " + shipmentMapping.Rows.Count;
@@ -128,6 +140,8 @@ namespace IST.OrderSynchronizationSystem
         private void HideIdColumn()
         {
             shipmentMappingGridView.Columns["OSSShipmentMappingsId"].Visible = false;
+            shipmentMappingGridView.Columns["MBShipVia"].Visible = false;
+            
         }
 
         
@@ -140,29 +154,41 @@ namespace IST.OrderSynchronizationSystem
                 {
                     shipmentMappingGridView.DataSource = null;
                     shipmentMappingGridView.DataSource = shipmentMapping;
+                    if (!shipmentMappingGridView.Columns.Contains("btnDelete"))
+                    {
+                        AddDeleteButtonToGridView(shipmentMappingGridView, 4);
+                    }
+                    
+                    if (!shipmentMappingGridView.Columns.Contains("MBShipViaCombobox"))
+                    {
+                        AddComboBoxColum();
+                        
+                    }
+                    HideIdColumn();
 
-                    shipmentMappingGridView.Columns["MBShipVia"].DisplayIndex = 1;
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].DisplayIndex = 0;
+                    shipmentMappingGridView.Columns["MBShipViaCombobox"].DisplayIndex = 1;
                     shipmentMappingGridView.Columns["MBShipMethod"].DisplayIndex = 2;
                     shipmentMappingGridView.Columns["DestinationShipmentMethod"].DisplayIndex = 3;
-                    shipmentMappingGridView.Columns["SourceShipmentMethod"].DisplayIndex = 0;
-                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].ReadOnly = false;
+                    shipmentMappingGridView.Columns["btnDelete"].DisplayIndex = 4;
+                    
+
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].ReadOnly = false;                    
                     shipmentMappingGridView.Columns["SourceShipmentMethod"].ReadOnly = false;
                     shipmentMappingGridView.Columns["MBShipVia"].ReadOnly = false;
                     shipmentMappingGridView.Columns["MBShipMethod"].ReadOnly = false;
+                    
                     shipmentMappingGridView.Columns["DestinationShipmentMethod"].HeaderText = "MB: Shipment Method ID";
                     shipmentMappingGridView.Columns["SourceShipmentMethod"].HeaderText = "T-Hub: Web Ship Method";
                     shipmentMappingGridView.Columns["MBShipVia"].HeaderText = "T-Hub: Ship Via";
                     shipmentMappingGridView.Columns["MBShipMethod"].HeaderText = "T-Hub: Ship Method";
-                    shipmentMappingGridView.Columns["SourceShipmentMethod"].MinimumWidth = 250;
-                    shipmentMappingGridView.Columns["MBShipMethod"].MinimumWidth = 150;
-                    shipmentMappingGridView.Columns["MBShipVia"].MinimumWidth = 150;
+
+                    shipmentMappingGridView.Columns["SourceShipmentMethod"].Width = 250;
+                    shipmentMappingGridView.Columns["MBShipMethod"].Width = 250;
+                    shipmentMappingGridView.Columns["DestinationShipmentMethod"].Width = 150;
+                    shipmentMappingGridView.Columns["btnDelete"].Width = 100;
+                    shipmentMappingGridView.Columns["MBShipViaCombobox"].Width = 100;
                     
-                    HideIdColumn();
-                    if (!shipmentMappingGridView.Columns.Contains("btnDelete"))
-                    {
-                        AddDeleteButtonToGridView(shipmentMappingGridView, 5);
-                    }
-                    shipmentMappingGridView.Columns["btnDelete"].DisplayIndex = 5;
                 }
                 
                 MappingLabel.Text = "Total No. of Mappings: " + shipmentMapping.Rows.Count;
@@ -183,23 +209,22 @@ namespace IST.OrderSynchronizationSystem
         {
             DataGridViewComboBoxColumn cmb = new DataGridViewComboBoxColumn();
             DataTable tableSource = new DataTable("tableSource");
-            tableSource.Columns.AddRange(new[] { new DataColumn("ID"), new DataColumn("Method") });
-            foreach (ShippingMethod shippingMethod in moldingBoxWebShipmentMethod)
-            {
-                tableSource.Rows.Add(shippingMethod.ID, shippingMethod.Method);
-            }
+            tableSource.Columns.AddRange(new[] { new DataColumn("MBShipVia"), new DataColumn("MBShipViaText") });
+
+            tableSource.Rows.Add("FedEx", "FedEx");
+            tableSource.Rows.Add("UPS", "UPS");
+            tableSource.Rows.Add("USPS", "USPS");
+            
             
             cmb.DataSource = tableSource;
-            
-            cmb.DisplayMember = "Method";
-            cmb.ValueMember = "Method";
-            cmb.Name = "MethodCombobox";
-            cmb.HeaderText = "Moldingbox Shipment Method";
-            cmb.DataPropertyName = "DestinationShipmentMethod";
+
+            cmb.DisplayMember = "MBShipViaText";
+            cmb.ValueMember = "MBShipVia";
+            cmb.Name = "MBShipViaCombobox";
+            cmb.HeaderText = "T-Hub: Ship Via";
+            cmb.DataPropertyName = "MBShipVia";
             shipmentMappingGridView.Columns.Add(cmb);
-            shipmentMappingGridView.EditMode = DataGridViewEditMode.EditOnEnter;
-            shipmentMappingGridView.Columns[0].ReadOnly = true;
-            shipmentMappingGridView.Columns[1].ReadOnly = true;
+            shipmentMappingGridView.EditMode = DataGridViewEditMode.EditOnEnter;                        
         }
         private void shipmentMappingGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
@@ -272,23 +297,23 @@ namespace IST.OrderSynchronizationSystem
                     (!string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["OSSShipmentMappingsId"].Value.ToString()) &&
                     (string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["DestinationShipmentMethod"].Value.ToString()) ||
                       string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["SourceShipmentMethod"].Value.ToString()) ||
-                      string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipVia"].Value.ToString()) ||
+                      string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipViaCombobox"].Value.ToString()) ||
                        string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipMethod"].Value.ToString()))
                     ) ||
                   (string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["OSSShipmentMappingsId"].Value.ToString())  &&
                       (!string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["DestinationShipmentMethod"].Value.ToString()) &&
                       (string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["SourceShipmentMethod"].Value.ToString()) ||
-                        string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipVia"].Value.ToString()) ||
+                        string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipViaCombobox"].Value.ToString()) ||
                         string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipMethod"].Value.ToString()))
                        )
                       ||
                       (!string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["SourceShipmentMethod"].Value.ToString()) &&
                       (string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["DestinationShipmentMethod"].Value.ToString()) ||
-                        string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipVia"].Value.ToString()) ||
+                        string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipViaCombobox"].Value.ToString()) ||
                         string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipMethod"].Value.ToString()))
                        )
                       ||
-                      (!string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipVia"].Value.ToString()) &&
+                      (!string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipViaCombobox"].Value.ToString()) &&
                       (string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["DestinationShipmentMethod"].Value.ToString()) ||
                         string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["SourceShipmentMethod"].Value.ToString()) ||
                         string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipMethod"].Value.ToString()))
@@ -297,7 +322,7 @@ namespace IST.OrderSynchronizationSystem
                       (!string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipMethod"].Value.ToString()) &&
                       (string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["DestinationShipmentMethod"].Value.ToString()) ||
                         string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["SourceShipmentMethod"].Value.ToString()) ||
-                        string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipVia"].Value.ToString()))
+                        string.IsNullOrEmpty(shipmentMappingGridView.Rows[i].Cells["MBShipViaCombobox"].Value.ToString()))
                        )
                       ))
                 {
