@@ -144,9 +144,9 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(171, 104);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(71, 13);
+            this.label7.Size = new System.Drawing.Size(65, 13);
             this.label7.TabIndex = 7;
-            this.label7.Text = "27/01/20158";
+            this.label7.Text = "29/01/2015";
             // 
             // label6
             // 
@@ -155,7 +155,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(40, 13);
             this.label6.TabIndex = 6;
-            this.label6.Text = "2.0.1.2";
+            this.label6.Text = "2.0.1.3";
             // 
             // label5
             // 

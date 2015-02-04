@@ -1579,7 +1579,7 @@ namespace IST.OrderSynchronizationSystem
                 Items = source.Items,
                 LastName = source.LastName,
                 OrderID = source.OrderID,
-                Orderdate = source.Orderdate,
+                Orderdate = DateTime.Now,                
                 Phone = string.IsNullOrEmpty(source.Phone) ? PhoneTextbox.Text : source.Phone,
                 ShippingMethodID = source.ShippingMethodID,
                 State = source.State,
